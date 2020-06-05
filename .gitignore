@@ -46,6 +46,8 @@ ehthumbs.db
 # Francisco Gomez custom
 staging
 /wp-content/plugins/all-in-one-wp-migration/storage/
+/wp-content/vpdb/options/st/staging_config.ini
+/wp-content/vpdb/options/st/staging_environment.ini
 
 # Exceptions custom
 !/wp-content/.versionpress/plugins/jetpack/schema.yml
