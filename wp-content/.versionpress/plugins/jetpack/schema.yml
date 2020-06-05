@@ -1,0 +1,7 @@
+option:
+  ignored-entities:
+    - 'option_name: jetpack_next_sync_time_full-sync-enqueue'
+    - 'option_name: jp_sync_lock_full_sync'
+    #- 'option_name: jetpack_protect_error'
+    #- 'option_name: action_scheduler_lock_async-request-runner'
+    #- 'option_name: jetpack_nonce_1591327636_M8xQTnA8f5'

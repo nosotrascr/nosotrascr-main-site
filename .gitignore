@@ -42,3 +42,10 @@ access_log
 ehthumbs.db
 *[Tt]humbs.db
 *.Trashes
+
+# Francisco Gomez custom
+staging
+/wp-content/plugins/all-in-one-wp-migration/storage/
+
+# Exceptions custom
+!/wp-content/.versionpress/plugins/jetpack/schema.yml
