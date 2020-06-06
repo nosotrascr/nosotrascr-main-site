@@ -10,3 +10,6 @@ option:
     - 'option_name: jetpack_protect_error'
     - 'option_name: wpforms_notifications'
     - 'option_name: jetpack_safe_mode_confirmed'
+    - 'option_name: jetpack_active_plan'
+    - 'option_name: jetpack-sitemap-state'
+    - 'option_name: ai1wm_status'
