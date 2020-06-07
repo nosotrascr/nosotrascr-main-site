@@ -5,7 +5,7 @@
  * Description: OptinMonster is the best WordPress popup plugin that helps you grow your email list and sales with email popups, exit intent popups, floating bars and more!
  * Author:      OptinMonster Team
  * Author URI:  https://optinmonster.com
- * Version:     1.9.7
+ * Version:     1.9.8
  * Text Domain: optin-monster-api
  * Domain Path: languages
  * WC requires at least: 3.2.0
@@ -62,7 +62,7 @@ class OMAPI {
 	 *
 	 * @var string
 	 */
-	public $version = '1.9.7';
+	public $version = '1.9.8';
 
 	/**
 	 * The name of the plugin.
@@ -305,22 +305,45 @@ class OMAPI {
 
 		// Run hook once OptinMonster has been fully loaded.
 		do_action( 'optin_monster_api_loaded' );
-
 	}
 
 	/**
-	 * Sets our global option if it is not found in the DB.
+	 * Sets our options if not found in the DB.
 	 *
 	 * @since 1.0.0
 	 */
 	public function load_option() {
 
+		// Check/set the plugin options.
 		$option = get_option( 'optin_monster_api' );
-		if ( ! $option || empty( $option ) ) {
+		if ( empty( $option ) ) {
 			$option = OMAPI::default_options();
 			update_option( 'optin_monster_api', $option );
 		}
 
+		$review           = get_option( 'omapi_review' );
+		$review_installed = ! empty( $review['time'] ) && is_numeric( $review['time'] );
+		$review_dismissed = ! empty( $review['dismissed'] );
+
+		if ( ! $review_installed ) {
+			$review = array(
+				'time'      => time(),
+				'dismissed' => $review_dismissed,
+			);
+			update_option( 'omapi_review', $review );
+		}
+
+		// Check/set the installation date.
+		if ( empty( $option['installed'] ) ) {
+
+			// If the review was dismissed, we know the plugin was installed at least a day
+			// before the notice was shown and dismissed. Otherwise, the review timestamp
+			// should be pretty close to the install date.
+			$option['installed'] = $review_dismissed ? $review['time'] - DAY_IN_SECONDS : $review['time'];
+
+			// Store the plugin install date.
+			update_option( 'optin_monster_api', $option );
+		}
 	}
 
 	/**
@@ -706,14 +729,14 @@ class OMAPI {
 			'is_expired'  => false,
 			'is_disabled' => false,
 			'is_invalid'  => false,
+			'installed'   => time(),
+			'connected'   => '',
 			'welcome'     => array(
-				'status'  => 'none', //none, welcomed
-				'review'    => 'ask', //ask, asked, dismissed
-				'version'   => '1141', //base to check against
-			)
+				'status' => 'none',
+			),
 		);
-		return apply_filters( 'optin_monster_api_default_options', $options );
 
+		return apply_filters( 'optin_monster_api_default_options', $options );
 	}
 
 	/**
@@ -829,19 +852,13 @@ function optin_monster_api_activation_hook( $network_wide ) {
 			switch_to_blog( $site->blog_id );
 
 			// Set default option.
-			$option = get_option( 'optin_monster_api' );
-			if ( ! $option || empty( $option ) ) {
-				update_option( 'optin_monster_api', OMAPI::default_options() );
-			}
+			$instance->load_option();
 
 			restore_current_blog();
 		}
 	} else {
 		// Set default option.
-		$option = get_option( 'optin_monster_api' );
-		if ( ! $option || empty( $option ) ) {
-			update_option( 'optin_monster_api', OMAPI::default_options() );
-		}
+		$instance->load_option();
 	}
 
 	// If we don't have api credentials, set up the redirect on plugin activation.

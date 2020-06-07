@@ -1,8 +1,15 @@
 # Changelog
 All notable changes to the OptinMonster plugin will be documented in this file.
 
-### 1.9.7
+### 1.9.8
+* Fix compatibility with AMP.
+* Update compatibility with popular caching plugins.
+* Update to make all strings translatable.
+* Fix bug where phone numbers wouldn't save when using MailPoet.
+* Remove old jQuery dependencies.
+* Update internal notices to be more friendly with other plugins.
 
+### 1.9.7
 * Update the OptinMonster API JS URL.
 * Update trustpulse menu title.
 
