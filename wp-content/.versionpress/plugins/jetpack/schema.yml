@@ -13,3 +13,5 @@ option:
     - 'option_name: jetpack_active_plan'
     - 'option_name: jetpack-sitemap-state'
     - 'option_name: ai1wm_status'
+    - 'option_name: staging_config'
+    - 'option_name: staging_environment'
