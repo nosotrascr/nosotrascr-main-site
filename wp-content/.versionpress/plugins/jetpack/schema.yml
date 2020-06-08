@@ -7,6 +7,7 @@ option:
     - 'option_name: jetpack_sync_https_history_home_url'
     - 'option_name: jetpack_sync_https_history_site_url'
     - 'option_name: eig_last_site_login'
+    - 'option_name: eig_last_login'
     - 'option_name: jetpack_protect_error'
     - 'option_name: wpforms_notifications'
     - 'option_name: jetpack_safe_mode_confirmed'
@@ -15,3 +16,4 @@ option:
     - 'option_name: ai1wm_status'
     - 'option_name: staging_config'
     - 'option_name: staging_environment'
+    - 'option_name: community-events-location'
