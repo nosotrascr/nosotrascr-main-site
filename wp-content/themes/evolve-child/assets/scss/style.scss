@@ -11,5 +11,8 @@
  Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
  Text Domain:  evolvechild
 */
+// Components
+@use './components/pre-header';
+@use './components/header';
 
 @import 'important_news';
