@@ -103,4 +103,14 @@
   }
 }
 
+.post .pre-titulo {
+  font-size: 1.2em;
+  color: #888;
+}
+
+.post .breadcrumb {
+  border-bottom: 2px red solid;
+  border-radius: 0;
+}
+
 /*# sourceMappingURL=style.css.map */
