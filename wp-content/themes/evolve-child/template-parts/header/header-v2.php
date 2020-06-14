@@ -55,7 +55,7 @@
 			</div><!-- .row .align-items-center -->
 			<div class="row align-items-md-center">
 				<div class="col">
-					<?php echo evolve_menu( 'primary-menu', 'navbar-nav mr-auto' );  ?>
+					<?php echo evolve_child_menu( 'primary-menu', 'navbar-nav mr-auto' );  ?>
 				</div>
 			</div>
         </div><!-- .header .container -->

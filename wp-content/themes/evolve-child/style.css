@@ -7,6 +7,9 @@
   font-size: 32px;
   color: white;
 }
+.header-v2 .navbar-nav {
+  margin: 0 auto;
+}
 
 /*
  Theme Name:   Evolve Child
