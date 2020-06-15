@@ -1,0 +1,19 @@
+.related-news {
+    width: 100%;
+    padding: 8px;
+    border-bottom: 1px red solid;
+    border-top: 1px red solid;
+    display: inline-block;
+    margin-bottom: 16px;
+
+    .left-block {
+        display: inline-block;
+        border-right: 1px red solid;
+        padding-right: 8px;
+    }
+
+    .title-block {
+        padding-left: 8px;
+        display: inline-block;
+    }
+}
