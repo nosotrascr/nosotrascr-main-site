@@ -11,11 +11,12 @@
  Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
  Text Domain:  evolvechild
 */
-// Components
+// General
 @use './base/base';
+
+// Components
 @use './components/pre-header';
 @use './components/header';
-
-@import 'components/important_news';
-@import 'components/related_news';
-@import 'components/post';
+@use './components/important_news';
+@use './components/related_news';
+@use './components/post';
