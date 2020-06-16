@@ -1,4 +1,4 @@
-/*
+/*! important comment
  Theme Name:   Evolve Child
  Theme URI:    http://example.com/evolve-child/
  Description:  EvolveChild Theme
@@ -15,6 +15,6 @@
 @use './components/pre-header';
 @use './components/header';
 
-@import 'important_news';
-@import './components/related_news';
+@import 'components/important_news';
+@import 'components/related_news';
 @import 'components/post';
