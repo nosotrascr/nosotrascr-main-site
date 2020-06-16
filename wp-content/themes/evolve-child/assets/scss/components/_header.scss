@@ -4,7 +4,9 @@
     color: white;
   }
 
-  .navbar-nav {
-    margin: 0 auto;
+  .centered-nav {
+    .navbar-nav {
+      margin: 0 auto;
+    }
   }
 }

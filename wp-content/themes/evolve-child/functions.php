@@ -157,7 +157,7 @@ function evolve_child_menu($location = false, $class = false)
     $menu = '';
 
     if (evolve_theme_mod('evl_header_type', 'none') == "h1") {
-        $menu .= '<nav class="navbar navbar-expand-md main-menu mt-3 mt-md-0 order-3 col-sm-11' . (evolve_theme_mod('evl_searchbox', true) ? ' col-md-8' : ' col-md-12') . '">';
+        $menu .= '<nav class="navbar navbar-expand-md main-menu mt-3 mt-md-0 order-3 col-sm-11 col-md-12">';
     } else {
         $menu .= '<nav class="navbar navbar-expand-md main-menu mr-auto col-12 col-sm">';
     }

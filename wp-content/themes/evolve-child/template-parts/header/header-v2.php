@@ -2,7 +2,7 @@
     <div class="top-bar py-2">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-md-6 col-sm-12">
+                <div class="col-6">
 					<?php if ( evolve_theme_mod( 'evl_social_links', 0 ) ) {
 						evolve_social_media_links();
 					}
@@ -11,7 +11,7 @@
 						dynamic_sidebar( 'top-left' );
 					} ?>
                 </div>
-                <div class="col-md-6 col-sm-12">
+                <div class="col-6">
 					<?php if ( is_active_sidebar( 'top-right' ) ) {
 						dynamic_sidebar( 'top-right' );
 					}
@@ -31,7 +31,7 @@
 
         <div class="header container">
             <div class="row align-items-md-center">
-				<div class="col col-md-2 menu-icon">
+				<div class="col col-md-2 d-none d-md-block d-md-none menu-icon">
 					<i class="fa fa-bars" aria-hidden="true"></i>
 				</div>
 				<div class="col col-md-8">
@@ -51,12 +51,19 @@
 			// 	evolve_header_search( '2' );
 			// } 
 			?>
-
+			<?php 
+				$searchEnable = evolve_theme_mod( 'evl_searchbox', true );
+			?>
 			</div><!-- .row .align-items-center -->
 			<div class="row align-items-md-center">
-				<div class="col">
+				<div class="<?php echo $searchEnable ? 'col-8' : 'col centered-nav' ?>">
 					<?php echo evolve_child_menu( 'primary-menu', 'navbar-nav mr-auto' );  ?>
 				</div>
+				<?php if ($searchEnable) { ?>
+				<div class="col-4">
+					<?php evolve_header_search( '2' ); ?>
+				</div>
+				<?php } ?>
 			</div>
         </div><!-- .header .container -->
 
