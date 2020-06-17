@@ -117,6 +117,33 @@
   border-radius: 0;
 }
 
+body.category #primary {
+  overflow: hidden;
+}
+body.category #primary .left-content {
+  float: left;
+}
+body.category #primary .right-content {
+  float: left;
+}
+body.category #primary .right-content.posts.card-deck .card {
+  min-width: 100%;
+  max-width: 100%;
+}
+body.category #primary .right-content.posts.card-deck .card .post-content .thumbnail-post {
+  margin-left: 10px;
+  float: right;
+  width: 40%;
+}
+body.category #primary .right-content.posts.card-deck .card .post-content .pre-info {
+  margin-bottom: 10px;
+}
+body.category #primary .right-content.posts.card-deck .card .post-content .pre-info span {
+  font-weight: bold;
+  color: #4A4A4A;
+  margin-right: 15px;
+}
+
 /*! important comment
  Theme Name:   Evolve Child
  Theme URI:    http://example.com/evolve-child/
