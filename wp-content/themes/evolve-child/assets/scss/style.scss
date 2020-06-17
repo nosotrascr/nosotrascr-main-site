@@ -1,4 +1,4 @@
-/*
+/*! important comment
  Theme Name:   Evolve Child
  Theme URI:    http://example.com/evolve-child/
  Description:  EvolveChild Theme
@@ -11,6 +11,12 @@
  Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
  Text Domain:  evolvechild
 */
+// General
+@use './base/base';
 
-@import 'important_news';
-@import 'category';
+// Components
+@use './components/pre-header';
+@use './components/header';
+@use './components/important_news';
+@use './components/related_news';
+@use './components/post';

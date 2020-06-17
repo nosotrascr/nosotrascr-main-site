@@ -1,16 +1,16 @@
-/*
- Theme Name:   Evolve Child
- Theme URI:    http://example.com/evolve-child/
- Description:  EvolveChild Theme
- Author:       Jose Villalobos
- Author URI:   http://example.com
- Template:     evolve
- Version:      1.0.0
- License:      GNU General Public License v2 or later
- License URI:  http://www.gnu.org/licenses/gpl-2.0.html
- Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
- Text Domain:  evolvechild
-*/
+.top-bar .jetpack-social-widget-list {
+  margin: 0;
+  float: right;
+}
+
+.header-v2 .menu-icon {
+  font-size: 32px;
+  color: white;
+}
+.header-v2 .centered-nav .navbar-nav {
+  margin: 0 auto;
+}
+
 #primary .post-content {
   color: #000000;
 }
@@ -89,5 +89,46 @@
     border-right: none;
   }
 }
+.related-news {
+  width: 100%;
+  padding: 8px;
+  border-bottom: 1px red solid;
+  border-top: 1px red solid;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+.related-news .left-block {
+  display: inline-block;
+  border-right: 1px red solid;
+  padding-right: 8px;
+}
+.related-news .title-block {
+  padding-left: 8px;
+  display: inline-block;
+}
+
+.post .pre-titulo {
+  font-size: 1.2em;
+  color: #888;
+}
+
+.breadcrumb {
+  border-bottom: 2px red solid;
+  border-radius: 0;
+}
+
+/*! important comment
+ Theme Name:   Evolve Child
+ Theme URI:    http://example.com/evolve-child/
+ Description:  EvolveChild Theme
+ Author:       Jose Villalobos
+ Author URI:   http://example.com
+ Template:     evolve
+ Version:      1.0.0
+ License:      GNU General Public License v2 or later
+ License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+ Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
+ Text Domain:  evolvechild
+*/
 
 /*# sourceMappingURL=style.css.map */

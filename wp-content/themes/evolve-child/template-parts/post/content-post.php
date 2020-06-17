@@ -9,7 +9,9 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?> itemscope="itemscope"
          itemtype="http://schema.org/Article">
 
+
 	<?php if ( is_single() || is_page() ) {
+		?><h3 class="pre-titulo"><?php the_field('pre-titulo'); ?></h3><?php
 		if ( get_post_meta( $post->ID, 'evolve_page_title', true ) == "yes" || get_post_meta( $post->ID, 'evolve_page_title', true ) == "" ) {
 			the_title( '<h1 class="post-title" itemprop="name">', '</h1>' );
 		}
@@ -47,7 +49,7 @@
     <div class="row post-meta post-meta-footer align-items-top">
 
 
-		<?php 
+		<?php
 
 		evolve_sharethis(); ?>
 
