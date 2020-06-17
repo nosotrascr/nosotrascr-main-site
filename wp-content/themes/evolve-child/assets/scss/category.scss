@@ -1,0 +1,34 @@
+body.category{
+	#primary{
+		overflow: hidden;
+		.left-content{
+			float:left;
+		}
+		.right-content{
+			float:left;
+
+			&.posts.card-deck{
+				.card{
+					min-width: 100%;
+					max-width: 100%;
+
+					.post-content{
+						.thumbnail-post{
+						    margin-left: 10px;
+							float: right;
+	    					width: 40%;
+						}
+						.pre-info{
+							margin-bottom: 10px;
+							span{
+								font-weight: bold;
+							    color: #4A4A4A;
+							    margin-right: 15px;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

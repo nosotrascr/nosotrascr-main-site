@@ -17,3 +17,20 @@ function my_theme_enqueue_styles() {
         $theme->get('Version') // this only works if you have Version in the style header
     );
 }
+
+if ( ! function_exists( 'evolve_posts_loop_open' ) ) {
+    function evolve_posts_loop_open() {
+        if ( ( is_home() || is_archive() || is_search() ) ) {
+            if ( evolve_theme_mod( 'evl_post_layout', 'two' ) != "one" ) {
+                if ( evolve_theme_mod( 'evl_grid_layout', 'card' ) != "card" ) {
+                    echo '<div class="posts card-columns">';
+                } else {
+                    echo '<div class="left-content col-lg-3"><h3>Últimas noticias</h3></div>';
+                    echo '<div class="posts card-deck col-lg-9 right-content">';
+                }
+            } else {
+                echo '<div class="posts">';
+            }
+        }
+    }
+}
