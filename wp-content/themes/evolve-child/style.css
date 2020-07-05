@@ -3,12 +3,21 @@
   float: right;
 }
 
-.header-v2 .menu-icon {
+.header-v2 .action-icon {
   font-size: 32px;
+  cursor: pointer;
+}
+.header-v2 .ham-icon {
   color: white;
 }
 .header-v2 .centered-nav .navbar-nav {
   margin: 0 auto;
+}
+.header-v2 .header {
+  position: relative;
+}
+.header-v2 .top-bar .textwidget p {
+  margin-bottom: 0;
 }
 
 #primary .post-content {
@@ -89,6 +98,55 @@
     border-right: none;
   }
 }
+.nav-menu {
+  position: absolute;
+  padding: 25px 30px;
+  top: 0;
+  left: 0;
+  min-height: 185px;
+  z-index: 100;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: 280px;
+  margin-left: -280px;
+  transition: 0.5s;
+  z-index: 10000;
+}
+.side-menu.active {
+  margin-left: 0;
+}
+.side-menu .side-menu-nav {
+  font-size: 22px;
+}
+.side-menu .side-menu-nav .menu-item {
+  margin-bottom: 16px;
+}
+
+.nav-menu .search-form,
+.side-menu .search-form {
+  position: relative;
+  margin: 0;
+}
+.nav-menu .search-form > label,
+.nav-menu .search-form .form-control,
+.side-menu .search-form > label,
+.side-menu .search-form .form-control {
+  width: 100%;
+}
+.nav-menu .search-form .icon-search,
+.side-menu .search-form .icon-search {
+  left: 10px;
+}
+.nav-menu .search-form .form-control,
+.side-menu .search-form .form-control {
+  position: inherit;
+  padding-left: 35px;
+}
+
 .related-news {
   width: 100%;
   padding: 8px;

@@ -2,6 +2,8 @@
 
 add_action( 'wp_enqueue_scripts', 'my_theme_enqueue_styles' );
 function my_theme_enqueue_styles() {
+	global $css_data;
+
     $parenthandle = 'evolve-style'; // This is 'twentyfifteen-style' for the Twenty Fifteen theme.
     $theme = wp_get_theme();
 
@@ -15,8 +17,19 @@ function my_theme_enqueue_styles() {
     wp_enqueue_style( 'evolvechild-style', get_stylesheet_uri(),
         array( $parenthandle ),
         $theme->get('Version') // this only works if you have Version in the style header
-    );
+	);
+
+	// Dynamic CSS Definitions
+	require get_theme_file_path( '/inc/dynamic-css.php' );
+	wp_add_inline_style( 'evolvechild-style', evolve_child_dynamic_css( $css_data ) );
 }
+
+if (! function_exists('evolve_child_enqueue_scripts')) {
+	function evolve_child_enqueue_scripts() {
+		wp_enqueue_script('evolve-child', get_stylesheet_directory_uri() . '/assets/js/nosotras_menus.js', array('jquery'));
+	}
+}
+add_action('wp_enqueue_scripts', 'evolve_child_enqueue_scripts');
 
 if ( ! function_exists( 'evolve_breadcrumbs' ) ) {
 	function evolve_breadcrumbs() {
@@ -199,3 +212,17 @@ if ( ! function_exists( 'evolve_posts_loop_open' ) ) {
         }
     }
 }
+
+function evolve_child_register_my_menu() {
+	register_nav_menu('hamburger-menu-1',__( 'Hamburger-menu-1' ));
+	register_nav_menu('hamburger-menu-2',__( 'Hamburger-menu-2' ));
+}
+add_action( 'init', 'evolve_child_register_my_menu' );
+
+function evolve_child_customize_register($wp_customize) {
+	evolve_child_customize_settings_register($wp_customize);
+	evolve_child_customize_sections($wp_customize);
+}
+add_action( 'customize_register', 'evolve_child_customize_register' );
+
+require get_theme_file_path('/inc/customizer.php');
