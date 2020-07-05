@@ -3,6 +3,11 @@ body.category{
 		overflow: hidden;
 		.left-content{
 			float:left;
+
+			h3{
+				font-size: 20px;
+    			margin-top: 5px;
+			}
 		}
 		.right-content{
 			float:left;
@@ -11,8 +16,10 @@ body.category{
 				.card{
 					min-width: 100%;
 					max-width: 100%;
+					border-bottom: 1px #999999 solid;
 
 					.post-content{
+					    margin-bottom: 10px;
 						.thumbnail-post{
 						    margin-left: 10px;
 							float: right;
