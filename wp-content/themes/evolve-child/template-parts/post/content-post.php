@@ -15,6 +15,7 @@
 		if ( get_post_meta( $post->ID, 'evolve_page_title', true ) == "yes" || get_post_meta( $post->ID, 'evolve_page_title', true ) == "" ) {
 			the_title( '<h1 class="post-title" itemprop="name">', '</h1>' );
 		}
+		?><div class="custom-summary"><?php the_field('summary'); ?></div><?php
 	} else {
 		if ( evolve_theme_mod( 'evl_post_layout', 'two' ) != "one" ) {
 			$evolve_title = the_title( '', '', false );
