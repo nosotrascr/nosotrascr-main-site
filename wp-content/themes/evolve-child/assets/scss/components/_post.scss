@@ -1,10 +1,21 @@
-.post .pre-titulo {
+.breadcrumb {
+  border-bottom: 2px red solid;
+  border-radius: 0;
+}
+
+.post {
+  .pre-titulo {
     font-size: 1.2em;
     color: #888;
   }
-  
-  .breadcrumb {
-    border-bottom: 2px red solid;
-    border-radius: 0;
+
+  .custom-summary {
+    ul {
+      list-style-type: disc;
+    }
+
+    font-weight: bold;
+    color: black;
   }
-  
+
+}

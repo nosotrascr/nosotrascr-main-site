@@ -1,12 +1,27 @@
 .header-v2 {
-  .menu-icon {
+
+  .action-icon {
     font-size: 32px;
+    cursor: pointer;
+  }
+
+  .ham-icon {
     color: white;
   }
 
   .centered-nav {
     .navbar-nav {
       margin: 0 auto;
+    }
+  }
+
+  .header {
+    position: relative;
+  }
+
+  .top-bar {
+    .textwidget p {
+      margin-bottom: 0;
     }
   }
 }
