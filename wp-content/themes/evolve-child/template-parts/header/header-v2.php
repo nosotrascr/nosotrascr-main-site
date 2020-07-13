@@ -31,28 +31,28 @@
 
 		<div class="header container">
 			<div class="row align-items-md-center">
-				<div class="col-12 col-md-2 text-center mb-2 navbar-menu">
+				<div class="col-2 col-md-2 text-center mb-2 navbar-menu">
 					<span class="ham-icon">
 						<i class="fa fa-bars action-icon" aria-hidden="true"></i>
 					</span>
 				</div>
+				<?php if ( evolve_theme_mod( 'evl_header_logo', '' ) != '' ) { ?>
+					<div class="col-10 col-md-8 text-center">
+						<a href="<?php echo home_url(); ?>">
+							<img 
+								alt="<?php echo get_bloginfo( 'name' ) ?>" 
+								src="<?php echo evolve_theme_mod( 'evl_header_logo', '' ) ?>" />
+						</a>
+					</div>						
+				<?php
+					} else {
+				?>
 				<div class="col-12 col-md-8">
 					<h1 id="website-title" class="text-center">
 						<a href="<?php echo home_url(); ?>"><?php bloginfo('name') ?></a>
 						<h1>
 				</div>
-				<?php
-
-				// TODO: How to add new layout as part of customization options
-				// Code comment just for future reference. 
-				// if ( evolve_theme_mod( 'evl_main_menu', false ) !== true ) {
-				// 	echo evolve_menu( 'primary-menu', 'navbar-nav mr-auto' );
-				// }
-
-				// if ( evolve_theme_mod( 'evl_searchbox', true ) ) {
-				// 	evolve_header_search( '2' );
-				// } 
-				?>
+					<?php } ?>
 				<?php
 				$searchEnable = evolve_theme_mod('evl_searchbox', true);
 				?>
@@ -70,21 +70,17 @@
 			<div class="nav-menu container d-none">
 				<div class="row mb-3">
 					<div class="col col-md-1 navbar-close">
-						<span class="menu-close-icon">
+						<span class="menu-close-icon text-center">
 							<i class="fa fa-times action-icon" aria-hidden="true"></i>
 						</span>
 					</div>
-					<div class="col col-md-11">
+					<div class="col col-md-11 pl-0">
 						<?php evolve_header_search(''); ?>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col col-md-6">
+					<div class="col">
 						<?php echo evolve_child_menu('hamburger-menu-1', 'navbar-nav mr-auto');  ?>
-					</div>
-
-					<div class="col col-md-6">
-						<?php echo evolve_child_menu('hamburger-menu-2', 'navbar-nav mr-auto');  ?>
 					</div>
 				</div>
 			</div>
@@ -101,7 +97,15 @@
 		<div class="container px-0">
 			<div class="row mx-0 py-2 menu-head ">
 				<div class="col-10">
-					<h3><?php bloginfo('name') ?></h3>
+					<?php if ( evolve_theme_mod( 'evl_header_logo', '' ) != '' ) { ?>
+						<a href="<?php echo home_url(); ?>">
+							<img 
+								alt="<?php echo get_bloginfo( 'name' ) ?>" 
+								src="<?php echo evolve_theme_mod( 'evl_header_logo', '' ) ?>" />
+						</a>
+					<?php } else { ?>
+						<h3><?php bloginfo('name') ?></h3>
+					<?php } ?>
 				</div>
 				<div class="col-2 navbar-close">
 					<span class="menu-close-icon">
@@ -113,20 +117,11 @@
 				<div class="col-12 mb-3">
 					<?php evolve_header_search(''); ?>
 				</div>
-				<div class="col-12 col-md-6">
+				<div class="col-12">
 					<?php 
 						echo wp_nav_menu(array(
 							'menu_class' => 'side-menu-nav mb-0',
 							'theme_location' => 'hamburger-menu-1'
-						));
-					?>
-				</div>
-
-				<div class="col-12 col-md-6">
-					<?php 
-						echo wp_nav_menu(array(
-							'menu_class' => 'side-menu-nav mb-0',
-							'theme_location' => 'hamburger-menu-2'
 						));
 					?>
 				</div>
