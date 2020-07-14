@@ -1,3 +1,5 @@
+@use "../base/breakpoints" as breakpoints;
+
 $side-menu-width: 280px;
 
 .nav-menu {
@@ -6,6 +8,7 @@ $side-menu-width: 280px;
   top: 0;
   left: 0;
   min-height: 195px;
+  max-width: 100%;
   z-index: 100;
 }
 
@@ -49,6 +52,16 @@ $side-menu-width: 280px;
     .form-control {
       position: inherit;
       padding-left: 35px;
+    }
+  }
+}
+
+body {
+  &.menu-open {
+    overflow: hidden;
+
+    @media (min-width: breakpoints.$md-breakpoint) {  
+      overflow: auto;
     }
   }
 }

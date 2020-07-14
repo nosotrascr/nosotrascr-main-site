@@ -67,24 +67,26 @@
 					</div>
 				<?php } ?>
 			</div>
-			<div class="nav-menu container d-none">
-				<div class="row mb-3">
-					<div class="col col-md-1 navbar-close">
-						<span class="menu-close-icon text-center">
-							<i class="fa fa-times action-icon" aria-hidden="true"></i>
-						</span>
-					</div>
-					<div class="col col-md-11 pl-0">
-						<?php evolve_header_search(''); ?>
-					</div>
+			
+		</div><!-- .header .container -->
+
+		<div class="nav-menu container d-none"><!-- nav-menu -->
+			<div class="row mb-3">
+				<div class="col col-md-1 navbar-close d-flex justify-content-center align-items-center">
+					<span class="menu-close-icon text-center">
+						<i class="fa fa-times action-icon" aria-hidden="true"></i>
+					</span>
 				</div>
-				<div class="row">
-					<div class="col">
-						<?php echo evolve_child_menu('hamburger-menu-1', 'navbar-nav mr-auto');  ?>
-					</div>
+				<div class="col col-md-11 pl-0">
+					<?php evolve_header_search(''); ?>
 				</div>
 			</div>
-		</div><!-- .header .container -->
+			<div class="row">
+				<div class="col">
+					<?php echo evolve_child_menu('hamburger-menu-1', 'navbar-nav mr-auto');  ?>
+				</div>
+			</div>
+		</div><!-- nav-menu -->
 
 		<?php if (get_header_image()) {
 			echo '</div><!-- .custom-header -->';
