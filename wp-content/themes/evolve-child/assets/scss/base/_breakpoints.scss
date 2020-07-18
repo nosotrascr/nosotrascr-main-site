@@ -1,6 +1,7 @@
 // Breakpoints
-// In any case we need them. This is not the best solution as we should be importing 
-// from the oficial bootstrap-sass.
+// In case we need them.
+// Bootstrap default breakpoints. It'd be better to import them from bootstrap-sass
+// but this is good enough for now.
 $sm-breakpoint: 576px;
 $md-breakpoint: 768px;
 $lg-breakpoint: 992px;

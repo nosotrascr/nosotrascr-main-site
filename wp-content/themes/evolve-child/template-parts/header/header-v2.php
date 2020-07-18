@@ -2,7 +2,7 @@
 	<div class="top-bar py-2">
 		<div class="container">
 			<div class="row align-items-center">
-				<div class="col-6">
+				<div class="col-8 col-md-6 pr-0">
 					<?php if (evolve_theme_mod('evl_social_links', 0)) {
 						evolve_social_media_links();
 					}
@@ -11,7 +11,7 @@
 						dynamic_sidebar('top-left');
 					} ?>
 				</div>
-				<div class="col-6">
+				<div class="col-4 col-md-6 pl-0">
 					<?php if (is_active_sidebar('top-right')) {
 						dynamic_sidebar('top-right');
 					}
