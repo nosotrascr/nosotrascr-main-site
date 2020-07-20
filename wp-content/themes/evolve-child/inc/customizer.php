@@ -30,6 +30,9 @@ if (!function_exists('evolve_child_customize_settings_register')) {
         $wp_customize->add_setting( 'evlch_menu_nav_direction' , array(
             'default'   => 'column',
         ) );
+        $wp_customize->add_setting( 'evlch_breadcrumb_line_color' , array(
+            'default'   => '#F00',
+        ) );
     }
 }
 
@@ -104,6 +107,15 @@ if(!function_exists('evolve_child_customize_sections')) {
                 )
             )
         );
+
+        $breadcrumbSectionId = 'evl-pagetitlebar-tab';
+
+        $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'evlch_breadcrumb_line_color_control', array(
+            'label'      => __( 'Color', 'evolve_child' ),
+            'section'    => $breadcrumbSectionId,
+            'settings'   => 'evlch_breadcrumb_line_color',
+            'priority'   => 11,
+        )));
     }
 }
 ?>
