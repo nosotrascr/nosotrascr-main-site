@@ -6,7 +6,7 @@
 
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class(); ?> itemscope="itemscope"
+<article id="post-<?php the_ID(); ?>" <?php post_class_custom(); ?> itemscope="itemscope"
          itemtype="http://schema.org/Article">
 
 

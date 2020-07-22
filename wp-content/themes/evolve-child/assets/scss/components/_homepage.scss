@@ -1,0 +1,20 @@
+
+.multimedia-section{
+    margin-top: 20px;
+	.wp-block-video{
+		video{
+			width: 100%;
+		}
+	}
+	.podcast{
+		height: 100%;
+    	position: relative;
+    	iframe{
+    		margin: 0;
+		    position: absolute;
+		    top: 50%;
+		    -ms-transform: translateY(-50%);
+		    transform: translateY(-50%);
+    	}
+	}
+}

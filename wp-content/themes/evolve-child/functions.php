@@ -97,6 +97,15 @@ if ( ! function_exists( 'evolve_posts_loop_open' ) ) {
     }
 }
 
+if ( ! function_exists( 'post_class_custom' ) ) {
+    function post_class_custom( $class = '', $post_id = null ) {
+        // Separates classes with a single space, collates classes for post DIV.
+        echo 'class="main_site_color ' . join( ' ', get_post_class( $class, $post_id ) ) . '"';
+    }
+}
+
+
+
 function evolve_child_register_my_menu() {
 	register_nav_menu('hamburger-menu-1',__( 'Hamburger-menu-1' ));
 	register_nav_menu('hamburger-menu-2',__( 'Hamburger-menu-2' ));
@@ -110,3 +119,31 @@ function evolve_child_customize_register($wp_customize) {
 add_action( 'customize_register', 'evolve_child_customize_register' );
 
 require get_theme_file_path('/inc/customizer.php');
+
+
+if ( ! function_exists( 'evolve_custom_footer' ) ) {
+    function evolve_custom_footer() {
+        $evolve_home_url = esc_url( "https://theme4press.com/" );
+        $image_url = get_theme_file_uri() . '/assets/images/logo_mini.png';
+        $html = '<div class="row"><div class="col custom-footer">'. '<div class="footer-logo"><img src="'.$image_url.'" /></div>' . "<p>Los comentarios realizados en nuestras páginas de redes sociales son responsabilidad exclusiva de sus autores, nosotrascr.com no se responsabiliza por su contenido.</p>";
+        $html .= '<p>© 2020 nosotrascr.com - Todos los derechos reservados.</p>';
+        $html .= '<a href="'.get_site_url().'" class="terms_of_use">Condiciones de uso</a>'; 
+        $html .= '</div></div>';
+        echo $html;
+    }
+}
+
+if ( ! function_exists( 'evolve_primary_container_open' ) ) {
+    function evolve_primary_container_open() {
+        if ( ( is_home() && ! is_front_page() ) || ( is_front_page() && evolve_theme_mod( 'evl_front_elements_content_display', 'above' ) != 'above' ) ) {
+            echo '<div id="primary" class="main_site_color ' . evolve_layout_class( $type = 1 ) . '">';
+        } elseif ( is_404() ) {
+            echo '<div id="primary" class="main_site_color col mb-5">';
+        } elseif ( ( function_exists( 'is_buddypress' ) && is_buddypress() ) || ( class_exists( 'bbPress' ) && is_bbpress() ) ) {
+            echo '<div id="primary" class="main_site_color ' . evolve_layout_class( $type = 2 ) . '">';
+        } elseif ( ( is_home() && ! is_front_page() ) || is_front_page() && evolve_theme_mod( 'evl_front_elements_content_display', 'above' ) == 'above' ) {
+        } else {
+            echo '<div id="primary" class="main_site_color ' . evolve_layout_class( $type = 1 ) . '">';
+        }
+    }
+}
