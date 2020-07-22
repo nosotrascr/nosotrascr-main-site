@@ -13,12 +13,13 @@
 */
 
 // Components
-@import './components/pre-header';
-@import './components/header';
-@import './components/important_news';
-@import './components/menu';
-@import './components/related_news';
-@import './components/post';
-@import './components/category';
-@import './components/homepage';
-@import './components/footer';
+@use './components/content';
+@use './components/pre-header';
+@use './components/header';
+@use './components/important_news';
+@use './components/menu';
+@use './components/related_news';
+@use './components/post';
+@use './components/category';
+@use './components/homepage';
+@use './components/footer';

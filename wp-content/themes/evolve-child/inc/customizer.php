@@ -35,6 +35,12 @@ if (!function_exists('evolve_child_customize_settings_register')) {
         $wp_customize->add_setting( 'evlch_menu_nav_direction' , array(
             'default'   => 'column',
         ) );
+        $wp_customize->add_setting( 'evlch_breadcrumb_line_color' , array(
+            'default'   => '#F00',
+        ) );
+        $wp_customize->add_setting( 'evlch_related_news_border_color' , array(
+            'default'   => '#DDD',
+        ) );
     }
 }
 
@@ -121,6 +127,29 @@ if(!function_exists('evolve_child_customize_sections')) {
                 )
             )
         );
+
+        $breadcrumbSectionId = 'evl-pagetitlebar-tab';
+
+        $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'evlch_breadcrumb_line_color_control', array(
+            'label'      => __( 'Color', 'evolve_child' ),
+            'section'    => $breadcrumbSectionId,
+            'settings'   => 'evlch_breadcrumb_line_color',
+            'priority'   => 11,
+        )));
+
+
+        $relatedNewsSectionId = 'evolve_child_nosotras_related_news_section';
+
+        $wp_customize->add_section($relatedNewsSectionId , array(
+            'title'      => __( 'Noticias relacionadas', 'evolve_child' ),
+            'priority'   => 102,
+        ) );
+
+        $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'evlch_related_news_border_color_control', array(
+            'label'      => __( 'Border Color', 'evolve_child' ),
+            'section'    => $relatedNewsSectionId,
+            'settings'   => 'evlch_related_news_border_color',
+        ) ) );
     }
 }
 ?>

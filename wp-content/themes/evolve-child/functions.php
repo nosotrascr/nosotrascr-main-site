@@ -97,6 +97,83 @@ if ( ! function_exists( 'evolve_posts_loop_open' ) ) {
     }
 }
 
+if ( ! function_exists( 'evolve_sticky_header_open' ) ) {
+	function evolve_sticky_header_open() {
+
+		if ( evolve_theme_mod( 'evl_sticky_header', true ) == false ) {
+			return;
+		}
+
+		echo '<div class="sticky-header"><div class="container"><div class="row align-items-center">';
+		if ( evolve_theme_mod( 'evl_blog_title', '0' ) != '1' && evolve_logo_position() !== 'disable' && '' != ( evolve_theme_mod( 'evl_header_logo', '' ) ) ) {
+			echo '<div class="col-auto"><div class="row align-items-center">';
+		}
+		if ( evolve_logo_position() == "disable" ) {
+		} else {
+			if ( evolve_theme_mod( 'evl_header_logo', '' ) ) {
+				echo '<div class="' . ( ( evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) ? 'col-2' : 'col-auto pr-0' ) . '"><a href="' . home_url() . '"><img src="' . evolve_theme_mod( 'evl_header_logo', '' ) . '" alt="' . get_bloginfo( 'name' ) . '" /></a></div>';
+			}
+		}
+		if ( evolve_theme_mod( 'evl_blog_title', '0' ) == "0" ) {
+			echo '<div class="' . ( '' != ( evolve_theme_mod( 'evl_header_logo', '' ) && evolve_logo_position() != "disable" ) ? 'col-auto pr-0' : 'col-auto' ) . '"><a id="sticky-title" href="' . home_url() . '">';
+			bloginfo( 'name' );
+			echo '</a></div>';
+		}
+		if ( evolve_theme_mod( 'evl_blog_title', '0' ) != '1' && evolve_logo_position() !== 'disable' && '' != ( evolve_theme_mod( 'evl_header_logo', '' ) ) ) {
+			echo '</div></div>';
+		}
+		if ( has_nav_menu( 'sticky_navigation' ) ) {
+			echo '<nav class="navbar navbar-expand-md col' . ( ( ( evolve_logo_position() == 'disable' && evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) || evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) ? " pl-0" : "" ) . '">
+			                    <div class="navbar-toggler" data-toggle="collapse" data-target="#sticky-menu" aria-controls="primary-menu" aria-expanded="false" aria-label="' . __( "Sticky", "evolve" ) . '">
+                                    <span class="navbar-toggler-icon-svg"></span>
+                                </div><div id="sticky-menu" class="collapse navbar-collapse" data-hover="dropdown" data-animations="fadeInUp fadeInDown fadeInDown fadeInDown">';
+			wp_nav_menu( array(
+				'theme_location' => 'sticky_navigation',
+				'depth'          => 10,
+				'container'      => false,
+				'menu_class'     => 'navbar-nav mr-auto align-items-center',
+				'fallback_cb'    => 'evolve_custom_menu_walker::fallback',
+				'walker'         => new evolve_custom_menu_walker()
+			) );
+			echo '</div></nav>';
+		} elseif ( has_nav_menu( 'primary-menu' ) ) {
+			echo '<nav class="navbar navbar-expand-md col' . ( ( ( evolve_logo_position() == 'disable' && evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) || evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) ? " pl-0" : "" ) . '">
+                                <div class="navbar-toggler" data-toggle="collapse" data-target="#sticky-menu" aria-controls="primary-menu" aria-expanded="false" aria-label="' . __( "Sticky", "evolve" ) . '">
+                                    <span class="navbar-toggler-icon-svg"></span>
+                                </div><div id="sticky-menu" class="collapse navbar-collapse" data-hover="dropdown" data-animations="fadeInUp fadeInDown fadeInDown fadeInDown">';
+			wp_nav_menu( array(
+				'theme_location' => 'primary-menu',
+				'depth'          => 10,
+				'container'      => false,
+				'menu_class'     => 'navbar-nav mr-auto align-items-center',
+				'fallback_cb'    => 'evolve_custom_menu_walker::fallback',
+				'walker'         => new evolve_custom_menu_walker()
+			) );
+			echo '</div></nav>';
+		} else {
+			echo '<nav class="navbar navbar-expand-md col' . ( ( ( evolve_logo_position() == 'disable' && evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) || evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) ? " pl-0" : "" ) . '">
+                                <div class="navbar-toggler" data-toggle="collapse" data-target="#sticky-menu" aria-controls="primary-menu" aria-expanded="false" aria-label="' . __( "Sticky", "evolve" ) . '">
+                                    <span class="navbar-toggler-icon-svg"></span>
+                                </div><div id="sticky-menu" class="collapse navbar-collapse" data-hover="dropdown" data-animations="fadeInUp fadeInDown fadeInDown fadeInDown">';
+
+			wp_page_menu( array(
+				'menu_class' => 'page-nav',
+				'echo'       => '1',
+			) );
+
+			echo '</div></nav>';
+		}
+
+		if ( evolve_theme_mod( 'evl_searchbox_sticky_header', '1' ) == "1" ) {
+			evolve_header_search( 'sticky' );
+		}
+
+		echo '</div></div></div><!-- .sticky-header --><div class="header-height">';
+	}
+}
+
+add_action( 'evolve_header_area', 'evolve_sticky_header_open', 20 );
+
 if ( ! function_exists( 'post_class_custom' ) ) {
     function post_class_custom( $class = '', $post_id = null ) {
         // Separates classes with a single space, collates classes for post DIV.
@@ -107,8 +184,7 @@ if ( ! function_exists( 'post_class_custom' ) ) {
 
 
 function evolve_child_register_my_menu() {
-	register_nav_menu('hamburger-menu-1',__( 'Hamburger-menu-1' ));
-	register_nav_menu('hamburger-menu-2',__( 'Hamburger-menu-2' ));
+	register_nav_menu('hamburger-menu-1',__( 'Hamburger-menu' ));
 }
 add_action( 'init', 'evolve_child_register_my_menu' );
 
@@ -127,7 +203,7 @@ if ( ! function_exists( 'evolve_custom_footer' ) ) {
         $image_url = get_theme_file_uri() . '/assets/images/logo_mini.png';
         $html = '<div class="row"><div class="col custom-footer">'. '<div class="footer-logo"><img src="'.$image_url.'" /></div>' . "<p>Los comentarios realizados en nuestras páginas de redes sociales son responsabilidad exclusiva de sus autores, nosotrascr.com no se responsabiliza por su contenido.</p>";
         $html .= '<p>© 2020 nosotrascr.com - Todos los derechos reservados.</p>';
-        $html .= '<a href="'.get_site_url().'" class="terms_of_use">Condiciones de uso</a>'; 
+        $html .= '<a href="'.get_site_url().'" class="terms_of_use">Condiciones de uso</a>';
         $html .= '</div></div>';
         echo $html;
     }
