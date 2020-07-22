@@ -1,6 +1,7 @@
 @use "../base/breakpoints" as breakpoints;
 
 .header-v2 {
+  width: 100%;
   position: fixed;
   z-index: 1000;
 
