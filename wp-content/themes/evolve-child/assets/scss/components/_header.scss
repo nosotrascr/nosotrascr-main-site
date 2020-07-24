@@ -7,7 +7,6 @@
 
   .action-icon {
     font-size: 32px;
-    cursor: pointer;
   }
 
   .ham-icon {
@@ -32,5 +31,17 @@
 
   @media (min-width: breakpoints.$md-breakpoint) {  
     position: initial;
+  }
+}
+
+.sticky-header {
+  .action-icon {
+    font-size: 25px;
+  }
+}
+
+.ham-icon {
+  .action-icon {
+    cursor: pointer;
   }
 }
