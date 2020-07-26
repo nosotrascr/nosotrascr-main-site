@@ -2,25 +2,16 @@
 
 $side-menu-width: 280px;
 
-.nav-menu {
-  position: absolute;
-  padding: 25px 30px;
-  top: 0;
-  left: 0;
-  min-height: 195px;
-  max-width: 100%;
-  z-index: 100;
-}
-
 .side-menu {
   position: fixed;
   top: 0;
+  left: 0;
   height: 110%;
   width: $side-menu-width;
   margin-left: -$side-menu-width;
   transition: 0.5s;
-  overflow: scroll;
-  z-index: 10000;
+  overflow: auto;
+  z-index: 100000;
 
   &.active {
     margin-left: 0;
@@ -35,7 +26,6 @@ $side-menu-width: 280px;
   }
 }
 
-.nav-menu,
 .side-menu {
   .search-form {
     position: relative;
@@ -52,8 +42,14 @@ $side-menu-width: 280px;
 
     .form-control {
       position: inherit;
-      padding-left: 35px;
+      padding: 0 28px;
     }
+  }
+}
+
+.menu-close-icon {
+  .action-icon {
+    cursor: pointer;
   }
 }
 
