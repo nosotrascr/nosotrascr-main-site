@@ -1,4 +1,7 @@
 #primary{
+  
+  border-right: 1px solid #DDD;
+
 	.post-content{
 		color: #000000;
 	}
@@ -107,6 +110,10 @@
 }
 
 @media only screen and (max-width: 767px) {
+
+  #primary{
+    border-right: none;
+  }
 
 	.important_news .column-left, .important_news .column-right{
 		width: 100%;

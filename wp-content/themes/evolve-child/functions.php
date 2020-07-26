@@ -209,17 +209,3 @@ if ( ! function_exists( 'evolve_custom_footer' ) ) {
     }
 }
 
-if ( ! function_exists( 'evolve_primary_container_open' ) ) {
-    function evolve_primary_container_open() {
-        if ( ( is_home() && ! is_front_page() ) || ( is_front_page() && evolve_theme_mod( 'evl_front_elements_content_display', 'above' ) != 'above' ) ) {
-            echo '<div id="primary" class="main_site_color ' . evolve_layout_class( $type = 1 ) . '">';
-        } elseif ( is_404() ) {
-            echo '<div id="primary" class="main_site_color col mb-5">';
-        } elseif ( ( function_exists( 'is_buddypress' ) && is_buddypress() ) || ( class_exists( 'bbPress' ) && is_bbpress() ) ) {
-            echo '<div id="primary" class="main_site_color ' . evolve_layout_class( $type = 2 ) . '">';
-        } elseif ( ( is_home() && ! is_front_page() ) || is_front_page() && evolve_theme_mod( 'evl_front_elements_content_display', 'above' ) == 'above' ) {
-        } else {
-            echo '<div id="primary" class="main_site_color ' . evolve_layout_class( $type = 1 ) . '">';
-        }
-    }
-}

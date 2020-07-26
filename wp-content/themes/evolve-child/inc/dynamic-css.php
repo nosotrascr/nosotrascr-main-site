@@ -30,6 +30,7 @@ if(!function_exists('evolve_child_dynamic_css')) {
 		$css_data .= ".related-news { border-top-color: {$related_news_border_color}; border-bottom-color: {$related_news_border_color};}";
 		$css_data .= ".main_site_color:after{border-color: {$main_site_color}; }";
 		$css_data .= ".main_site_color_font{color: {$main_site_color}; }";
+		$css_data .= ".wp-block-separator.partial-color-border:after{color: {$main_site_color}; }";
 
 		return $css_data;
 	}
