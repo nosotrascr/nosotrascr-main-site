@@ -69,25 +69,6 @@
 			</div>
 			
 		</div><!-- .header .container -->
-
-		<div class="nav-menu container d-none"><!-- nav-menu -->
-			<div class="row mb-3">
-				<div class="col col-md-1 navbar-close d-flex justify-content-center align-items-center">
-					<span class="menu-close-icon text-center">
-						<i class="fa fa-times action-icon" aria-hidden="true"></i>
-					</span>
-				</div>
-				<div class="col col-md-11 pl-0">
-					<?php evolve_header_search(''); ?>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-					<?php echo evolve_child_menu('hamburger-menu-1', 'navbar-nav mr-auto');  ?>
-				</div>
-			</div>
-		</div><!-- nav-menu -->
-
 		<?php if (get_header_image()) {
 			echo '</div><!-- .custom-header -->';
 		} ?>
@@ -95,16 +76,14 @@
 	</div><!-- .header-pattern -->
 	
 	<!-- Side Menu -->
-	<div class="side-menu d-block d-md-none">
+	<div class="side-menu">
 		<div class="container px-0">
 			<div class="row mx-0 py-2 menu-head ">
 				<div class="col-10">
 					<?php if ( evolve_theme_mod( 'evl_header_logo', '' ) != '' ) { ?>
-						<a href="<?php echo home_url(); ?>">
-							<img 
-								alt="<?php echo get_bloginfo( 'name' ) ?>" 
-								src="<?php echo evolve_theme_mod( 'evl_header_logo', '' ) ?>" />
-						</a>
+						<img 
+							alt="<?php echo get_bloginfo( 'name' ) ?>" 
+							src="<?php echo evolve_theme_mod( 'evl_header_logo', '' ) ?>" />						
 					<?php } else { ?>
 						<h3><?php bloginfo('name') ?></h3>
 					<?php } ?>
