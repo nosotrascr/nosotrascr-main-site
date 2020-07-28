@@ -35,6 +35,9 @@ if (!function_exists('evolve_child_customize_settings_register')) {
         $wp_customize->add_setting( 'evlch_related_news_border_color' , array(
             'default'   => '#DDD',
         ) );
+        $wp_customize->add_setting('evlch_sticky_header_enable_nav', array(
+            'default'   => 0,
+        ));
     }
 }
 
@@ -42,6 +45,7 @@ if(!function_exists('evolve_child_customize_sections')) {
     function evolve_child_customize_sections($wp_customize) {
         $menuSectionId = 'evolve_child_nosotras_menu_section';
         $mainMenuSectionId = 'evolve_child_nosotras_main_section';
+        $stickyHeaderSectionId = 'evl-header-subsec-sticky-header-tab';
 
         // Sections
         // NosotrasCR Menus
@@ -110,6 +114,19 @@ if(!function_exists('evolve_child_customize_sections')) {
             'priority'   => 11,
         )));
 
+        // Sticky header extra controls
+        Kirki::add_field( 'evolve_child', [
+            'type'        => 'switch',
+            'settings'    => 'evlch_sticky_header_enable_nav',
+            'label'       => esc_html__( 'Enable Navbar', 'kirki' ),
+            'section'     => $stickyHeaderSectionId,
+            'default'     => 0,
+            'priority'    => 3,
+            'choices'     => [
+                'on'  => esc_html__( 'Enable', 'evolve_child' ),
+                'off' => esc_html__( 'Disable', 'evolve_child' ),
+            ],
+        ] );
 
         $relatedNewsSectionId = 'evolve_child_nosotras_related_news_section';
 
