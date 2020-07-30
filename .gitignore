@@ -46,6 +46,7 @@ ehthumbs.db
 # Francisco Gomez custom
 staging
 /wp-content/plugins/all-in-one-wp-migration/storage/
+/wp-content/themes/**/customizer-controls.json
 *.css.map
 #/wp-content/vpdb/options/ai/ai1wm_updater.ini
 #/wp-content/vpdb/options/ei/eig_last_site_login.ini
