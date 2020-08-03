@@ -22,7 +22,9 @@
 		if (is_array(($summary))) {
 			?><ul><?php
 			for ($i = 1; $i <= count($summary); $i++) {
-				?><li><?php echo $summary[$i]; ?></li><?php
+				if ($summary[$i]) {
+					?><li><?php echo $summary[$i]; ?></li><?php
+				}
 			}
 			?></ul><?php
 		} else {
