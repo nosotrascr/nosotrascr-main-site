@@ -1,0 +1,12 @@
+aside.aside {
+    div.widget-content ul li {
+        margin-bottom: .5rem;
+        padding-bottom: .5rem;
+
+        & a {
+            font-weight: bold;
+        }
+
+        border-bottom: 1px solid #ddd;
+    }
+}

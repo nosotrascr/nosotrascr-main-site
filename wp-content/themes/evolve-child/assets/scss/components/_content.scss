@@ -7,3 +7,10 @@
     padding-top: 2rem;  
   }
 }
+
+.thumbnail-post {
+  &:hover img {
+    transform: inherit;
+    -webkit-transform: inherit;
+  }
+}

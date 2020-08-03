@@ -99,7 +99,7 @@ if ( ! function_exists( 'evolve_posts_loop_open' ) ) {
 
 if ( ! function_exists( 'evolve_sticky_header_open' ) ) {
 	function evolve_sticky_header_open() {
-        $hamIcon = '<span class="ham-icon"><i class="fa fa-bars action-icon" aria-hidden="true"></i></span>';
+        $hamIcon = '<span class="col-4 ham-icon"><i class="fa fa-bars action-icon" aria-hidden="true"></i></span>';
         
 		if ( evolve_theme_mod( 'evl_sticky_header', true ) == false ) {
 			return;
@@ -112,7 +112,7 @@ if ( ! function_exists( 'evolve_sticky_header_open' ) ) {
 		if ( evolve_logo_position() == "disable" ) {
 		} else {
 			if ( evolve_theme_mod( 'evl_header_logo', '' ) ) {
-				echo $hamIcon . '<div class="' . ( ( evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) ? 'col-2' : 'col-auto pr-0' ) . '"><a href="' . home_url() . '"><img src="' . evolve_theme_mod( 'evl_header_logo', '' ) . '" alt="' . get_bloginfo( 'name' ) . '" /></a></div>';
+				echo $hamIcon . '<div class="' . ( ( evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) ? 'col-4 text-center px-5' : 'col-auto pr-0' ) . '"><a href="' . home_url() . '"><img src="' . evolve_theme_mod( 'evl_header_logo', '' ) . '" alt="' . get_bloginfo( 'name' ) . '" /></a></div>';
 			}
 		}
 		if ( evolve_theme_mod( 'evl_blog_title', '0' ) == "0" ) {
@@ -122,49 +122,50 @@ if ( ! function_exists( 'evolve_sticky_header_open' ) ) {
 		}
 		if ( evolve_theme_mod( 'evl_blog_title', '0' ) != '1' && evolve_logo_position() !== 'disable' && '' != ( evolve_theme_mod( 'evl_header_logo', '' ) ) ) {
 			echo '</div></div>';
-		}
-		if ( has_nav_menu( 'sticky_navigation' ) ) {
-			echo '<nav class="navbar navbar-expand-md col' . ( ( ( evolve_logo_position() == 'disable' && evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) || evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) ? " pl-0" : "" ) . '">
-			                    <div class="navbar-toggler" data-toggle="collapse" data-target="#sticky-menu" aria-controls="primary-menu" aria-expanded="false" aria-label="' . __( "Sticky", "evolve" ) . '">
-                                    <span class="navbar-toggler-icon-svg"></span>
-                                </div><div id="sticky-menu" class="collapse navbar-collapse" data-hover="dropdown" data-animations="fadeInUp fadeInDown fadeInDown fadeInDown">';
-			wp_nav_menu( array(
-				'theme_location' => 'sticky_navigation',
-				'depth'          => 10,
-				'container'      => false,
-				'menu_class'     => 'navbar-nav mr-auto align-items-center',
-				'fallback_cb'    => 'evolve_custom_menu_walker::fallback',
-				'walker'         => new evolve_custom_menu_walker()
-			) );
-			echo '</div></nav>';
-		} elseif ( has_nav_menu( 'primary-menu' ) ) {
-			echo '<nav class="navbar navbar-expand-md col' . ( ( ( evolve_logo_position() == 'disable' && evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) || evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) ? " pl-0" : "" ) . '">
-                                <div class="navbar-toggler" data-toggle="collapse" data-target="#sticky-menu" aria-controls="primary-menu" aria-expanded="false" aria-label="' . __( "Sticky", "evolve" ) . '">
-                                    <span class="navbar-toggler-icon-svg"></span>
-                                </div><div id="sticky-menu" class="collapse navbar-collapse" data-hover="dropdown" data-animations="fadeInUp fadeInDown fadeInDown fadeInDown">';
-			wp_nav_menu( array(
-				'theme_location' => 'primary-menu',
-				'depth'          => 10,
-				'container'      => false,
-				'menu_class'     => 'navbar-nav mr-auto align-items-center',
-				'fallback_cb'    => 'evolve_custom_menu_walker::fallback',
-				'walker'         => new evolve_custom_menu_walker()
-			) );
-			echo '</div></nav>';
-		} else {
-			echo '<nav class="navbar navbar-expand-md col' . ( ( ( evolve_logo_position() == 'disable' && evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) || evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) ? " pl-0" : "" ) . '">
-                                <div class="navbar-toggler" data-toggle="collapse" data-target="#sticky-menu" aria-controls="primary-menu" aria-expanded="false" aria-label="' . __( "Sticky", "evolve" ) . '">
-                                    <span class="navbar-toggler-icon-svg"></span>
-                                </div><div id="sticky-menu" class="collapse navbar-collapse" data-hover="dropdown" data-animations="fadeInUp fadeInDown fadeInDown fadeInDown">';
+        }
+        if (get_theme_mod('evlch_sticky_header_enable_nav')) {
+            if ( has_nav_menu( 'sticky_navigation' ) ) {
+                echo '<nav class="navbar navbar-expand-md col' . ( ( ( evolve_logo_position() == 'disable' && evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) || evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) ? " pl-0" : "" ) . '">
+                                    <div class="navbar-toggler" data-toggle="collapse" data-target="#sticky-menu" aria-controls="primary-menu" aria-expanded="false" aria-label="' . __( "Sticky", "evolve" ) . '">
+                                        <span class="navbar-toggler-icon-svg"></span>
+                                    </div><div id="sticky-menu" class="collapse navbar-collapse" data-hover="dropdown" data-animations="fadeInUp fadeInDown fadeInDown fadeInDown">';
+                wp_nav_menu( array(
+                    'theme_location' => 'sticky_navigation',
+                    'depth'          => 10,
+                    'container'      => false,
+                    'menu_class'     => 'navbar-nav mr-auto align-items-center',
+                    'fallback_cb'    => 'evolve_custom_menu_walker::fallback',
+                    'walker'         => new evolve_custom_menu_walker()
+                ) );
+                echo '</div></nav>';
+            } elseif ( has_nav_menu( 'primary-menu' ) ) {
+                echo '<nav class="navbar navbar-expand-md col' . ( ( ( evolve_logo_position() == 'disable' && evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) || evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) ? " pl-0" : "" ) . '">
+                                    <div class="navbar-toggler" data-toggle="collapse" data-target="#sticky-menu" aria-controls="primary-menu" aria-expanded="false" aria-label="' . __( "Sticky", "evolve" ) . '">
+                                        <span class="navbar-toggler-icon-svg"></span>
+                                    </div><div id="sticky-menu" class="collapse navbar-collapse" data-hover="dropdown" data-animations="fadeInUp fadeInDown fadeInDown fadeInDown">';
+                wp_nav_menu( array(
+                    'theme_location' => 'primary-menu',
+                    'depth'          => 10,
+                    'container'      => false,
+                    'menu_class'     => 'navbar-nav mr-auto align-items-center',
+                    'fallback_cb'    => 'evolve_custom_menu_walker::fallback',
+                    'walker'         => new evolve_custom_menu_walker()
+                ) );
+                echo '</div></nav>';
+            } else {
+                echo '<nav class="navbar navbar-expand-md col' . ( ( ( evolve_logo_position() == 'disable' && evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) || evolve_theme_mod( 'evl_blog_title', '0' ) == '1' ) ? " pl-0" : "" ) . '">
+                                    <div class="navbar-toggler" data-toggle="collapse" data-target="#sticky-menu" aria-controls="primary-menu" aria-expanded="false" aria-label="' . __( "Sticky", "evolve" ) . '">
+                                        <span class="navbar-toggler-icon-svg"></span>
+                                    </div><div id="sticky-menu" class="collapse navbar-collapse" data-hover="dropdown" data-animations="fadeInUp fadeInDown fadeInDown fadeInDown">';
 
-			wp_page_menu( array(
-				'menu_class' => 'page-nav',
-				'echo'       => '1',
-			) );
+                wp_page_menu( array(
+                    'menu_class' => 'page-nav',
+                    'echo'       => '1',
+                ) );
 
-			echo '</div></nav>';
-		}
-
+                echo '</div></nav>';
+            }
+        }
 		if ( evolve_theme_mod( 'evl_searchbox_sticky_header', '1' ) == "1" ) {
 			evolve_header_search( 'sticky' );
 		}
