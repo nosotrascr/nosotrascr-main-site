@@ -1,6 +1,7 @@
 #primary{
   
   border-right: 1px solid #DDD;
+  margin-bottom: 20px;
 
 	.post-content{
 		color: #000000;
@@ -23,7 +24,7 @@
 }
 
 .important_news {
-  
+  margin-bottom: 7em;
   overflow: hidden;
 
   .column-left, .column-right{
@@ -123,8 +124,10 @@
 
 
 .homepage_news{
-    padding-left: 15%;
-    overflow: hidden;
+  padding-left: 15%;
+  overflow: hidden;
+  margin-top: 5em;
+
   .card{
     min-width: 100%;
     max-width: 100%;
