@@ -15,7 +15,23 @@
 		if ( get_post_meta( $post->ID, 'evolve_page_title', true ) == "yes" || get_post_meta( $post->ID, 'evolve_page_title', true ) == "" ) {
 			the_title( '<h1 class="post-title" itemprop="name">', '</h1>' );
 		}
-		?><div class="custom-summary"><?php the_field('summary'); ?></div><?php
+
+		// Custom Summary
+		$summary = get_field('summary');
+		?><div class="custom-summary"><?php
+		if (is_array(($summary))) {
+			?><ul><?php
+			for ($i = 1; $i <= count($summary); $i++) {
+				if ($summary[$i]) {
+					?><li><?php echo $summary[$i]; ?></li><?php
+				}
+			}
+			?></ul><?php
+		} else {
+			echo $summary;
+		}
+		?></ul></div><?php
+
 	} else {
 		if ( evolve_theme_mod( 'evl_post_layout', 'two' ) != "one" ) {
 			$evolve_title = the_title( '', '', false );
@@ -29,8 +45,15 @@
 
 	evolve_post_meta( 'header' );
 
-	evolve_featured_image( '1' ); ?>
+	evolve_featured_image( '1' );
+	if ( is_single() || is_page() ) {
+		$description = get_post(get_post_thumbnail_id())->post_content;
+		if ( $description ) {
+			//echo $description;
+		}
+	}
 
+	?>
     <div class="post-content" itemprop="description">
 
 		<?php evolve_featured_image( '2' );
