@@ -3,10 +3,13 @@
 if (!function_exists('evolve_child_customize_settings_register')) {
     function evolve_child_customize_settings_register ($wp_customize) {
 
+        // 
         $wp_customize->add_setting( 'evlch_main_site_color' , array(
             'default'   => '#ffbf00',
         ) );
-
+        $wp_customize->add_setting('evlch_categories_filter_enable', array(
+            'default'   => 0,
+        ));
         // Menu
         $wp_customize->add_setting( 'evlch_menu_back_color' , array(
             'default'   => '#f7f7f7',
@@ -66,6 +69,18 @@ if(!function_exists('evolve_child_customize_sections')) {
             'section'    => $mainMenuSectionId,
             'settings'   => 'evlch_main_site_color',
         ) ) );
+        Kirki::add_field( 'evolve_child', [
+            'type'        => 'switch',
+            'settings'    => 'evlch_categories_filter_enable',
+            'label'       => esc_html__( 'Enable Date Filter on Categories', 'kirki' ),
+            'section'     => $mainMenuSectionId,
+            'default'     => 0,
+            'choices'     => [
+                'on'  => esc_html__( 'Enable', 'evolve_child' ),
+                'off' => esc_html__( 'Disable', 'evolve_child' ),
+            ],
+        ] );
+
 
         // Controls for NosotrasCR Menus
         $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'evlch_menu_back_color_control', array(

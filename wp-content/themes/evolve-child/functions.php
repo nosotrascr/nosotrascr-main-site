@@ -26,7 +26,7 @@ function my_theme_enqueue_styles() {
 
 if (! function_exists('evolve_child_enqueue_scripts')) {
 	function evolve_child_enqueue_scripts() {
-		wp_enqueue_script('evolve-child', get_stylesheet_directory_uri() . '/assets/js/nosotras_menus.js', array('jquery'));
+        wp_enqueue_script('evolve-child', get_stylesheet_directory_uri() . '/assets/js/nosotras_menus.js', array('jquery'));
 	}
 }
 add_action('wp_enqueue_scripts', 'evolve_child_enqueue_scripts');
@@ -211,3 +211,26 @@ if ( ! function_exists( 'evolve_custom_footer' ) ) {
     }
 }
 
+/**
+ * Simple filter posts if there is a post_date param
+ */
+if ( ! function_exists( 'categories_date_filter' ) ) {
+    function categories_date_filter( $query ) {
+        if ( !is_admin() && $query->is_main_query() ) {
+            $post_date_str = $_GET['post_date'];
+            $category = $_GET['cat'];
+
+            if ($category && $post_date_str) {
+                $post_date = strtotime($post_date_str);
+                $query->set('date_query', array(
+                    'year' => date('Y', $post_date),
+                    'month' => date('n', $post_date),
+                    'day' => date('j', $post_date)
+                ));
+                $query->set('cat', $category);
+            }
+        }
+        return $query;
+    }
+}
+add_action('pre_get_posts', 'categories_date_filter');
