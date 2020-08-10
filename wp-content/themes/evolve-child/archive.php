@@ -41,10 +41,6 @@ if ( have_posts() ) :
 
 	do_action( 'evolve_before_posts_loop' );
 
-	if(get_theme_mod('evlch_categories_filter_enable')) {
-		get_template_part('template-parts/forms/categories', 'filter');
-	}
-
 	while ( have_posts() ) :
 		the_post();
 		get_template_part( 'template-parts/post/content', 'post' );

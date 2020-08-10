@@ -4,7 +4,7 @@ $category = get_queried_object();
 $default_date = isset($_GET['post_date']) ? $_GET['post_date'] : date('Y-m-d');
 ?>
 
-<div class="col-12 mb-2 px-0 categories-form">
+<div class="col-12 mb-2 px-0">
     <form method="GET" id="post-categories-filter">
         <div class="">
             <input type="hidden" name="cat" value="<?php echo $category->term_id ?>">

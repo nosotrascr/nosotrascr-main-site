@@ -60,11 +60,3 @@ body.category{
 		}
 	}
 }
-
-.categories-form {
-	text-align: center;
-
-	@media (min-width: breakpoints.$md-breakpoint) {  
-		text-align: right;
-	}
-}

@@ -87,8 +87,11 @@ if ( ! function_exists( 'evolve_posts_loop_open' ) ) {
                 if ( evolve_theme_mod( 'evl_grid_layout', 'card' ) != "card" ) {
                     echo '<div class="posts card-columns">';
                 } else {
-                    echo '<div class="left-content col-lg-3"><h3>Últimas noticias</h3></div>';
-                    echo '<div class="posts card-deck col-lg-9 right-content">';
+                    echo '<div class="left-content col-lg-3"><h3>Últimas noticias</h3>';
+                    if(get_theme_mod('evlch_categories_filter_enable')) {
+                        get_template_part('template-parts/forms/categories', 'filter');
+                    }
+                    echo '</div><div class="posts card-deck col-lg-9 right-content">';
                 }
             } else {
                 echo '<div class="posts">';
