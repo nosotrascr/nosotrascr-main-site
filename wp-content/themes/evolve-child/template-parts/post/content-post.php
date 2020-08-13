@@ -31,6 +31,7 @@
 			echo $summary;
 		}
 		?></ul></div><?php
+
 	} else {
 		/*if ( evolve_theme_mod( 'evl_post_layout', 'two' ) != "one" ) {
 			$evolve_title = the_title( '', '', false );
@@ -45,8 +46,15 @@
 
 	evolve_post_meta( 'header' );
 
-	evolve_featured_image( '1' ); ?>
+	evolve_featured_image( '1' );
+	if ( is_single() || is_page() ) {
+		$description = get_post(get_post_thumbnail_id())->post_content;
+		if ( $description ) {
+			//echo $description;
+		}
+	}
 
+	?>
     <div class="post-content" itemprop="description">
 
 		<?php evolve_featured_image( '2' );
