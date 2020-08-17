@@ -13,6 +13,8 @@ if(!function_exists('evolve_child_dynamic_css')) {
 		$breadcrumb_line_color 		 = get_theme_mod('evlch_breadcrumb_line_color', '#F00');
 		$related_news_border_color	 = get_theme_mod('evlch_related_news_border_color', '#DDD');
 		$main_site_color       		 = get_theme_mod( 'evlch_main_site_color', '#ffbf00' );
+		$pheader_font_color		 	 = get_theme_mod('evlch_pre_header_font_color', '#000000');
+		$pheader_links_hover_color 	 = get_theme_mod('evlch_pre_header_links_hover_color', '#ffbf00');
 
 		$css_data .= ".side-menu { background-color: {$menus_back}; }"; 
 		$css_data .= ".side-menu .menu-head { color: {$m_color}; background-color: {$m_header_back_color}; } .side-menu h3 { color: {$m_color};}";
@@ -27,7 +29,8 @@ if(!function_exists('evolve_child_dynamic_css')) {
 		$css_data .= ".main_site_color:after{border-color: {$main_site_color}; }";
 		$css_data .= ".main_site_color_font{color: {$main_site_color}; }";
 		$css_data .= ".wp-block-separator.partial-color-border:after{color: {$main_site_color}; }";
-
+		$css_data .= ".header-v2 .top-bar, .header-v2 .top-bar a { color: {$pheader_font_color}; }";
+		$css_data .= ".header-v2 .top-bar a:hover { color: {$pheader_links_hover_color}; }";
 		return $css_data;
 	}
 }
