@@ -47,10 +47,10 @@
 	evolve_post_meta( 'header' );
 
 	evolve_featured_image( '1' );
-	if ( is_single() || is_page() ) {
+	if ( is_single() && has_post_thumbnail() ) {
 		$description = get_post(get_post_thumbnail_id())->post_content;
 		if ( $description ) {
-			//echo $description;
+			echo $description;
 		}
 	}
 
