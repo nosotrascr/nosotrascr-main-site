@@ -208,7 +208,7 @@ if ( ! function_exists( 'evolve_custom_footer' ) ) {
         $image_url = get_theme_file_uri() . '/assets/images/logo_mini.png';
         $html = '<div class="row"><div class="col custom-footer">'. '<div class="footer-logo"><img src="'.$image_url.'" /></div>' . "<p>Los comentarios realizados en nuestras páginas de redes sociales son responsabilidad exclusiva de sus autores, nosotrascr.com no se responsabiliza por su contenido.</p>";
         $html .= '<p>© 2020 nosotrascr.com - Todos los derechos reservados.</p>';
-        $html .= '<a href="'.get_site_url().'" class="terms_of_use">Condiciones de uso</a>';
+        $html .= '<a href="'.get_site_url().'/condiciones-de-uso" class="terms_of_use">Condiciones de uso</a>';
         $html .= '</div></div>';
         echo $html;
     }
