@@ -1,8 +1,20 @@
 .about_us {
     .section {
-        border: 1px solid darkgray;
+        border: 2px solid darkgray;
         padding: 20px;
         border-radius: 20px;
+    }
+    
+    .section-1 {
+        border-color: rgb(45, 45, 130);
+    }
+
+    .section-2 {
+        border-color: rgb(224, 32, 32);
+    }
+
+    .section-3 {
+        border-color: rgb(240, 170, 30);
     }
 
     ul {
