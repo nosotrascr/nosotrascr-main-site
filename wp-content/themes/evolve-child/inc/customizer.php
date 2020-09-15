@@ -38,6 +38,12 @@ if (!function_exists('evolve_child_customize_settings_register')) {
         $wp_customize->add_setting( 'evlch_related_news_border_color' , array(
             'default'   => '#DDD',
         ) );
+        $wp_customize->add_setting( 'evlch_pre_header_font_color' , array(
+            'default'   => '#000000',
+        ) );
+        $wp_customize->add_setting( 'evlch_pre_header_links_hover_color' , array(
+            'default'   => '#ffbf00',
+        ) );
         $wp_customize->add_setting('evlch_sticky_header_enable_nav', array(
             'default'   => 0,
         ));
@@ -48,6 +54,7 @@ if(!function_exists('evolve_child_customize_sections')) {
     function evolve_child_customize_sections($wp_customize) {
         $menuSectionId = 'evolve_child_nosotras_menu_section';
         $mainMenuSectionId = 'evolve_child_nosotras_main_section';
+        $colorsSectionId = 'evl-styling-main-tab';
         $stickyHeaderSectionId = 'evl-header-subsec-sticky-header-tab';
 
         // Sections
@@ -128,6 +135,20 @@ if(!function_exists('evolve_child_customize_sections')) {
             'settings'   => 'evlch_breadcrumb_line_color',
             'priority'   => 11,
         )));
+
+        // Colors extra controls
+        $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'evlch_pre_header_font_color_control', array(
+            'label'      => __( 'Pre Header Color', 'evolve_child' ),
+            'section'    => $colorsSectionId,
+            'settings'   => 'evlch_pre_header_font_color',
+            'priority'   => 100,
+        ) ) );
+        $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'evlch_pre_header_links_hover_color_control', array(
+            'label'      => __( 'Pre Header Links Hover Color', 'evolve_child' ),
+            'section'    => $colorsSectionId,
+            'settings'   => 'evlch_pre_header_links_hover_color',
+            'priority'   => 101,
+        ) ) );
 
         // Sticky header extra controls
         Kirki::add_field( 'evolve_child', [
