@@ -46,8 +46,11 @@
 
 	evolve_post_meta( 'header' );
 
-	//evolve_featured_image( '1' );
-	the_post_thumbnail( 'full' );
+	if ( is_single() || is_page() ) {
+		//the_post_thumbnail( 'full' );
+	} else {
+		evolve_featured_image( '1' );
+	}
 
 	if ( is_single() && has_post_thumbnail() ) {
 		$description = get_post(get_post_thumbnail_id())->post_content;
