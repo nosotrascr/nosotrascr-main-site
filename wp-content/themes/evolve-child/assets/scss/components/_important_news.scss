@@ -143,7 +143,6 @@
     flex-direction: column;
  
     margin: 0;
-    /*border-right: 1px solid #DDD;*/
     padding: 20px;
 
     &.main_site_color{
@@ -175,8 +174,13 @@
       font-family: Roboto;
       font-weight: 700;
       color: #000000;
+      line-height: 16px;
       a{
         font-size: 1rem;
+      }
+
+      @media (min-width: breakpoints.$md-breakpoint) {
+        line-height: 29px;
       }
     }
 
