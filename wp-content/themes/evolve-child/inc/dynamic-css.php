@@ -28,7 +28,7 @@ if(!function_exists('evolve_child_dynamic_css')) {
 		$css_data .= ".related-news { border-top-color: {$related_news_border_color}; border-bottom-color: {$related_news_border_color};}";
 		$css_data .= ".main_site_color:after{border-color: {$main_site_color}; }";
 		$css_data .= ".main_site_color_font{color: {$main_site_color}; }";
-		$css_data .= ".wp-block-separator.partial-color-border:after{color: {$main_site_color}; }";
+		$css_data .= ".wp-block-separator.partial-color-border:after{color: {$main_site_color}; background-color: {$main_site_color};}";
 		$css_data .= ".header-v2 .top-bar, .header-v2 .top-bar .textwidget, .header-v2 .top-bar a { color: {$pheader_font_color}; }";
 		$css_data .= ".header-v2 .top-bar a:hover { color: {$pheader_links_hover_color}; }";
 		$css_data .= ".force-hover-maincolor:hover{color: {$main_site_color} !important; }";
