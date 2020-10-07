@@ -123,9 +123,9 @@ if ( ! function_exists( 'sinatra_logo' ) ) :
 		if ( sinatra_has_logo() ) {
 
 			$default_logo = sinatra_option( 'custom_logo', '' );
-			
-			$retina_logo  = sinatra_option( 'logo_default_retina' );
-			$retina_logo  = isset( $retina_logo['background-image-id'] ) ? $retina_logo['background-image-id'] : false;
+
+			$retina_logo = sinatra_option( 'logo_default_retina' );
+			$retina_logo = isset( $retina_logo['background-image-id'] ) ? $retina_logo['background-image-id'] : false;
 
 			$site_title_output = sinatra_get_logo_img_output( $default_logo, $retina_logo );
 
@@ -189,6 +189,9 @@ if ( ! function_exists( 'sinatra_get_logo_img_output' ) ) :
 	/**
 	 * Outputs logo image markup.
 	 *
+	 * @param int    $logo Attachment ID of the logo image.
+	 * @param int    $retina Attachment ID of the retina logo image.
+	 * @param string $class Additional CSS class.
 	 * @since 1.0.0
 	 */
 	function sinatra_get_logo_img_output( $logo, $retina = '', $class = '' ) {
@@ -335,7 +338,7 @@ if ( ! function_exists( 'sinatra_hamburger' ) ) :
 		$classes = trim( implode( ' ', $classes ) );
 
 		?>
-		<button class="<?php echo esc_attr( $classes ); ?>" aria-label="<?php echo esc_attr( 'Menu', 'sinatra' ); ?>" aria-controls="<?php echo esc_attr( $menu_id ); ?>" type="button">
+		<button class="<?php echo esc_attr( $classes ); ?>" aria-label="<?php esc_attr_e( 'Menu', 'sinatra' ); ?>" aria-controls="<?php echo esc_attr( $menu_id ); ?>" type="button">
 
 			<?php if ( $button_title || is_customize_preview() ) { ?>
 				<span class="hamburger-label uppercase-text"><?php echo wp_kses( $button_title, sinatra_get_allowed_html_tags( 'button' ) ); ?></span>
@@ -445,8 +448,9 @@ if ( ! function_exists( 'sinatra_excerpt' ) ) :
 	/**
 	 * Get excerpt.
 	 *
-	 * @since  1.0.0
-	 * @param  int $length the length of the excerpt.
+	 * @since 1.0.0
+	 * @param int    $length the length of the excerpt.
+	 * @param string $more What to append if $text needs to be trimmed.
 	 */
 	function sinatra_excerpt( $length = null, $more = null ) {
 
@@ -608,6 +612,8 @@ if ( ! function_exists( 'sinatra_entry_meta_category' ) ) :
 	 *
 	 * @since 1.0.0
 	 * @param string $sep Category separator.
+	 * @param bool   $show_icon Show an icon for the meta detail.
+	 * @param bool   $return Return or output.
 	 */
 	function sinatra_entry_meta_category( $sep = ', ', $show_icon = true, $return = false ) {
 
@@ -647,10 +653,11 @@ if ( ! function_exists( 'sinatra_entry_meta_tag' ) ) :
 	 * Prints HTML with meta information for the tags.
 	 *
 	 * @since 1.0.0
-	 * @param string $before Before entry meta tag.
-	 * @param string $sep    Separator string.
-	 * @param string $after  After entry meta tag.
-	 * @param int    $id     Post ID.
+	 * @param string $before    Before entry meta tag.
+	 * @param string $sep       Separator string.
+	 * @param string $after     After entry meta tag.
+	 * @param int    $id        Post ID.
+	 * @param bool   $show_icon Show an icon for the meta detail.
 	 */
 	function sinatra_entry_meta_tag( $before = '<span class="cat-links"><span>', $sep = ', ', $after = '</span></span>', $id = 0, $show_icon = true ) {
 
@@ -792,10 +799,11 @@ if ( ! function_exists( 'sinatra_top_bar_widget_nav' ) ) :
 	/**
 	 * Outputs the top bar navigation widget.
 	 *
+	 * @param array $options Array of navigation widget options.
 	 * @since 1.0.0
 	 */
 	function sinatra_top_bar_widget_nav( $options ) {
-		
+
 		$defaults = array(
 			'menu_id'     => 'sinatra-topbar-nav',
 			'container'   => false,
@@ -838,6 +846,7 @@ if ( ! function_exists( 'sinatra_top_bar_widget_socials' ) ) :
 	/**
 	 * Outputs the top bar social links widget.
 	 *
+	 * @param array $options Array of widget options.
 	 * @since 1.0.0
 	 */
 	function sinatra_top_bar_widget_socials( $options ) {
@@ -914,6 +923,7 @@ if ( ! function_exists( 'sinatra_copyright_widget_nav' ) ) :
 	/**
 	 * Outputs the copyright navigation widget.
 	 *
+	 * @param array $options Array of widget options.
 	 * @since 1.0.0
 	 */
 	function sinatra_copyright_widget_nav( $options ) {
@@ -951,7 +961,7 @@ if ( ! function_exists( 'sinatra_copyright_widget_nav' ) ) :
 
 		$options['before_nav'] = '<nav role="navigation" class="sinatra-nav">';
 		$options['after_nav']  = '</nav>';
-		
+
 		sinatra_navigation( $options );
 
 	}
@@ -961,6 +971,7 @@ if ( ! function_exists( 'sinatra_copyright_widget_socials' ) ) :
 	/**
 	 * Outputs the copyright social links widget.
 	 *
+	 * @param array $options Array of widget options.
 	 * @since 1.0.0
 	 */
 	function sinatra_copyright_widget_socials( $options ) {
@@ -1056,7 +1067,7 @@ if ( ! function_exists( 'sinatra_comment' ) ) :
 								<?php echo get_avatar( $comment, $args['avatar_size'] ); ?>
 
 								<?php if ( $comment->user_id === $post->post_author ) { ?>
-									<span class="bypostauthor-badge" aria-hidden="true" title="<?php esc_html_e( 'The post author', 'sinatra' ); ?>"><?php echo esc_html_x( 'A', 'Post author badge on comments', 'sinatra' ); ?></span>
+									<span class="bypostauthor-badge" aria-hidden="true" title="<?php esc_attr_e( 'The post author', 'sinatra' ); ?>"><?php echo esc_html_x( 'A', 'Post author badge on comments', 'sinatra' ); ?></span>
 								<?php } ?>
 							</span>
 
@@ -1140,6 +1151,7 @@ if ( ! function_exists( 'sinatra_social_links' ) ) :
 			'link_after'      => '</span><i class="si-icon si-external-link" aria-hidden="true"></i><i class="si-icon si-external-link bottom-icon" aria-hidden="true"></i>',
 			'style'           => '',
 			'align'           => '',
+			'size'            => 'si-standard',
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -1153,6 +1165,11 @@ if ( ! function_exists( 'sinatra_social_links' ) ) :
 		// Add alignment class to container_class.
 		if ( ! empty( $args['align'] ) ) {
 			$args['menu_class'] .= ' ' . esc_attr( $args['align'] );
+		}
+
+		// Add size class to container_class.
+		if ( ! empty( $args['size'] ) ) {
+			$args['container_class'] .= ' ' . esc_attr( $args['size'] );
 		}
 
 		if ( ! empty( $args['menu'] ) && is_nav_menu( $args['menu'] ) ) {
@@ -1190,6 +1207,11 @@ if ( ! function_exists( 'sinatra_navigation' ) ) :
 endif;
 
 if ( ! function_exists( 'sinatra_breadcrumb' ) ) :
+	/**
+	 * Outputs breadcrumbs trail
+	 *
+	 * @param array $args Array of breadcrumb options.
+	 */
 	function sinatra_breadcrumb( $args = array() ) {
 
 		$args = wp_parse_args(
@@ -1201,13 +1223,13 @@ if ( ! function_exists( 'sinatra_breadcrumb' ) ) :
 		);
 
 		echo wp_kses_post( $args['container_before'] );
-			
+
 		sinatra_breadcrumb_trail(
 			array(
 				'show_browse' => false,
 			)
 		);
-		
+
 		echo wp_kses_post( $args['container_after'] );
 	}
 endif;

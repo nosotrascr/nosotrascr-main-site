@@ -12,10 +12,9 @@
  *
  * Sinatra changes: h2 to h4 tag. Removed &hellip from title output.
  *
- * @see         https://docs.woocommerce.com/document/template-structure/
- * @author      WooThemes
- * @package     WooCommerce/Templates
- * @version     3.0.0
+ * @see https://docs.woocommerce.com/document/template-structure/
+ * @package WooCommerce/Templates
+ * @version 4.4.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -25,8 +24,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( $cross_sells ) : ?>
 
 	<div class="cross-sells">
+		<?php
+		$heading = apply_filters( 'woocommerce_product_cross_sells_products_heading', __( 'You may be interested in', 'sinatra' ) );
 
-		<h4><?php esc_html_e( 'You may be interested in', 'sinatra' ); ?></h4>
+		if ( $heading ) :
+			?>
+			<h4><?php echo esc_html( $heading ); ?></h4>
+		<?php endif; ?>
 
 		<?php woocommerce_product_loop_start(); ?>
 
@@ -35,7 +39,7 @@ if ( $cross_sells ) : ?>
 				<?php
 					$post_object = get_post( $cross_sell->get_id() );
 
-					setup_postdata( $GLOBALS['post'] =& $post_object );
+					setup_postdata( $GLOBALS['post'] =& $post_object ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, Squiz.PHP.DisallowMultipleAssignments.Found
 
 					wc_get_template_part( 'content', 'product' );
 				?>
@@ -45,7 +49,6 @@ if ( $cross_sells ) : ?>
 		<?php woocommerce_product_loop_end(); ?>
 
 	</div>
-
 	<?php
 endif;
 

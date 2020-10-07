@@ -7,7 +7,7 @@
  * @since       1.1.0
  */
 
-if ( ! function_exists( 'sinatra_entry_meta_shares' ) ):
+if ( ! function_exists( 'sinatra_entry_meta_shares' ) ) :
 	/**
 	 * Add share count information to entry meta.
 	 *

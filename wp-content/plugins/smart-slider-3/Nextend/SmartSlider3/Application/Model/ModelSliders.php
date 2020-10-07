@@ -95,7 +95,7 @@ class ModelSliders extends AbstractModelTable {
         $wheres = array();
         if ($groupID !== '*') {
             if ($groupID == 0) {
-                $wheres[] = "xref.group_id IS NULL OR xref.group_id = 0";
+                $wheres[] = "(xref.group_id IS NULL OR xref.group_id = 0)";
             } else {
                 if ($orderBy == 'ordering') {
                     $_orderby = 'xref.' . $orderBy . ' ' . $orderByDirection;
@@ -267,6 +267,19 @@ class ModelSliders extends AbstractModelTable {
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+    }
+
+    public function saveSimple($id, $title, $params) {
+        if ($id <= 0) return false;
+
+        if (empty($title)) $title = n2_('New slider');
+
+        $this->table->update(array(
+            'title'     => $title,
+            'params'    => json_encode($params)
+        ), array(
+            "id" => $id
+        ));
     }
 
     public function save($id, $slider) {

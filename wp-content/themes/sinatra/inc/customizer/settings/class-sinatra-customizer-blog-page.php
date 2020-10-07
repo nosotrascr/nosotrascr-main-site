@@ -69,6 +69,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Blog_Page' ) ) :
 			if ( ! empty( $_image_sizes ) ) {
 				foreach ( $_image_sizes as $key => $value ) {
 					$name = ucwords( str_replace( array( '-', '_' ), ' ', $key ) );
+
 					$size_choices[ $key ] = $name;
 
 					if ( $value['width'] || $value['height'] ) {

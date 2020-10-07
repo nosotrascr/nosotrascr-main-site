@@ -11,6 +11,10 @@
   display: none !important;
 }
 
+.customize-partial-edit-shortcut {
+  z-index: 9;
+}
+
 .customize-partial-edit-shortcut-sinatra_top_bar_widgets,
 .customize-partial-edit-shortcut-sinatra_enable_pre_footer_cta,
 .customize-partial-edit-shortcut-sinatra_header_widgets,

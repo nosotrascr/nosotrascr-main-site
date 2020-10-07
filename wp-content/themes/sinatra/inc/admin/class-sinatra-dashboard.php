@@ -226,7 +226,7 @@ if ( ! class_exists( 'Sinatra_Dashboard' ) ) :
 					<div class="sinatra-hero">
 						<img src="<?php echo esc_url( SINATRA_THEME_URI . '/assets/images/si-customize.svg' ); ?>" alt="<?php echo esc_html( 'Customize' ); ?>" />
 					</div>
-					
+
 					<h2><?php esc_html_e( 'Let‘s customize your website', 'sinatra' ); ?></h2>
 					<p><?php esc_html_e( 'There are many changes you can make to customize your website. Explore Sinatra customization options and make it unique.', 'sinatra' ); ?></p>
 

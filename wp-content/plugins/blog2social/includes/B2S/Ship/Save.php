@@ -239,6 +239,27 @@ class B2S_Ship_Save {
                         $serializeData['image_url'] = $schedData['sched_image_url'][$key];
                         $data['image_url'] = $schedData['sched_image_url'][$key];
                     }
+                    
+                    
+                    //Multi Image
+                    $multi_images = array();
+                    if (isset($schedData['sched_multi_image_1'][$key]) && !empty($schedData['sched_multi_image_1'][$key])) {
+                        array_push($multi_images, $schedData['sched_multi_image_1'][$key]);
+                    }
+                    if (isset($schedData['sched_multi_image_2'][$key]) && !empty($schedData['sched_multi_image_2'][$key])) {
+                        array_push($multi_images, $schedData['sched_multi_image_2'][$key]);
+                    }
+                    if (isset($schedData['sched_multi_image_3'][$key]) && !empty($schedData['sched_multi_image_3'][$key])) {
+                        array_push($multi_images, $schedData['sched_multi_image_3'][$key]);
+                    }
+                    if(!empty($multi_images)) {
+                        $serializeData['multi_images'] = json_encode($multi_images);
+                        $data['multi_images'] = json_encode($multi_images);
+                    }
+                    
+                    
+                    
+                    
                     //content
                     if (isset($schedData['sched_content'][$key]) && !empty($schedData['sched_content'][$key])) {
                         $serializeData['content'] = $schedData['sched_content'][$key];

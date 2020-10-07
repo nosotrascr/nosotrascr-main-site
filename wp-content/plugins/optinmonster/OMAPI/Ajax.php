@@ -86,7 +86,11 @@ class OMAPI_Ajax {
 
 		switch ( $_REQUEST['action'] ) {
 			case 'mailpoet':
-				$this->mailpoet();
+				$this->base->mailpoet->handle_ajax_call();
+				break;
+			case 'om_plugin_install':
+				add_action( 'wp_ajax_om_plugin_install', array( $this, 'install_or_activate' ) );
+				add_action( 'wp_ajax_nopriv_om_plugin_install', array( $this, 'install_or_activate' ) );
 				break;
 			default:
 				break;
@@ -94,86 +98,102 @@ class OMAPI_Ajax {
 	}
 
 	/**
-	 * Opts the user into MailPoet.
+	 * Installs and activates a plugin for a given url
 	 *
-	 * @since 1.0.0
+	 * @since 1.9.10
+	 *
+	 * @param string $plugin_url The Plugin URL
+	 * @return void
 	 */
-	public function mailpoet() {
-		// Run a security check first.
-		check_ajax_referer( 'omapi', 'nonce' );
-
-		// Prepare variables.
-		$data = array_merge( $_REQUEST, $_REQUEST['optinData'] );
-		unset( $data['optinData'] );
-
-		$optin       = $this->base->get_optin_by_slug( stripslashes( $data['optin'] ) );
-		$list        = get_post_meta( $optin->ID, '_omapi_mailpoet_list', true );
-		$phone_field = get_post_meta( $optin->ID, '_omapi_mailpoet_phone_field', true );
-		$email       = ! empty( $data['email'] ) ? stripslashes( $data['email'] ) : false;
-		$name        = ! empty( $data['name'] ) ? stripslashes( $data['name'] ) : false;
-		$user        = array();
-
-		// Possibly split name into first and last.
-		if ( $name ) {
-			$names = explode( ' ', $name );
-			if ( isset( $names[0] ) ) {
-				$user['firstname'] = $names[0];
-			}
-
-			if ( isset( $names[1] ) ) {
-				$user['lastname'] = $names[1];
-			}
+	public function install_plugin( $plugin_url ) {
+		// Todo: Add Nonce verification
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			wp_send_json_error( esc_html__( 'Sorry, not allowed!', 'optin-monster-api' ) );
 		}
 
-		// Save the email address.
-		$user['email'] = $email;
+		$creds = request_filesystem_credentials( admin_url( 'admin.php' ), '', false, false, null );
 
-		// Save the phone number
-		if ( ! empty( $phone_field ) ) {
-			$user[ $phone_field ] = ! empty( $data['phone'] ) ? stripslashes( $data['phone'] ) : false;
+		// Check for file system permissions.
+		if ( false === $creds ) {
+			wp_send_json_error( esc_html__( 'Sorry, not allowed!', 'optin-monster-api' ) );
 		}
 
-		// Store the data.
-		$data = array(
-			'user'      => $user,
-			'user_list' => array( 'list_ids' => array( $list ) ),
+		// We do not need any extra credentials if we have gotten this far, so let's install the plugin.
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+
+		// Create the plugin upgrader with our custom skin.
+		$installer = new Plugin_Upgrader( new OMAPI_InstallSkin() );
+
+		// Error check.
+		if ( ! method_exists( $installer, 'install' ) ) {
+			wp_send_json_error();
+		}
+
+		$installer->install( esc_url_raw( $plugin_url ) ); // phpcs:ignore
+
+		if ( ! $installer->plugin_info() ) {
+			wp_send_json_error();
+		}
+
+		$plugin_basename = $installer->plugin_info();
+
+		// Activate the plugin silently.
+		$activated = activate_plugin( $plugin_basename );
+
+		if ( ! is_wp_error( $activated ) ) {
+			wp_send_json_success(
+				array(
+					'msg'          => esc_html__( 'Plugin installed & activated.', 'optin-monster-api' ),
+					'is_activated' => true,
+					'basename'     => $plugin_basename,
+				)
+			);
+		}
+
+		wp_send_json_success(
+			array(
+				'msg'          => esc_html__( 'Plugin installed.', 'optin-monster-api' ),
+				'is_activated' => false,
+				'basename'     => $plugin_basename,
+			)
 		);
-		$data = apply_filters( 'optin_monster_pre_optin_mailpoet', $data, $_REQUEST, $list, null );
+	}
 
-		// Save the subscriber. Check for MailPoet 3 first. Default to legacy.
-		if ( class_exists( 'MailPoet\\API\\API' ) ) {
-			// Customize the lead data for MailPoet 3.
-			if ( isset( $user['firstname'] ) ) {
-				$user['first_name'] = $user['firstname'];
-				unset( $user['firstname'] );
-			}
+	/**
+	 * Installs or Activates a plugin with a given plugin name
+	 *
+	 * @param string $plugin_name
+	 * @return void
+	 */
+	public function install_or_activate() {
+		$plugin = $_POST['plugin'];
+		$action = $_POST['installAction'];
+		$url    = $_POST['url'];
 
-			if ( isset( $user['lastname'] ) ) {
-				$user['last_name'] = $user['lastname'];
-				unset( $user['lastname'] );
-			}
-
-			try {
-				$subscriber = \MailPoet\API\API::MP( 'v1' )->getSubscriber( $user['email'] );
-			} catch ( Exception $e ) {
-				$subscriber = false;
-			}
-
-			try {
-				if ( $subscriber ) {
-					\MailPoet\API\API::MP( 'v1' )->subscribeToList( $subscriber['email'], array( $list ) );
-				} else {
-					\MailPoet\API\API::MP( 'v1' )->addSubscriber( $user, array( $list ) );
-				}
-			} catch ( Exception $e ) {
-				return wp_send_json_error( $e->getMessage(), 400 );
-			}
+		if ( 'install' === $action ) {
+			$this->install_plugin( $url );
 		} else {
-			$userHelper = WYSIJA::get( 'user', 'helper' );
-			$userHelper->addSubscriber( $data );
+			$this->activate_plugin( $plugin );
+		}
+	}
+
+	/**
+	 * Activates a plugin with a given plugin name
+	 *
+	 * @param string $plugin_name
+	 * @return void
+	 */
+	public function activate_plugin( $plugin_name ) {
+
+		// Check for permissions.
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_send_json_error( esc_html__( 'Sorry, not allowed!', 'optin-monster-api' ) );
 		}
 
-		// Send back a response.
-		wp_send_json_success();
+		$activate = activate_plugins( sanitize_text_field( $plugin_name ) );
+
+		if ( ! is_wp_error( $activate ) ) {
+			wp_send_json_success( esc_html__( 'Plugin activated.', 'optin-monster-api' ) );
+		}
 	}
 }

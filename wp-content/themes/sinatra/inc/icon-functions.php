@@ -238,7 +238,7 @@ function sinatra_get_svg( $args = array() ) {
  * @param  string $post_id Current post ID.
  * @return string          Icon HTML markup.
  */
-function sinatra_get_meta_icon( $slug = '', $icon  = '', $post_id = '' ) {
+function sinatra_get_meta_icon( $slug = '', $icon = '', $post_id = '' ) {
 
 	$return = '';
 

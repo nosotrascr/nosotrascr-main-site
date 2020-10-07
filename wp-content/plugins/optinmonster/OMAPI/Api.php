@@ -21,6 +21,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class OMAPI_Api {
 
 	/**
+	 * Holds the last instantiated instance of this class.
+	 *
+	 * @var OMAPI_Api
+	 */
+	protected static $instance = null;
+
+	/**
 	 * Base API route.
 	 *
 	 * @since 1.0.0
@@ -142,20 +149,27 @@ class OMAPI_Api {
 	 *
 	 * @since 1.8.0
 	 *
-	 * @param string $version The Api Version (v1 or v2)
+	 * @param string $version  The Api Version (v1 or v2)
 	 * @param string $endpoint The Api Endpoint
-	 * @param string $method The Request method
+	 * @param string $method   The Request method
+	 * @param array  $creds    Array of API credentials.
 	 *
 	 * @return self
 	 */
-	public static function build( $version, $route, $method = 'POST' ) {
-		$creds  = OMAPI::get_instance()->get_api_credentials();
-		// Check if we have the new API and if so only use it
-		if ( $creds['apikey'] ) {
-			return new OMAPI_Api( $route, array( 'apikey' => $creds['apikey'] ), $method, $version );
+	public static function build( $version, $route, $method = 'POST', $creds = array() ) {
+		if ( empty( $creds ) ) {
+			$creds = OMAPI::get_instance()->get_api_credentials();
+
+			// Check if we have the new API and if so only use it
+			$creds = ! empty( $creds['apikey'] )
+				? array( 'apikey' => $creds['apikey'] )
+				: array(
+					'user' => $creds['user'],
+					'key'  => $creds['key'],
+				);
 		}
 
-		return new OMAPI_Api( $route, array( 'user' => $creds['user'], 'key' => $creds['key'] ), $method, $version);
+		return new self( $route, $creds, $method, $version );
 	}
 
 	/**
@@ -164,19 +178,21 @@ class OMAPI_Api {
 	 * @since 1.0.0
 	 *
 	 * @param string $route   The API route to target.
-	 * @param array $creds    Array of API credentials.
+	 * @param array  $creds    Array of API credentials.
 	 * @param string $method  The API method.
 	 * @param string $version The version number of our API
 	 */
 	public function __construct( $route, $creds, $method = 'POST', $version = 'v1' ) {
 		// Set class properties.
-		$this->route    = $route;
-		$this->version  = $version;
-		$this->method   = $method;
-		$this->user     = ! empty( $creds['user'] ) ? $creds['user'] : '';
-		$this->key      = ! empty( $creds['key'] ) ? $creds['key'] : '';
-		$this->apikey   = ! empty( $creds['apikey'] ) ? $creds['apikey'] : '';
-		$this->plugin   = OMAPI::get_instance()->plugin_slug;
+		$this->route   = $route;
+		$this->version = $version;
+		$this->method  = $method;
+		$this->user    = ! empty( $creds['user'] ) ? $creds['user'] : '';
+		$this->key     = ! empty( $creds['key'] ) ? $creds['key'] : '';
+		$this->apikey  = ! empty( $creds['apikey'] ) ? $creds['apikey'] : '';
+		$this->plugin  = OMAPI::get_instance()->plugin_slug;
+
+		self::$instance = $this;
 	}
 
 	/**
@@ -190,8 +206,9 @@ class OMAPI_Api {
 		// Build the body of the request.
 		$body = array(
 			'omapi-user' => $this->user,
-			'omapi-key'  => $this->key
+			'omapi-key'  => $this->key,
 		);
+		$body = array_filter( $body );
 
 		// If a plugin API request, add the data.
 		if ( 'info' == $this->route || 'update' == $this->route ) {
@@ -205,25 +222,25 @@ class OMAPI_Api {
 
 		$body = wp_parse_args( $args, $body );
 		$url  = in_array( $this->method, array( 'GET', 'DELETE' ), true )
-			? add_query_arg( $body, $this->getUrl() )
+			? add_query_arg( array_map( 'urlencode', $body ), $this->getUrl() )
 			: $this->getUrl();
-		$url  = esc_url_raw( $url );
+
+		$url = esc_url_raw( $url );
 
 		// Build the headers of the request.
 		$headers = array(
-			'Content-Type'          => 'application/x-www-form-urlencoded',
-			'Cache-Control'         => 'no-store, no-cache, must-revalidate, max-age=0, post-check=0, pre-check=0',
-			'Pragma'                => 'no-cache',
-			'Expires'               => 0,
-			'Origin'                => site_url(),
-			'OMAPI-Referer'         => site_url(),
-			'OMAPI-Sender'          => 'WordPress',
+			'Content-Type'  => 'application/x-www-form-urlencoded',
+			'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0, post-check=0, pre-check=0',
+			'Pragma'        => 'no-cache',
+			'Expires'       => 0,
+			'Origin'        => site_url(),
+			'OMAPI-Referer' => site_url(),
+			'OMAPI-Sender'  => 'WordPress',
 		);
 
 		if ( $this->apikey ) {
 			$headers['X-OptinMonster-ApiKey'] = $this->apikey;
 		}
-
 		// Setup data to be sent to the API.
 		$data = array(
 			'headers'   => $headers,
@@ -259,7 +276,7 @@ class OMAPI_Api {
 				$error = ! empty( $this->response_body->error ) ? stripslashes( $this->response_body->error ) : 'unknown';
 			}
 
-			return new WP_Error( $type, sprintf( __( 'The API returned a <strong>%s</strong> response with this message: <strong>%s</strong>', 'optin-monster-api' ), $this->response_code, $error ) );
+			return new WP_Error( $type, sprintf( __( 'The API returned a <strong>%1$s</strong> response with this message: <strong>%2$s</strong>', 'optin-monster-api' ), $this->response_code, $error ), $this->response_code );
 		}
 
 		// Return the json decoded content.
@@ -300,5 +317,30 @@ class OMAPI_Api {
 	 */
 	public function set_additional_data( array $data ) {
 		$this->additional_data = array_merge( $this->additional_data, $data );
+	}
+
+	/**
+	 * Clear additional data
+	 *
+	 * @since 1.9.0
+	 *
+	 * @param array $data
+	 * return void
+	 */
+	public function clear_additional_data() {
+		$this->additional_data = null;
+
+		return $this;
+	}
+
+	/**
+	 * Returns the last instantiated instance of this class.
+	 *
+	 * @since 1.9.10
+	 *
+	 * @return  A single instance of this class.
+	 */
+	public static function instance() {
+		return self::$instance;
 	}
 }

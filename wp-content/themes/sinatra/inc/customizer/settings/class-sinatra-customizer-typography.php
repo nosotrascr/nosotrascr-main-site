@@ -152,7 +152,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Typography' ) ) :
 					),
 				),
 			);
-			
+
 			for ( $i = 1; $i <= 6; $i++ ) {
 
 				$options['setting'][ 'sinatra_h' . $i . '_font' ] = array(

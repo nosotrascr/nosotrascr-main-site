@@ -3,7 +3,7 @@
     cursor: pointer;
     overflow: hidden;
     line-height: 0 !important;
-    z-index: 20;
+    z-index: 18;
   }
 
   .nextend-arrow img {

@@ -1,9 +1,9 @@
 <?php
 /**
  * Template Name: Sinatra Fullwidth
- * 
+ *
  * 100% wide page template without vertical spacing.
- * 
+ *
  * @package     Sinatra
  * @author      Sinatra Team <hello@sinatrawp.com>
  * @since       1.0.0

@@ -1,9 +1,11 @@
 <!--Footer Start-->
 <div class="b2s-footer">
     <div class="pull-left hidden-xs <?php echo isset($noLegend) ? 'hide' : ''; ?>">
-        <small> © <?php echo date('Y'); ?> <a target="_blank" href="https://www.adenion.de" rel="nofollow">Adenion GmbH</a> | <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('privacy_policy')); ?>" rel="nofollow"><?php esc_html_e("Privacy Policy", "blog2social") ?></a> | <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('term')); ?>" rel="nofollow"><?php esc_html_e("Terms", "blog2social") ?></a> | <?php esc_html_e("We never store your data from your social media profiles", "blog2social") ?></small>
+        <?php if (!B2S_System::isblockedArea('B2S_MENU_FOOTER', B2S_PLUGIN_ADMIN)) { ?>
+            <small> © <?php echo date('Y'); ?> <a target="_blank" href="https://www.adenion.de" rel="nofollow">Adenion GmbH</a> | <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('privacy_policy')); ?>" rel="nofollow"><?php esc_html_e("Privacy Policy", "blog2social") ?></a> | <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('term')); ?>" rel="nofollow"><?php esc_html_e("Terms", "blog2social") ?></a> | <?php esc_html_e("We never store your data from your social media profiles", "blog2social") ?></small>
+        <?php } ?>
     </div>
-    <div class="pull-right hidden-xs <?php echo isset($noLegend) ? 'hide' : ''; ?>">
+    <div class="pull-right hidden-xs <?php echo isset($noLegend) || isset($noLegendCalender) ? 'hide' : ''; ?>">
         <small>
             <img class="img-width-9" src="<?php echo plugins_url('/assets/images/b2s/post-icon.png', B2S_PLUGIN_FILE); ?>" alt="beitrag">  <?php esc_html_e('Post', 'blog2social') ?> 
             <img class="img-width-9" src="<?php echo plugins_url('/assets/images/b2s/job-icon.png', B2S_PLUGIN_FILE); ?>" alt="job"> <?php esc_html_e('Job', 'blog2social') ?>
@@ -15,7 +17,7 @@
 <!--Footer Ende-->
 <?php if ($_GET['page'] != 'blog2social-calendar') { ?>
 
-    <div class="modal fade" id="b2sPreFeatureModal" tabindex="-1" role="dialog" aria-labelledby="b2sPreFeatureModal" aria-hidden="true" data-backdrop="false">
+    <div class="modal fade" id="b2sPreFeatureModal" tabindex="-1" role="dialog" aria-labelledby="b2sPreFeatureModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -45,7 +47,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="b2sProFeatureModal" tabindex="-1" role="dialog" aria-labelledby="b2sProFeatureModal" aria-hidden="true" data-backdrop="false">
+    <div class="modal fade" id="b2sProFeatureModal" tabindex="-1" role="dialog" aria-labelledby="b2sProFeatureModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -90,11 +92,58 @@
                     <br>
                     <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
                 </div>              
+                <div class="modal-body multi-image">
+                    <b><?php esc_html_e('Activate Blog2Social PREMIUM PRO.', 'blog2social') ?></b>
+                    <br>
+                    <?php esc_html_e('With Blog2Social Premium PRO you can post multiple images.', 'blog2social') ?>
+                    <br>
+                    <br>
+                    <?php esc_html_e('Also included:', 'blog2social') ?>
+                    <br>
+                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Social media auto-posting and auto-scheduling', 'blog2social') ?><br>
+                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Posting to social media pages and groups in Facebook', 'blog2social') ?><br>
+                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Sharing on multiple accounts per network', 'blog2social') ?><br>
+                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Best Time Scheduler: schedule once, multiple times or recurringly', 'blog2social') ?><br>  
+                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Reporting with links to already published posts', 'blog2social') ?><br>  
+                    <br>
+                    <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to PRO and above', 'blog2social') ?></a>
+                    <br>
+                    <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                </div>              
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="b2sInfoFormatModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoFormatModal" aria-hidden="true" data-backdrop="false">
+    <div class="modal fade" id="b2sBusinessFeatureModal" tabindex="-1" role="dialog" aria-labelledby="b2sBusinessFeatureModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="b2s-modal-close close" data-modal-name="#b2sBusinessFeatureModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><?php esc_html_e('Upgrade to Blog2Social PREMIUM BUSINESS', 'blog2social') ?></h4>
+                </div>
+                <div class="modal-body auth-network">
+                    <b><?php esc_html_e('Activate Blog2Social PREMIUM BUSINESS.', 'blog2social') ?></b>
+                    <br>
+                    <?php esc_html_e('With Blog2Social Premium BUSINESS you can connect pages in LinkedIn and XING as well as XING groups and Telegram.', 'blog2social') ?>
+                    <br>
+                    <br>
+                    <?php esc_html_e('Also included:', 'blog2social') ?>
+                    <br>
+                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Social media auto-posting and auto-scheduling', 'blog2social') ?><br>
+                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Posting to social media pages and groups in Facebook', 'blog2social') ?><br>
+                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Sharing on multiple accounts per network', 'blog2social') ?><br>
+                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Best Time Scheduler: schedule once, multiple times or recurringly', 'blog2social') ?><br>  
+                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Reporting with links to already published posts', 'blog2social') ?><br>  
+                    <br>
+                    <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to BUSINESS', 'blog2social') ?></a>
+                    <br>
+                    <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                </div>             
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="b2sInfoFormatModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoFormatModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -166,7 +215,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="b2sTrailFeedbackModal" tabindex="-1" role="dialog" aria-labelledby="b2sTrailFeedbackModal" aria-hidden="true" data-backdrop="false">
+    <div class="modal fade" id="b2sTrailFeedbackModal" tabindex="-1" role="dialog" aria-labelledby="b2sTrailFeedbackModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -184,7 +233,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="b2sInfoSchedTimesModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoSchedTimesModal" aria-hidden="true" data-backdrop="false">
+    <div class="modal fade" id="b2sInfoSchedTimesModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoSchedTimesModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -229,7 +278,7 @@
     </div>
 
 
-    <div class="modal fade" id="b2sInfoPostRelayModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoPostRelayModal" aria-hidden="true" data-backdrop="false">
+    <div class="modal fade" id="b2sInfoPostRelayModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoPostRelayModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -268,15 +317,15 @@
         </div>
     </div>
 
-    <div class="modal fade" id="b2sInfoUrlShortenerModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoUrlShortenerModal" aria-hidden="true" data-backdrop="false">
+    <div class="modal fade" id="b2sInfoUrlShortenerModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoUrlShortenerModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoUrlShortenerModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><?php esc_html_e('Bit.ly integration (URL Shortening)', 'blog2social') ?></h4>
+                    <h4 class="modal-title"><?php esc_html_e('URL Shortening', 'blog2social') ?></h4>
                 </div>
                 <div class="modal-body">
-                    <?php esc_html_e('You can use Bit.ly links to shorten the URL of your links and to track the performance of your links in your social media networks. Activate Bit.ly in the Blog2Social settings and link it to your Bit.ly account. Your social media posts will then be shared with your Bit.ly links and you can monitor the success of your posts in your Bit.ly account. Please note: Reddit, Pinterest and Medium do not allow Bit.ly shortlinks. Blog2Social will apply the regular URL for these networks.', 'blog2social') ?>
+                    <?php esc_html_e('You can use Bit.ly, Rebrandly or Sniply links to shorten the URL of your links and to track the performance of your links in your social media networks.  Activate one of the URL-Shorteners you like to use and link it to your account. Your social media posts will then be shared with your links of Bit.ly, Rebrandly or Sniply and you can monitor the success of your posts in these accounts. Please note: Reddit, Pinterest and Medium do not allow Bit.ly shortlinks. Blog2Social will apply the regular URL for these networks. ', 'blog2social') ?>
                     <br>
                 </div>
             </div>
@@ -297,7 +346,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="b2sInfoAutoPosterMModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoAutoPosterMModal" aria-hidden="true" data-backdrop="false">
+    <div class="modal fade" id="b2sInfoAutoPosterMModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoAutoPosterMModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -311,7 +360,7 @@
 
                         if (B2S_PLUGIN_USER_VERSION == 0) {
                             ?>
-                        <br>
+                            <br>
                         <hr>               
                         <h4><?php esc_html_e('You want to auto-post your blog post?', 'blog2social'); ?></h4>
                         <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
@@ -337,7 +386,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="b2sInfoAutoPosterAModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoAutoPosterAModal" aria-hidden="true" data-backdrop="false">
+    <div class="modal fade" id="b2sInfoAutoPosterAModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoAutoPosterAModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -376,8 +425,25 @@
         </div>
     </div>
 
+    <div class="modal fade" id="b2sInfoAssignAutoPost" tabindex="-1" role="dialog" aria-labelledby="b2sInfoAssignAutoPost" aria-hidden="true" data-backdrop="false"  style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoAssignAutoPost" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><?php esc_html_e('Share posts from other authors automatically with your Auto-Poster settings', 'blog2social') ?></h4>
+                </div>
+                <div class="modal-body">
+                    <?php esc_html_e('With Blog2Social you can transfer the Auto-Poster settings as a WordPress-administrator to other WordPress-authors if they have activated the same Blog2Social-Business license. This way, WordPress-administrators assign social media channels to other WordPress authors, where they can auto-post without having to create the network connection themselves. Within these settings, the WordPress-administrator decides whether newly published or updated content from other WordPress-authors should be automatically shared. WordPress-authors with assigned Auto-Poster settings and an assigned social-media-network group will then share content automatically, like the WordPress-administrator selected the content to be shared automatically. ', 'blog2social') ?>
+                    <br>
+                    <?php echo sprintf(__('You can find a detailed guide on how to assign the Auto-Poster settings <a target="_blank" href="%s">here</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('auto_post_assign'))) ?>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div class="modal fade" id="b2sInfoRePosterModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoRePosterModal" aria-hidden="true" data-backdrop="false">
+
+    <div class="modal fade" id="b2sInfoRePosterModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoRePosterModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -391,7 +457,7 @@
 
                         if (B2S_PLUGIN_USER_VERSION == 0) {
                             ?>
-                        <br>
+                            <br>
                         <hr>               
                         <h4><?php esc_html_e('You want to auto-post your blog post?', 'blog2social'); ?></h4>
                         <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
@@ -419,7 +485,7 @@
 
 <?php } ?>
 
-<div class="modal fade" id="b2s-info-meta-tag-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-info-meta-tag-modal" aria-hidden="true" data-backdrop="false" style="z-index: 1070">
+<div class="modal fade" id="b2s-info-meta-tag-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-info-meta-tag-modal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 1070;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -514,7 +580,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="b2s-info-change-meta-tag-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-info-change-meta-tag-modal" aria-hidden="true" data-backdrop="false" style="z-index: 1070">
+<div class="modal fade" id="b2s-info-change-meta-tag-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-info-change-meta-tag-modal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 1070;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

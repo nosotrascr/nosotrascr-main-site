@@ -6,9 +6,9 @@
  * Added extra properties and methods to the Basic related to file, dir, url.
  *
  * @author     Denra.com aka SoftShop Ltd <support@denra.com>
- * @copyright  2019 Denra.com aka SoftShop Ltd
+ * @copyright  2019-2020 Denra.com aka SoftShop Ltd
  * @license    GPLv2 or later
- * @version    1.0
+ * @version    1.1
  * @link       https://www.denra.com/
  */
 
@@ -21,7 +21,8 @@ namespace Denra\Plugins;
  */
 class BasicExtra extends Basic {
     
-    public $dir; // dir to file without the file name
+    public $file; // file
+    public $dir; // dir to file
     public $dir_clases; // dir to classes
     public $url; // url to file without the file name
     public $plugin_basename; // the plugin basename
@@ -36,6 +37,7 @@ class BasicExtra extends Basic {
         parent::__construct($id, $data);
         
         // Set more important data
+        $this->file = $data['file'];
         $this->dir = $data['dir'];
         $this->dir_classes = $data['dir'] . 'classes/';
         $this->url = $data['url'];

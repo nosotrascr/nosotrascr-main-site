@@ -5,11 +5,11 @@
  * Description: OptinMonster is the best WordPress popup plugin that helps you grow your email list and sales with email popups, exit intent popups, floating bars and more!
  * Author:      OptinMonster Team
  * Author URI:  https://optinmonster.com
- * Version:     1.9.8
+ * Version:     1.9.16
  * Text Domain: optin-monster-api
  * Domain Path: languages
  * WC requires at least: 3.2.0
- * WC tested up to:      4.0.0
+ * WC tested up to:      4.5.2
  *
  * OptinMonster is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ class OMAPI {
 	 *
 	 * @var string
 	 */
-	public $version = '1.9.8';
+	public $version = '1.9.16';
 
 	/**
 	 * The name of the plugin.
@@ -132,6 +132,13 @@ class OMAPI {
 	 * @var OMAPI_WooCommerce
 	 */
 	public $woocommerce;
+
+	/**
+	 * OMAPI_MailPoet object.
+	 *
+	 * @var OMAPI_MailPoet;
+	 */
+	public $mailpoet;
 
 	/**
 	 * OMAPI_Actions object (loaded only in the admin)
@@ -236,6 +243,9 @@ class OMAPI {
 		// Hide the unrelated admin notices.
 		add_action( 'admin_print_scripts', array( $this, 'hide_unrelated_admin_notices' ) );
 
+		// PHP version check.
+		add_action( 'admin_init', array( $this, 'check_php_version' ) );
+
 		// Filter the WooCommerce category/tag REST API responses.
 		add_filter( 'woocommerce_rest_prepare_product_cat', 'OMAPI_WooCommerce::add_category_base_to_api_response' );
 		add_filter( 'woocommerce_rest_prepare_product_tag', 'OMAPI_WooCommerce::add_tag_base_to_api_response' );
@@ -247,7 +257,6 @@ class OMAPI {
 	 * @since 1.0.0
 	 */
 	public function load_plugin_textdomain() {
-
 		$domain = 'optin-monster-api';
 		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
 
@@ -280,10 +289,17 @@ class OMAPI {
 			define( 'OPTINMONSTER_APP_URL', 'https://app.optinmonster.com' );
 		}
 
+		if ( ! defined( 'OPTINMONSTER_API_URL' ) ) {
+			define( 'OPTINMONSTER_API_URL', 'https://api.omwpapi.com' );
+		}
+
 		if ( ! defined( 'OPTINMONSTER_CDN_URL' ) ) {
-			define( 'OPTINMONSTER_CDN_URL', is_admin()
+			define(
+				'OPTINMONSTER_CDN_URL',
+				is_admin()
 					? 'https://a.omwpapi.com'
-					: 'https://a.omappapi.com' );
+				: 'https://a.omappapi.com'
+			);
 		}
 
 		if ( ! defined( 'OPTINMONSTER_APIJS_URL' ) ) {
@@ -317,7 +333,7 @@ class OMAPI {
 		// Check/set the plugin options.
 		$option = get_option( 'optin_monster_api' );
 		if ( empty( $option ) ) {
-			$option = OMAPI::default_options();
+			$option = self::default_options();
 			update_option( 'optin_monster_api', $option );
 		}
 
@@ -355,11 +371,13 @@ class OMAPI {
 
 		// Register global components.
 		$this->ajax        = new OMAPI_Ajax();
+		$this->blocks      = new OMAPI_Blocks();
 		$this->type        = new OMAPI_Type();
 		$this->output      = new OMAPI_Output();
 		$this->shortcode   = new OMAPI_Shortcode();
 		$this->woocommerce = new OMAPI_WooCommerce();
-        $this->url         = plugin_dir_url( __FILE__ );
+		$this->mailpoet    = new OMAPI_MailPoet();
+		$this->url         = plugin_dir_url( __FILE__ );
 
 		// Fire a hook to say that the global classes are loaded.
 		do_action( 'optin_monster_api_global_loaded' );
@@ -428,9 +446,7 @@ class OMAPI {
 	 * @return array|bool Array of optin data or false if none found.
 	 */
 	public function get_optin( $id ) {
-
-		return get_post( $id );
-
+		return get_post( absint( $id ) );
 	}
 
 	/**
@@ -442,9 +458,49 @@ class OMAPI {
 	 * @return array|bool  Array of optin data or false if none found.
 	 */
 	public function get_optin_by_slug( $slug ) {
+		return get_page_by_path( sanitize_text_field( $slug ), OBJECT, 'omapi' );
+	}
 
-		return get_page_by_path( $slug, OBJECT, 'omapi' );
+	/**
+	 * Get all data for given campaign (optin).
+	 *
+	 * @since  1.9.10
+	 *
+	 * @param  WP_Post $campaign The campaign post object.
+	 *
+	 * @return array
+	 */
+	public function collect_campaign_data( $campaign ) {
+		$meta = array();
+		$keys = get_post_meta( $campaign->ID );
 
+		if ( ! empty( $keys ) ) {
+			foreach ( $keys as $key => $x ) {
+				$val = get_post_meta( $campaign->ID, $key, true );
+				switch ( $key ) {
+					case '_omapi_never':
+					case '_omapi_only':
+						$val = OMAPI_Utils::unique_array( $val );
+						break;
+					case '_omapi_taxonomies':
+						$val = ! empty( $val )
+							? array_map( array( 'OMAPI_Utils', 'unique_array' ), $val )
+							: array();
+						break;
+				}
+				$meta[ $key ] = $val;
+			}
+		}
+
+		$type = get_post_meta( $campaign->ID, '_omapi_type', true );
+
+		return array(
+			'id'        => $campaign->post_name,
+			'post'      => $campaign,
+			'type'      => $type,
+			'inline'    => OMAPI_Utils::is_inline_type( $type ),
+			'post_meta' => $meta,
+		);
 	}
 
 	/**
@@ -474,6 +530,10 @@ class OMAPI {
 			return false;
 		}
 
+		foreach ( $optins as $optin ) {
+			$optin->campaign_type = get_post_meta( $optin->ID, '_omapi_type', true );
+		}
+
 		// Return the optin data.
 		return $optins;
 	}
@@ -490,7 +550,7 @@ class OMAPI {
 		$option = get_option( 'optin_monster_api' );
 		if ( ! empty( $key ) && ! empty( $subkey ) ) {
 			return isset( $option[ $key ][ $subkey ] ) ? $option[ $key ][ $subkey ] : $default;
-		} else if ( ! empty( $key ) ) {
+		} elseif ( ! empty( $key ) ) {
 			return isset( $option[ $key ] ) ? $option[ $key ] : $default;
 		} else {
 			return $option;
@@ -548,10 +608,11 @@ class OMAPI {
 		}
 
 		// Return the API credentials.
-		return apply_filters( 'optin_monster_api_creds',
+		return apply_filters(
+			'optin_monster_api_creds',
 			array(
-				'key'  => $key,
-				'user' => $user,
+				'key'    => $key,
+				'user'   => $user,
 				'apikey' => $apikey,
 			)
 		);
@@ -579,8 +640,8 @@ class OMAPI {
 	 */
 	public function can_migrate() {
 		if ( false == ( $old_optins = get_transient( '_om_old_optins' ) ) ) {
-			$args = array(
-				'post_type' => 'optin',
+			$args       = array(
+				'post_type'      => 'optin',
 				'posts_per_page' => -1,
 			);
 			$old_optins = get_posts( $args );
@@ -654,7 +715,7 @@ class OMAPI {
 	 * @return bool
 	 */
 	public static function is_mailpoet_active() {
-		return class_exists( 'WYSIJA_object' ) || class_exists( 'MailPoet\\API\\API' );
+		return OMAPI_MailPoet::is_active();
 	}
 
 	/**
@@ -689,8 +750,8 @@ class OMAPI {
 	 *
 	 * @since  1.9.0
 	 *
-	 * @param  string  $file The view file.
-	 * @param  mixed   $data Arbitrary data to be made available to the view file.
+	 * @param  string $file The view file.
+	 * @param  mixed  $data Arbitrary data to be made available to the view file.
 	 *
 	 * @return void
 	 */
@@ -703,8 +764,8 @@ class OMAPI {
 	 *
 	 * @since  1.9.0
 	 *
-	 * @param  string  $file The view file.
-	 * @param  mixed   $data Arbitrary data to be made available to the view file.
+	 * @param  string $file The view file.
+	 * @param  mixed  $data Arbitrary data to be made available to the view file.
 	 *
 	 * @return void
 	 */
@@ -731,6 +792,7 @@ class OMAPI {
 			'is_invalid'  => false,
 			'installed'   => time(),
 			'connected'   => '',
+			'beta'        => false,
 			'welcome'     => array(
 				'status' => 'none',
 			),
@@ -759,6 +821,30 @@ class OMAPI {
 			require $filename;
 		}
 
+	}
+
+	/**
+	 * Gets all site IDs associated with this site
+	 *
+	 * @since 1.9.10
+	 *
+	 * @return array
+	 */
+	public function get_site_ids() {
+		$option = $this->get_option();
+		return ! empty( $option['siteIds'] ) ? (array) $option['siteIds'] : array();
+	}
+
+	/**
+	 * Gets the site ID associated with this site
+	 *
+	 * @since 1.9.10
+	 *
+	 * @return string
+	 */
+	public function get_site_id() {
+		$option = $this->get_option();
+		return ! empty( $option['siteId'] ) ? (string) $option['siteId'] : '';
 	}
 
 	/**
@@ -806,6 +892,115 @@ class OMAPI {
 		}
 	}
 
+	public function check_php_version() {
+
+		// Display for PHP below 5.6
+		if ( version_compare( PHP_VERSION, '5.5', '>=' ) ) {
+			return;
+		}
+
+		// Display for admins only.
+		if ( ! is_super_admin() ) {
+			return;
+		}
+
+		// Display on Dashboard page only.
+		if ( isset( $GLOBALS['pagenow'] ) && 'index.php' !== $GLOBALS['pagenow'] ) {
+			return;
+		}
+
+		// Do not double up on WPForms notice.
+		if ( function_exists( 'wpforms_check_php_version' ) ) {
+			return;
+		}
+
+		// Display the notice, finally.
+		echo '<div id="message" class="notice notice-error">' .
+		'<p>' .
+		sprintf(
+			wp_kses(
+				/* translators: %1$s - OptinMonster API plugin name; %2$s - optinmonster.com URL to a related doc. */
+				__( 'Your site is running an outdated version of PHP that is no longer supported and may cause issues with the %1$s plugin. <a href="%2$s" target="_blank" rel="noopener noreferrer">Read more</a> for additional information.', 'optin-monster-api' ),
+				array(
+					'a' => array(
+						'href'   => array(),
+						'target' => array(),
+						'rel'    => array(),
+					),
+				)
+			),
+			'<strong>OptinMonster API</strong>',
+			'https://optinmonster.com/docs/supported-php-version/'
+		) .
+		'<br><br><em>' .
+		wp_kses(
+			__( '<strong>Please Note:</strong> Support for PHP 5.5 will be discontinued in 2020. After this, if no further action is taken, OptinMonster functionality will be disabled.', 'optin-monster-api' ),
+			array(
+				'strong' => array(),
+				'em'     => array(),
+			)
+		) .
+		'</em></p>' .
+		'</div>';
+	}
+
+	/**
+	 * Get beta version.
+	 *
+	 * @param string $format The php date format.
+	 *
+	 * @return bool
+	 */
+	public function beta_version( $format = 'd M Y H:i:s' ) {
+		$version = false;
+		if ( false !== strpos( $this->version, 'beta' ) ) {
+			$file = plugin_dir_path( __FILE__ ) . '.betaversion';
+			if ( file_exists( $file ) ) {
+				ob_start();
+				include plugin_dir_path( __FILE__ ) . '.betaversion';
+				$timestamp = ob_get_clean();
+
+				if ( ! empty( $timestamp ) ) {
+					$version = date( $format, (int) $timestamp );
+				}
+			}
+		}
+
+		return $version;
+	}
+
+	/**
+	 * Get the asset version for enqueued assets.
+	 *
+	 * @since  1.9.10
+	 *
+	 * @return mixed
+	 */
+	public function asset_version() {
+		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
+			return time();
+		}
+
+		if ( defined( 'OPTINMONSTER_ENV' ) && 'dev' === strtolower( OPTINMONSTER_ENV ) ) {
+			return time();
+		}
+
+		return $this->beta_enabled() && $this->beta_version( 'U' )
+			? $this->beta_version( 'U' )
+			: $this->version;
+	}
+
+	/**
+	 * Check if beta is enabled.
+	 *
+	 * @return bool
+	 */
+	public function beta_enabled() {
+		$option = $this->get_option();
+
+		return apply_filters( 'optin_monster_beta_enabled', ! empty( $option['beta'] ) );
+	}
+
 	/**
 	 * Returns the singleton instance of the class.
 	 *
@@ -822,7 +1017,6 @@ class OMAPI {
 		return self::$instance;
 
 	}
-
 }
 
 register_activation_hook( __FILE__, 'optin_monster_api_activation_hook' );
@@ -838,9 +1032,9 @@ register_activation_hook( __FILE__, 'optin_monster_api_activation_hook' );
 function optin_monster_api_activation_hook( $network_wide ) {
 
 	global $wp_version;
-	if ( version_compare( $wp_version, '3.5.1', '<' ) && ! defined( 'OPTINMONSTER_FORCE_ACTIVATION' ) ) {
+	if ( version_compare( $wp_version, '4.7.0', '<' ) && ! defined( 'OPTINMONSTER_FORCE_ACTIVATION' ) ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) );
-		wp_die( sprintf( __( 'Sorry, but your version of WordPress does not meet OptinMonster\'s required version of <strong>3.5.1</strong> to run properly. The plugin has been deactivated. <a href="%s">Click here to return to the Dashboard</a>.', 'optin-monster-api' ), get_admin_url() ) );
+		wp_die( sprintf( __( 'Sorry, but your version of WordPress does not meet OptinMonster\'s required version of <strong>4.7.0</strong> to run properly. The plugin has been deactivated. <a href="%s">Click here to return to the Dashboard</a>.', 'optin-monster-api' ), get_admin_url() ) );
 	}
 
 	$instance = OMAPI::get_instance();
@@ -863,7 +1057,7 @@ function optin_monster_api_activation_hook( $network_wide ) {
 
 	// If we don't have api credentials, set up the redirect on plugin activation.
 	if ( ! $instance->get_api_credentials() ) {
-		$options = $instance->get_option();
+		$options                      = $instance->get_option();
 		$options['welcome']['status'] = 'none';
 		update_option( 'optin_monster_api', $options );
 	}
@@ -940,8 +1134,8 @@ if ( ! function_exists( 'optin_monster_tag' ) ) {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int    $string The post name of the optin to load.
-	 * @param bool   $return Flag to echo or return the optin HTML.
+	 * @param int  $string The post name of the optin to load.
+	 * @param bool $return Flag to echo or return the optin HTML.
 	 */
 	function optin_monster_tag( $id, $return = false ) {
 

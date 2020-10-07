@@ -82,7 +82,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Primary button hover background color
+			// Primary button hover background color.
 			$options['setting']['sinatra_primary_button_hover_bg_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -102,7 +102,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Primary button text color
+			// Primary button text color.
 			$options['setting']['sinatra_primary_button_text_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -121,7 +121,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Primary button text hover color
+			// Primary button text hover color.
 			$options['setting']['sinatra_primary_button_hover_text_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -140,7 +140,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Primary button border width
+			// Primary button border width.
 			$options['setting']['sinatra_primary_button_border_width'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_range',
@@ -162,7 +162,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Primary button border radius
+			// Primary button border radius.
 			$options['setting']['sinatra_primary_button_border_radius'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_responsive',
@@ -190,7 +190,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Primary button border color
+			// Primary button border color.
 			$options['setting']['sinatra_primary_button_border_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -209,7 +209,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Primary button hover border color
+			// Primary button hover border color.
 			$options['setting']['sinatra_primary_button_hover_border_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -228,7 +228,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Primary button typography
+			// Primary button typography.
 			$options['setting']['sinatra_primary_button_typography'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_typography',
@@ -270,7 +270,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Secondary button background color
+			// Secondary button background color.
 			$options['setting']['sinatra_secondary_button_bg_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -289,7 +289,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Secondary button hover background color
+			// Secondary button hover background color.
 			$options['setting']['sinatra_secondary_button_hover_bg_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -308,7 +308,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Secondary button text color
+			// Secondary button text color.
 			$options['setting']['sinatra_secondary_button_text_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -327,7 +327,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Secondary button text hover color
+			// Secondary button text hover color.
 			$options['setting']['sinatra_secondary_button_hover_text_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -346,7 +346,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Secondary button border width
+			// Secondary button border width.
 			$options['setting']['sinatra_secondary_button_border_width'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_range',
@@ -368,7 +368,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Secondary button border radius
+			// Secondary button border radius.
 			$options['setting']['sinatra_secondary_button_border_radius'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_responsive',
@@ -396,7 +396,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Secondary button border color
+			// Secondary button border color.
 			$options['setting']['sinatra_secondary_button_border_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -415,7 +415,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Secondary button hover border color
+			// Secondary button hover border color.
 			$options['setting']['sinatra_secondary_button_hover_border_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -434,7 +434,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Secondary button typography
+			// Secondary button typography.
 			$options['setting']['sinatra_secondary_button_typography'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_typography',
@@ -475,7 +475,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Text button text color
+			// Text button text color.
 			$options['setting']['sinatra_text_button_text_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -494,7 +494,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Text button text hover color
+			// Text button text hover color.
 			$options['setting']['sinatra_text_button_hover_text_color'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_color',
@@ -514,7 +514,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Buttons' ) ) :
 				),
 			);
 
-			// Text button typography
+			// Text button typography.
 			$options['setting']['sinatra_text_button_typography'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_typography',

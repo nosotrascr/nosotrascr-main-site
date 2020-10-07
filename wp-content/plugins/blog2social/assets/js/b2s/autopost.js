@@ -6,6 +6,7 @@ jQuery(window).on("load", function () {
     }
     
     jQuery(".b2s-import-auto-post-type").chosen();
+    jQuery(".b2s-auto-post-assign-user").chosen();
 
     jQuery('.b2s-network-item-auth-list[data-network-count="true"]').each(function () {
         jQuery('.b2s-network-auth-count-current[data-network-id="' + jQuery(this).attr("data-network-id") + '"').text(jQuery(this).children('li').length);
@@ -19,7 +20,33 @@ jQuery(window).on("load", function () {
     //TOS Twitter 032018 - none multiple Accounts - User select once
     checkNetworkTos(2);
     
-    jQuery('#b2s-auto-post-profil-dropdown').trigger('change');
+    
+    //Twitter Dropdown anpassen
+    var mandantId = jQuery('#b2s-auto-post-profil-dropdown').val();
+    jQuery('.b2s-auto-post-error[data-error-reason="no-auth-in-mandant"]').hide();
+    var tos = false;
+    if (jQuery('#b2s-auto-post-profil-data-' + mandantId).val() == "") {
+        tos = true;
+    } else {
+        //TOS Twitter Check
+        var len = jQuery('#b2s-auto-post-profil-dropdown-twitter').children('option[data-mandant-id="' + mandantId + '"]').length;
+        if (len >= 1) {
+            jQuery('.b2s-auto-post-twitter-profile').show();
+            jQuery('#b2s-auto-post-profil-dropdown-twitter').prop('disabled', false);
+            jQuery('#b2s-auto-post-profil-dropdown-twitter').show();
+            jQuery('#b2s-auto-post-profil-dropdown-twitter option').attr("disabled", "disabled");
+            jQuery('#b2s-auto-post-profil-dropdown-twitter option[data-mandant-id="' + mandantId + '"]').attr("disabled", false);
+        } else {
+            tos = true;
+        }
+
+    }
+    //TOS Twitter 032018
+    if (tos) {
+        jQuery('.b2s-auto-post-twitter-profile').hide();
+        jQuery('#b2s-auto-post-profil-dropdown-twitter').prop('disabled', 'disabled');
+        jQuery('#b2s-auto-post-profil-dropdown-twitter').hide();
+    }
 
 });
 
@@ -125,6 +152,9 @@ jQuery(document).on('click', '.b2sInfoAutoPosterAModalBtn', function () {
 jQuery(document).on('click', '.b2sTwitterInfoModalBtn', function () {
     jQuery('#b2sTwitterInfoModal').modal('show');
 });
+jQuery(document).on('click', '.b2sInfoAssignAutoPostBtn', function () {
+    jQuery('#b2sInfoAssignAutoPost').modal('show');
+});
 
 jQuery(document).on('change', '.b2s-auto-post-area-toggle', function() {
     if(jQuery(this).is(':checked')) {
@@ -206,4 +236,36 @@ jQuery(document).on('change', '.b2s-post-type-item-update', function() {
 jQuery(document).on('change', '.b2s-network-tos-check', function() {
     jQuery('.b2s-auto-post-error[data-error-reason="import-no-auth"]').hide();
     jQuery('.b2s-network-tos-check').css('border-color', '');
+});
+
+jQuery(document).on('click', '#b2s-auto-post-assign-by-disconnect', function() {
+    jQuery(".b2s-loading-area").show();
+    jQuery(".b2s-autopost-area").hide();
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_auto_post_assign_by_disconnect',
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function () {
+            jQuery('.b2s-server-connection-fail').show();
+            return false;
+        },
+        success: function (data) {
+            jQuery(".b2s-loading-area").hide();
+            jQuery(".b2s-autopost-area").show();
+            if (data.result == true) {
+                location.reload();
+            } else {
+                if(data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                }
+                jQuery('.b2s-settings-user-error').show();
+            }
+        }
+    });
+    return false;
 });

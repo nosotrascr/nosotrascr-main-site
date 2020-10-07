@@ -23,6 +23,18 @@ class B2S_PostBox {
         $lastPostDate = '---';
         $shareCount = 0;
         $optionAutoPost = $this->userOption->_getOption('auto_post');
+        $assigned = false;
+        if(isset($optionAutoPost['assignBy']) && (int) $optionAutoPost['assignBy'] > 0 && isset($optionAutoPost['assignProfile']) && (int) $optionAutoPost['assignProfile'] > 0) {
+            $assignOptions = new B2S_Options($optionAutoPost['assignBy']);
+            $newOptionAutoPost = $assignOptions->_getOption('auto_post');
+            $newOptionAutoPost['profile'] = $optionAutoPost['assignProfile'];
+            if(isset($optionAutoPost['assignTwitter']) && (int) $optionAutoPost['assignProfile'] > 0) {
+                $newOptionAutoPost['twitter'] = $optionAutoPost['assignTwitter'];
+            }
+            $optionAutoPost = $newOptionAutoPost;
+            $assigned = true;
+        }
+        
         $optionUserTimeZone = $this->userOption->_getOption('user_time_zone');
         $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
         $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);
@@ -94,7 +106,7 @@ class B2S_PostBox {
                     if ($postOptions != false && isset($postOptions[B2S_PLUGIN_BLOG_USER_ID]) && !empty($postOptions[B2S_PLUGIN_BLOG_USER_ID] && isset($postOptions[B2S_PLUGIN_BLOG_USER_ID]['best_times']))) {
                         $bestTimes = ((int) $postOptions[B2S_PLUGIN_BLOG_USER_ID]['best_times'] > 0) ? true : false;
                     }
-                    $advancedOptions = $this->getAdvancedOptions($result->data->mandant, $result->data->auth, $selectedProfileId, $selectedTwitterId, $bestTimes);
+                    $advancedOptions = $this->getAdvancedOptions($result->data->mandant, $result->data->auth, $selectedProfileId, $selectedTwitterId, $bestTimes, !$assigned);
                 }
             }
 
@@ -228,9 +240,17 @@ class B2S_PostBox {
         return $content;
     }
 
-    public function getAdvancedOptions($mandant = array(), $auth = array(), $selectedProfileId = -1, $selectedTwitterId = -1, $bestTimes = false) {
+    public function getAdvancedOptions($mandant = array(), $auth = array(), $selectedProfileId = -1, $selectedTwitterId = -1, $bestTimes = false, $show = true) {
         $authContent = '';
-        $content = '<br><div class="b2s-meta-box-auto-post-area"><label for="b2s-post-meta-box-profil-dropdown">' . esc_html__('Select network collection:', 'blog2social') . ' <div class="pull-right"><a class="b2s-info-btn" data-modal-target="b2sInfoNetworkModal" href="#">' . esc_html__('Info', 'blog2social') . '</a></div></label>
+        $content = '';
+        if(!$show) {
+            $content .= '<div class="panel panel-group b2s-info-assignd-by"><div class="panel-body">';
+            $content .= '<span>' . esc_html__('A WordPress admin has defined the Auto-Poster settings for you. You can deactivate these settings for your profile in the Auto-Poster settings at any time.', 'blog2social') . '</span>';
+            $content .= '</div>';
+            $content .= '</div>';
+            $content .= '<div style="display:none">';
+        }
+        $content .= '<br><div class="b2s-meta-box-auto-post-area"><label for="b2s-post-meta-box-profil-dropdown">' . esc_html__('Select network collection:', 'blog2social') . ' <div class="pull-right"><a class="b2s-info-btn" data-modal-target="b2sInfoNetworkModal" href="#">' . esc_html__('Info', 'blog2social') . '</a></div></label>
                     <div class="b2s-meta-box-modal" id="b2sInfoNetworkModal" aria-hidden="true" style="display:none;">
                         <div class="b2s-meta-box-modal-dialog">
                             <div class="b2s-meta-box-modal-header">
@@ -254,10 +274,10 @@ class B2S_PostBox {
                                     <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('VKontakte') . '" src="' . plugins_url('/assets/images/portale/17_flat.png', B2S_PLUGIN_FILE) . '">
                                     <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('XING') . '" src="' . plugins_url('/assets/images/portale/19_flat.png', B2S_PLUGIN_FILE) . '">
                                     <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Imgur') . '" src="' . plugins_url('/assets/images/portale/21_flat.png', B2S_PLUGIN_FILE) . '">
-
-                                    <img class="pull-right hidden-xs b2s-img-network-disabled" alt="' . esc_attr('Google My Business') . '" src="' . plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Google My Business') . '" src="' . plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE) . '">
                                 </div>
-                                <p class="b2s-bold">' . sprintf(__('Under <a href="%s">Network Settings</a> you define which network selection is used. <a href="%s" target="_blank">To create a network grouping.</a>', 'blog2social'), 'admin.php?page=blog2social-network', B2S_Tools::getSupportLink('network_grouping')) . '</p>
+                                <br>
+                                <p class="b2s-bold">' . sprintf(__('Under <a href="%s">Network Settings</a> you can define which network selection is used. <a href="%s" target="_blank">Create a network selection.</a>', 'blog2social'), 'admin.php?page=blog2social-network', B2S_Tools::getSupportLink('network_grouping')) . '</p>
                                 <h4>' . esc_html__('Available networks', 'blog2social') . '</h4>
                                 <span class="b2s-bold">' . esc_attr('Facebook (Profile & Seiten)') . '</span><br>
                                 <span class="b2s-bold">' . esc_attr('Twitter (1 Profil)') . '</span><br>
@@ -274,6 +294,7 @@ class B2S_PostBox {
                                 <span class="b2s-bold">' . esc_attr('VKontakte (Profile & Seiten)') . '</span><br>
                                 <span class="b2s-bold">' . esc_attr('XING (Profile & Seiten)') . '</span><br>
                                 <span class="b2s-bold">' . esc_attr('Imgur') . '</span><br>
+                                <span class="b2s-bold">' . esc_attr('Google My Business') . '</span><br>
                             </div>
                         </div>
                     </div>
@@ -329,6 +350,9 @@ class B2S_PostBox {
                 <option value="1" ' . (($bestTimes) ? 'selected' : '') . '>' . esc_html__('at best times', 'blog2social') . '</option>
                 </select></div>';
             $content .= "<input id='b2s-post-meta-box-best-time-settings' class='post-format' name='b2s-post-meta-box-best-time-settings' value='" . serialize($bestTimeSettings) . "' type='hidden'> ";
+        }
+        if(!$show) {
+            $content .= '</div>';
         }
 
         return $content;

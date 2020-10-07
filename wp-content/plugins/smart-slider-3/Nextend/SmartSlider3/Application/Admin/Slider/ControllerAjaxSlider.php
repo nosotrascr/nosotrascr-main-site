@@ -120,21 +120,6 @@ class ControllerAjaxSlider extends AdminAjaxController {
 
                     $slider['widget-arrow-enabled'] = 1;
                     $slider['widgetarrow']          = 'imageEmpty';
-
-                    // Custom settings NosotrasCR.
-                    $slider['responsive-mode']                      = 'auto';
-                    $slider['widget-arrow-previous-hover']          = 1;
-                    $slider['widget-arrow-previous-hover-color']    = 'ffffffff';
-                    $slider['widget-bullet-enabled']                = '1';
-                    $slider['widget-bar-enabled']                   = '1';
-                    $slider['widgetbar']                            = 'horizontalFull';
-                    $slider['widget-bar-show-title']                = '0';
-                    $slider['widget-bar-full-width']                = '1';
-                    $slider['widget-thumbnail-enabled']             = '0';
-                    $slider['autoplay']                             = '1';
-                    $slider['widget-autoplay-enabled']              = '1';
-                    $slider['backgroundMode']                       = 'blurfit';
-
                     break;
             }
         }

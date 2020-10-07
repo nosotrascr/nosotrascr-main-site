@@ -39,14 +39,12 @@ class B2S_Settings_Item {
         $isCheckedAllowShortcode = (get_option('B2S_PLUGIN_USER_ALLOW_SHORTCODE_' . B2S_PLUGIN_BLOG_USER_ID) !== false) ? 1 : 0;
 
         $optionUserTimeZone = $this->options->_getOption('user_time_zone');
-        $optionUserHashTag = $this->options->_getOption('user_allow_hashtag');
         $legacyMode = $this->generalOptions->_getOption('legacy_mode');
         $isCheckedLegacyMode = ($legacyMode !== false && $legacyMode == 1) ? 1 : 0;  //default not active , 1=active 0=not active
         $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
         $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);
         $userInfo = get_user_meta(B2S_PLUGIN_BLOG_USER_ID);
         $isCheckedShortener = (isset($this->settings->shortener_state) && (int) $this->settings->shortener_state > 0) ? ((int) $this->settings->shortener_state - 1) : -1;
-        $isCheckedAllowHashTag = ($optionUserHashTag === false || $optionUserHashTag == 1) ? 1 : 0;  //default allow , 1=include 0=not include
         
         $content = '';
         $content .='<h4>' . esc_html__('Account', 'blog2social') . '</h4>';
@@ -97,9 +95,6 @@ class B2S_Settings_Item {
         $content .= '<br>';
         $content .= '<strong>' . esc_html__('Shortcodes', 'blog2social') . '</strong> <a href="#" class="b2s-info-btn del-padding-left b2sInfoAllowShortcodeModalBtn">' . esc_html__('Info', 'Blog2Social') . '</a> <br>';
         $content .= '<input type="checkbox" value="' . esc_attr($isCheckedAllowShortcode) . '" id="b2s-user-network-settings-allow-shortcode" ' . (($isCheckedAllowShortcode == 1) ? 'checked="checked"' : '') . ' /> ' . esc_html__('allow shortcodes in my post', 'blog2social');
-        $content .= '<br><br>';
-        $content .= '<strong>' . esc_html__('Hashtags', 'blog2social') . '</strong> <a href="#" class="b2s-info-btn del-padding-left b2sInfoAllowHashTagModalBtn">' . esc_html__('Info', 'Blog2Social') . '</a> <br>';
-        $content .= '<input type="checkbox" value="' . (($isCheckedAllowHashTag == 1) ? 0 : 1) . '" id="b2s-user-network-settings-allow-hashtag" ' . (($isCheckedAllowHashTag == 1) ? 'checked="checked"' : '') . ' /> ' . esc_html__('include Wordpress tags as hashtags in my post', 'blog2social');
         $content .='<br>';
         $content .='<br>';
         $content .='<hr>';

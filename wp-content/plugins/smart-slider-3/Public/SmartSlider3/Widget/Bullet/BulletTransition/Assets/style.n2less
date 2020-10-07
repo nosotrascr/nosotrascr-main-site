@@ -4,6 +4,7 @@
     visibility: hidden;
     text-align: center;
     justify-content: center;
+    z-index: 14;
   }
 
   .n2-ss-control-bullet--calculate-size {

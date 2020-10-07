@@ -51,7 +51,7 @@ $autoPostItem = new B2S_AutoPost_Item();
 <input type="hidden" id="b2sServerUrl" value="<?php echo B2S_PLUGIN_SERVER_URL; ?>">
 
 
-<div class="modal fade" id="b2sInfoTimeZoneModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoTimeZoneModal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sInfoTimeZoneModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoTimeZoneModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -65,7 +65,7 @@ $autoPostItem = new B2S_AutoPost_Item();
     </div>
 </div>
 
-<div class="modal fade" id="b2sTwitterInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sTwitterInfoModal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sTwitterInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sTwitterInfoModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

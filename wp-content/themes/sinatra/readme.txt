@@ -2,7 +2,7 @@
 Contributors: sinatrateam
 Tags: two-columns, right-sidebar, left-sidebar, footer-widgets, blog, news, custom-background, custom-menu, post-formats, sticky-post, editor-style, threaded-comments, translation-ready, custom-colors, featured-images, full-width-template, microformats, theme-options, e-commerce
 Requires at least: 5.0
-Tested up to: 5.2.4
+Tested up to: 5.4.2
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -11,7 +11,7 @@ Stable tag: trunk
 A lightweight and highly customizable multi-purpose theme that makes it easy for anyone to create their perfect website.
 
 == Description ==
-Sinatra is a lightweight and highly customizable multi-purpose theme that makes it easy for anyone to create their perfect website. It comes with microdata integration, unlimited colors, multiple layouts, pre-built demo websites and so much more. It's also translatable and built with best SEO practices. Fully responsive layout makes it look beautiful on every device.
+Sinatra is a lightweight and highly customizable multi-purpose theme that makes it easy for anyone to create their perfect website. It comes with microdata integration, unlimited colors, multiple layouts, pre-built demo websites and so much more. It's also translatable and built with best SEO practices. It works well with your favorite plugins such as WooCommerce, JetPack, page builders, SEO plugins and others.
 
 == Frequently Asked Questions ==
 
@@ -23,6 +23,29 @@ Sinatra is a lightweight and highly customizable multi-purpose theme that makes 
 4. Navigate to Appearance » Customize to access theme options.
 
 == Changelog ==
+
+= 1.1.4 =
+* Updated: WordPress 5.5 compatibility.
+* Fixed: Range control in Customizer not working.
+* Fixed: Page Header background color overlay not working.
+* Improved: Block Editor styles to match frontend design.
+
+= 1.1.3 =
+* Added: 'sinatra_entry_meta_post_type' filter that allows post meta tags to be displayed on custom post types.
+* Added: Sticky header option.
+* Added: New Main Footer column layout: 1/3 + 2/3.
+* Added: New Main Footer column layout: 2/3 + 1/3.
+* Improved: CSS enhancements.
+
+= 1.1.2 =
+* Added: Option to control sidebar position on smaller screens.
+* Fixed: CSS issue with mobile (hamburger) menu colors.
+* Fixed: CSS issue with copyright menu not displaying on mobile devices.
+* Fixed: Breadcrumbs Posts page title hard coded to 'Blog' on single pages.
+* Updated: Default values for transparent header.
+* Updated: Google Fonts list.
+* Improved: Block Editor styles to match frontend design.
+* Improved: CSS enhancements.
 
 = 1.1.1 =
 * Added: Transparent Header - option to set alternative logo.
@@ -69,24 +92,6 @@ Sinatra is a lightweight and highly customizable multi-purpose theme that makes 
 * Improved: Responsive styling.
 * Improved: CSS enhancements.
 * Improved: WPML plugin compatibility.
-
-= 1.0.9 =
-* Added: Block Editor styles.
-* Added: Reset functionality for Typography control.
-* Added: Reset functionality for Spacing control.
-* Updated: Google Fonts list.
-* Improved: Default visibility for Sinatra widgets.
-* Improved: Function naming.
-* Improved: Class name prefix shortened.
-* Improved: CSS Styling enhancements.
-* Improved: Coding standards.
-
-= 1.0.8 =
-* Added: Button Styling options.
-* Updated: Google Fonts list.
-* Improved: Customizer options.
-* Improved: Accessibility.
-* Improved: Default & Dynamic styles.
 
 == Resources ==
 Feather Icons, https://feathericons.com/

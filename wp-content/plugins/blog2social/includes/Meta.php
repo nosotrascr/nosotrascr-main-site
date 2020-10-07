@@ -181,6 +181,7 @@ class B2S_Meta {
     private function getImage($type = 'og') {
 
         $image = '';
+        $image_size = array();
         if (!is_home()) {
             if (isset($this->metaData[$type . '_image']) && !empty($this->metaData[$type . '_image'])) {
                 $image = $this->metaData[$type . '_image'];
@@ -189,6 +190,10 @@ class B2S_Meta {
                 if (isset($this->post->ID)) {
                     if ($id_attachment = get_post_thumbnail_id($this->post->ID)) {
                         $image = wp_get_attachment_url($id_attachment, false);
+                        $imageMetaData = wp_get_attachment_metadata($id_attachment);
+                            if (isset($imageMetaData['width']) && isset($imageMetaData['height'])) {
+                                $image_size = array($imageMetaData['width'], $imageMetaData['height']);
+                            }
                         if (!preg_match('/^https?:\/\//', $image)) {
                             // Remove any starting slash with ltrim() and add one to the end of site_url()
                             $image = site_url('/') . ltrim($image, '/');
@@ -209,11 +214,18 @@ class B2S_Meta {
             $image = $this->options[$type . '_default_image'];
         }
 
-
         if (!empty($image)) {
             if ($this->print) {
                 if ($type == 'og') {
-                    echo '<meta property="og:image" content="' . esc_url(apply_filters('b2s_og_meta_image', $image)) . '"/>' . "\n";
+                    if (empty($image_size)) {
+                        $image_size = @getimagesize($image);
+                    }
+                    $size = "";
+                    if (isset($image_size[0]) && (int) $image_size[0] > 0 && isset($image_size[1]) && (int) $image_size[1] > 0) {
+                        $size = '<meta property="og:image:width" content="' . $image_size[0] . '"/>' . "\n";
+                        $size .= '<meta property="og:image:height" content="' . $image_size[1] . '"/>' . "\n";
+                    }
+                    echo '<meta property="og:image" content="' . esc_url(apply_filters('b2s_og_meta_image', $image)) . '"/>' . "\n" . $size;
                 } else {
                     echo '<meta name="twitter:image" content="' . esc_url(apply_filters('b2s_card_meta_image', $image)) . '"/>' . "\n";
                 }

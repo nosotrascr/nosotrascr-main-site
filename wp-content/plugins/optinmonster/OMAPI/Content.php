@@ -57,6 +57,24 @@ class OMAPI_Content {
 	protected $view;
 
 	/**
+	 * The current action slug
+	 *
+	 * @since 1.9.10
+	 *
+	 * @var string
+	 */
+	protected $action;
+
+	/**
+	 * The list of campaigns for the campaign overview.
+	 *
+	 * @since 1.9.10
+	 *
+	 * @var array
+	 */
+	protected $campaigns = array();
+
+	/**
 	 * Primary class constructor.
 	 *
 	 * @since 1.0.0
@@ -67,14 +85,15 @@ class OMAPI_Content {
 		$this->set();
 
 		// Load actions and filters.
-		add_action( 'optin_monster_api_content_before', array( $this, 'form_start' ), 0, 2 );
-		add_action( 'optin_monster_api_content_after', array( $this, 'form_end' ), 9999 );
-		add_action( 'optin_monster_api_content_api', array( $this, 'api' ), 10, 2 );
-		add_action( 'optin_monster_api_content_optins', array( $this, 'optins' ), 10, 2 );
-		add_action( 'optin_monster_api_content_settings', array( $this, 'settings' ), 10, 2 );
-		add_action( 'optin_monster_api_content_support', array( $this, 'support' ), 10, 2 );
-		add_action( 'optin_monster_api_content_migrate', array( $this, 'migrate' ), 10, 2 );
-		add_action( 'optin_monster_api_content_woocommerce', array( $this, 'woocommerce' ), 10, 2 );
+		add_filter( 'admin_body_class', array( $this, 'admin_body_classes' ) );
+		add_action( 'optin_monster_api_content_before', array( $this, 'form_start' ), 0, 4 );
+		add_action( 'optin_monster_api_content_after', array( $this, 'form_end' ), 9999, 4 );
+		add_action( 'optin_monster_api_content_api', array( $this, 'api' ), 10, 3 );
+		add_action( 'optin_monster_api_content_optins', array( $this, 'optins' ), 10, 3 );
+		add_action( 'optin_monster_api_content_settings', array( $this, 'settings' ), 10, 3 );
+		add_action( 'optin_monster_api_content_support', array( $this, 'support' ), 10, 3 );
+		add_action( 'optin_monster_api_content_migrate', array( $this, 'migrate' ), 10, 3 );
+		add_action( 'optin_monster_api_content_woocommerce', array( $this, 'woocommerce' ), 10, 3 );
 
 	}
 
@@ -88,8 +107,30 @@ class OMAPI_Content {
 		self::$instance = $this;
 		$this->base     = OMAPI::get_instance();
 		$this->view     = isset( $_GET['optin_monster_api_view'] ) ? stripslashes( $_GET['optin_monster_api_view'] ) : $this->base->get_view();
+		$this->action   = isset( $_GET['optin_monster_api_action'] ) ? stripslashes( $_GET['optin_monster_api_action'] ) : '';
 		$this->optin    = isset( $_GET['optin_monster_api_id'] ) ? $this->base->get_optin( absint( $_GET['optin_monster_api_id'] ) ) : false;
 
+	}
+
+	/**
+	 * Adds om admin body classes
+	 *
+	 * @since  1.9.10
+	 *
+	 * @param  array $classes
+	 *
+	 * @return array
+	 */
+	public function admin_body_classes( $classes ) {
+		if ( $this->view ) {
+			$classes .= ' omapi-view-'. $this->view .' ';
+		}
+
+		if ( $this->action ) {
+			$classes .= ' omapi-action-'. $this->action .' ';
+		}
+
+		return $classes;
 	}
 
 	/**
@@ -97,101 +138,146 @@ class OMAPI_Content {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $id    The panel ID we are targeting.
-	 * @param string $panel The panel name we are targeting.
+	 * @param string $id      The panel ID we are targeting.
+	 * @param string $panel   The panel name we are targeting.
+	 * @param object $object  The menu object.
+	 * @param bool   $active  Whether current panel is active.
 	 */
-	public function form_start( $id, $panel ) {
+	public function form_start( $id, $panel, $object, $active ) {
+		if ( empty( $active ) ) {
+			return;
+		}
 
-		if ( $this->view == 'support' ) :
-		?>
+		$url = stripslashes( $_SERVER['REQUEST_URI'] );
+		$url = add_query_arg( 'optin_monster_api_view', $id, $url );
+
+		if ( 'optins' === $this->view && 'edit' !== $this->action ) {
+
+			$args = array(
+				// Allow seeing the hidden drafts via query arg (for debugging purposes)
+				'post_status' => ! empty( $_GET['post_status'] )
+					? explode( ',', sanitize_text_field( $_GET['post_status'] ) )
+					: 'publish',
+			);
+
+			$this->campaigns = $this->base->get_optins( $args );
+			if ( ! empty( $this->campaigns ) ) {
+				$panel .= ' (' . count( $this->campaigns ) . ')';
+			}
+		}
+
+		if ( 'support' === $this->view ) :
+			?>
 			<h3><?php echo esc_html( $panel ); ?></h3>
-		<?php
-		else:
-		?>
-		<form id="omapi-form-<?php echo sanitize_html_class( $id ); ?>" class="omapi-form" method="post" action="<?php echo esc_attr( stripslashes( $_SERVER['REQUEST_URI'] ) ); ?>">
+			<?php
+		else :
+			?>
+		<form id="omapi-form-<?php echo sanitize_html_class( $id ); ?>" class="omapi-form" method="post" action="<?php echo esc_url( $url ); ?>">
 			<?php wp_nonce_field( 'omapi_nonce_' . $id, 'omapi_nonce_' . $id ); ?>
 			<input type="hidden" name="omapi_panel" value="<?php echo $id; ?>" />
 			<input type="hidden" name="omapi_save" value="true" />
-			<?php if ( 'settings' == $this->view ) : ?>
+			<?php if ( 'settings' === $this->view ) : ?>
 			<input type="hidden" name="omapi[<?php echo esc_attr( $this->view ); ?>][wpform]" value="true" />
 			<?php endif; ?>
 			<h3>
-				<?php if ( isset( $_GET['optin_monster_api_action'] ) && 'edit' == $_GET['optin_monster_api_action'] ) : ?>
-				<?php printf( __( 'Output Settings for %s', 'optin-monster-api' ), esc_html( $this->optin->post_title ) ); ?>
-				<span class="omapi-back"><a class="button button-secondary button-small" href="<?php echo esc_url_raw( add_query_arg( array( 'optin_monster_api_view' => 'optins' ), admin_url( 'admin.php?page=optin-monster-api-settings' ) ) ); ?>" title="<?php esc_attr_e( 'Back to campaign overview', 'optin-monster-api' ); ?>"><?php _e( 'Back to Overview', 'optin-monster-api' ); ?></a></span>
+				<?php if ( 'edit' === $this->action ) : ?>
+					<?php if ( ! empty( $this->optin->ID ) ) : ?>
+						<?php printf( esc_html__( 'Output Settings for %s', 'optin-monster-api' ), esc_html( $this->optin->post_title ) ); ?>
+						<?php if ( ! empty( $this->optin->post_status ) && 'publish' !== $this->optin->post_status ) : ?>
+							<?php esc_html_e( ' (Paused)', 'optin-monster-api' ); ?>
+						<?php endif; ?>
+					<?php else : ?>
+						<?php esc_html_e( 'Missing Campaign!', 'optin-monster-api' ); ?>
+					<?php endif; ?>
+					<span class="omapi-back"><a class="button button-secondary button-small" href="<?php echo esc_url_raw( $this->base->menu->get_settings_link( 'optins' ) ); ?>" title="<?php esc_attr_e( 'Back to campaign overview', 'optin-monster-api' ); ?>"><?php esc_html_e( 'Back to Overview', 'optin-monster-api' ); ?></a></span>
+					<?php if ( ! empty( $this->optin->post_name ) ) : ?>
+						<span class="omapi-slug omapi-has-tooltip" data-toggle="tooltip" data-placement="bottom" title="<?php esc_html_e( 'The unique slug of this campaign. Used for shortcodes and embed scripts.', 'optin-monster-api' ); ?>"><?php echo $this->optin->post_name; ?></span>
+					<?php endif; ?>
 				<?php else : ?>
-				<?php echo esc_html( $panel ); ?>
+					<?php echo esc_html( $panel ); ?>
 				<?php endif; ?>
 			</h3>
-		<?php
+			<?php
 		endif;
 
 		// Action to load success/reset messages.
+		// Deprecated. We now use the WP hook (all_admin_notices).
 		do_action( 'optin_monster_api_messages_' . $id );
-
 	}
 
 	/**
 	 * Loads the ending form HTML for the panel content.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @param string $id      The panel ID we are targeting.
+	 * @param string $panel   The panel name we are targeting.
+	 * @param object $object  The menu object.
+	 * @param bool   $active  Whether current panel is active.
 	 */
-	public function form_end() {
+	public function form_end( $id, $panel, $object, $active ) {
+		if ( empty( $active ) ) {
+			return;
+		}
+
 		$hide_submit_button_class = apply_filters( 'omapi_hide_submit_buttom', false ) ? 'omapi-hidden' : '';
+
 		// Load different form buttons based on if credentials have been supplied or not.
 		if ( ! $this->base->get_api_credentials() && 'support' !== $this->view ) :
-		?>
+			?>
 			<p class="submit <?php echo $hide_submit_button_class; ?>">
-				<input class="button button-primary" type="submit" name="omapi_submit" value="<?php esc_attr_e( 'Connect to OptinMonster', 'optin-monster-api' ); ?>" tabindex="749" />
+				<input class="button button-primary" type="submit" name="omapi_submit" value="<?php esc_attr_e( 'Connect to OptinMonster', 'optin-monster-api' ); ?>" />
 			</p>
 		</form>
-		<?php
-		elseif ( 'optins' == $this->view ) :
-			if ( isset( $_GET['optin_monster_api_action'] ) && 'edit' == $_GET['optin_monster_api_action'] ) :
-			?>
+			<?php
+		elseif ( 'optins' === $this->view ) :
+			if ( 'edit' === $this->action ) :
+				?>
 				<p class="submit">
-					<input class="button button-primary" type="submit" name="submit" value="<?php esc_attr_e( 'Save Settings', 'optin-monster-api' ); ?>" tabindex="749" />
+					<input class="button button-primary" type="submit" name="submit" value="<?php esc_attr_e( 'Save Settings', 'optin-monster-api' ); ?>" />
 				</p>
 			</form>
-			<?php
+				<?php
 			else :
-			?>
+				?>
 				<p class="submit">
-					<input class="button button-primary" type="submit" name="omapi_refresh" value="<?php esc_attr_e( 'Refresh Campaigns', 'optin-monster-api' ); ?>" tabindex="749" />
-					<a class="button button-secondary" href="<?php echo wp_nonce_url( esc_url_raw( add_query_arg( array( 'optin_monster_api_view' => $this->view, 'optin_monster_api_action' => 'cookies' ), admin_url( 'admin.php?page=optin-monster-api-settings' ) ) ), 'omapi-action' ); ?>" title="<?php esc_attr_e( 'Clear Local Cookies', 'optin-monster-api' ); ?>"><?php _e( 'Clear Local Cookies', 'optin-monster-api' ); ?></a>
+					<input class="button button-primary" type="submit" name="omapi_refresh" value="<?php esc_attr_e( 'Refresh Campaigns', 'optin-monster-api' ); ?>" />
+					<a class="button button-secondary" href="<?php echo wp_nonce_url( esc_url_raw( $this->base->menu->get_settings_link( $this->view, array( 'optin_monster_api_action' => 'cookies' ) ) ), 'omapi-action' ); ?>" title="<?php esc_attr_e( 'Clear Local Cookies', 'optin-monster-api' ); ?>"><?php esc_html_e( 'Clear Local Cookies', 'optin-monster-api' ); ?></a>
 				</p>
 			</form>
-			<?php
+				<?php
 			endif;
-		elseif ( 'migrate' == $this->view ) :
+		elseif ( 'migrate' === $this->view ) :
 			?>
 		</form>
-		<?php
-		elseif ( 'support' == $this->view ) :
+			<?php
+		elseif ( 'support' === $this->view ) :
 
 			// You get nothing.
 
 		elseif ( 'woocommerce' === $this->view ) :
-		?>
+			?>
 			<p class="submit">
 				<?php if ( OMAPI_WooCommerce::is_minimum_version() ) : ?>
 					<?php if ( OMAPI_WooCommerce::is_connected() ) : ?>
-						<input class="button button-primary" type="submit" name="omapi_woocommerce_disconnect" value="<?php esc_attr_e( 'Disconnect WooCommerce', 'optin-monster-api' ); ?>" tabindex="749" />
+						<input class="button button-secondary" type="submit" name="omapi_woocommerce_disconnect" value="<?php esc_attr_e( 'Disconnect WooCommerce', 'optin-monster-api' ); ?>" />
 					<?php else : ?>
-						<input class="button button-primary" type="submit" name="omapi_woocommerce_connect" value="<?php esc_attr_e( 'Connect WooCommerce', 'optin-monster-api' ); ?>" tabindex="749" />&nbsp;
-						<input class="button button-secondary" type="submit" name="omapi[woocommerce][autogenerate]" value="<?php esc_attr_e( 'Auto-Generate Keys', 'optin-monster-api' ); ?>" tabindex="749" />
+						<input class="button button-primary" type="submit" name="omapi[woocommerce][autogenerate]" value="<?php esc_attr_e( 'Auto-Generate Keys + Connect WooCommerce', 'optin-monster-api' ); ?>" />
+						<span class="manually-connect-wc">
+							<?php printf( esc_html__( 'or %1$sclick here%2$s to enter the the consumer key/secret pair manually.', 'optin-monster-api' ), '<a href="#" id="omapiShowApiKeys">', '</a>' ); ?>
+						</span>
 					<?php endif; ?>
 				<?php endif; ?>
 			</p>
 		</form>
-		<?php
+			<?php
 		else :
-		?>
+			?>
 			<p class="submit <?php echo $hide_submit_button_class; ?>">
-				<input class="button button-primary" type="submit" name="submit" value="<?php esc_attr_e( 'Save Settings', 'optin-monster-api' ); ?>" tabindex="749" />
+				<input class="button button-primary" type="submit" name="submit" value="<?php esc_attr_e( 'Save Settings', 'optin-monster-api' ); ?>" />
 			</p>
 		</form>
-		<?php
+			<?php
 		endif;
 	}
 
@@ -201,18 +287,27 @@ class OMAPI_Content {
 	 * @since 1.0.0
 	 *
 	 * @param string $panel  The panel name we are targeting.
-	 * @param object $object The menu object (useful for settings helpers).
+	 * @param object $object The menu object.
+	 * @param bool   $active  Whether current panel is active.
 	 */
-	public function api( $panel, $object ) {
+	public function api( $panel, $object, $active ) {
+		if ( empty( $active ) ) {
+			return;
+		}
 
 		$link = $this->base->menu->get_action_link();
-		$text = $this->base->menu->has_trial_link() ? __(  'Click here to start your free 30-day trial!', 'optin-monster-api' ) : __( 'Click here to learn more about OptinMonster!', 'optin-monster-api' );
+		$text = $this->base->menu->has_trial_link()
+			? esc_html__( 'Click here to start your free 30-day trial!', 'optin-monster-api' )
+			: esc_html__( 'Click here to learn more about OptinMonster!', 'optin-monster-api' );
 
 		$credentials = $this->base->get_api_credentials();
 
-		if ( ! $credentials ) : ?>
-		<p class="omapi-red"><strong><?php _e( 'You must authenticate your OptinMonster account before you can use OptinMonster on this site.', 'optin-monster-api' ); ?></strong></p>
-		<p><em><?php printf( __( 'Need an OptinMonster account? <a href="%s" title="Click here to learn more about OptinMonster" target="_blank">%s</a>', 'optin-monster-api' ), $link, $text ); ?></em></p>
+		if ( ! $credentials ) :
+			?>
+			<?php if ( ! $credentials && ! isset( $_GET['om-bypass-api-check'] ) ) : ?>
+				<p class="omapi-red"><strong><?php esc_html_e( 'You must authenticate your OptinMonster account before you can use OptinMonster on this site.', 'optin-monster-api' ); ?></strong></p>
+			<?php endif; ?>
+			<p><em><?php printf( __( 'Need an OptinMonster account? <a href="%1$s" title="Click here to learn more about OptinMonster" target="_blank">%2$s</a>', 'optin-monster-api' ), $link, $text ); ?></em></p>
 		<?php endif; ?>
 
 		<?php echo $object->get_setting_ui( 'api', 'apikey' ); ?>
@@ -240,53 +335,58 @@ class OMAPI_Content {
 	 * @since 1.0.0
 	 *
 	 * @param string $panel  The panel name we are targeting.
-	 * @param object $object The menu object (useful for settings helpers).
+	 * @param object $object The menu object.
+	 * @param bool   $active  Whether current panel is active.
 	 */
-	public function optins( $panel, $object ) {
-
-		$optin_view = isset( $_GET['optin_monster_api_action'] ) && 'edit' == $_GET['optin_monster_api_action'] ? 'edit' : 'overview';
-		if ( 'edit' == $optin_view ) {
-			$this->optin_edit( $object );
-		} else {
-			$this->optin_overview( $object );
+	public function optins( $panel, $object, $active ) {
+		if ( empty( $active ) ) {
+			return;
 		}
 
+		if ( 'edit' === $this->action ) {
+			return $this->optin_edit( $object );
+		}
+
+		$this->optin_overview();
 	}
 
 	/**
 	 * Shows the optins loaded on the site.
 	 *
 	 * @since 1.0.0
-	 *
-	 * @param object $object The menu object (useful for settings helpers).
 	 */
-	public function optin_overview( $object ) {
+	public function optin_overview() {
+		$first = true;
+		if ( ! empty( $this->campaigns ) ) : ?>
+			<?php foreach ( $this->campaigns as $optin ) :
+				$class = $first ? ' omapi-optin-first' : '';
+				if ( (bool) get_post_meta( $optin->ID, '_omapi_enabled', true ) ) {
+					$status         = '<span>' . esc_html__( 'Enabled', 'optin-monster-api' ) . '</span>';
+					$status_tooltip = esc_html__( 'This campaign is enabled on this site.', 'optin-monster-api' );
+				} else {
+					$status         = '<span style="opacity: .65;">' . esc_html__( 'Disabled', 'optin-monster-api' ) . '</span>';
+					$status_tooltip = esc_html__( 'This campaign is not embedded by the plugin anywhere on this site.', 'optin-monster-api' );
+				}
 
-		$optins = $this->base->get_optins();
-		$i      = 0;
-		if ( ! empty( $optins ) ) :
-		?>
-		<?php foreach ( $optins as $optin ) : $class = 0 == $i ? ' omapi-optin-first' : '';
-			if ( (bool) get_post_meta( $optin->ID, '_omapi_enabled', true ) ) {
-				$status = '<span class="omapi-green">' . __( 'Live', 'optin-monster-api' ) . '</span>';
-				$status_tooltip = __('This campaign is embedded on your site based on your output settings and will load subject to the display rules configured in the campaign builder.', 'optin-monster-api');
-			} else {
-				$status = '<span class="omapi-red">' . __( 'Disabled', 'optin-monster-api' ) . '</span>';
-				$status_tooltip = __('This campaign is not embedded by the plugin anywhere on this site.', 'optin-monster-api');
-			}
-		?>
-		<p class="omapi-optin<?php echo $class; ?>">
-			<a href="<?php echo esc_url_raw( add_query_arg( array( 'optin_monster_api_view' => $this->view, 'optin_monster_api_action' => 'edit', 'optin_monster_api_id' => $optin->ID ), admin_url( 'admin.php?page=optin-monster-api-settings' ) ) ); ?>" title="<?php printf( esc_attr__( 'Manage output settings for %s', 'optin-monster-api' ), $optin->post_title ); ?>"><?php echo $optin->post_title; ?></a>
-			<span class="omapi-status omapi-has-tooltip" data-toggle="tooltip" data-placement="bottom" title="<?php echo $status_tooltip; ?>"><?php echo $status; ?></span><br>
-			<span class="omapi-slug omapi-has-tooltip" data-toggle="tooltip" data-placement="bottom" title="<?php _e('The unique slug of this campaign. Used for shortcodes and embed scripts.', 'optin-monster-api'); ?>"><?php echo $optin->post_name; ?></span>
-			<span class="omapi-links"><?php echo $this->get_optin_links( $optin->ID ); ?></span>
-		</p>
-		<?php $i++; endforeach; ?>
+				$url = $this->base->menu->get_settings_link(
+					$this->view,
+					array(
+						'optin_monster_api_action' => 'edit',
+						'optin_monster_api_id'     => $optin->ID,
+					)
+				);
+				?>
+			<div class="omapi-optin<?php echo $class; ?>">
+				<a href="<?php echo esc_url_raw( $url ); ?>" title="<?php printf( esc_attr__( 'Manage output settings for %s', 'optin-monster-api' ), $optin->post_title ); ?>"><?php echo $optin->post_title; ?></a>
+				<span tabindex="0" class="omapi-status omapi-has-tooltip" data-toggle="tooltip" data-placement="bottom" title="<?php echo $status_tooltip; ?>"><?php echo $status; ?></span><br>
+				<span tabindex="0" class="omapi-slug omapi-has-tooltip" data-toggle="tooltip" data-placement="bottom" title="<?php esc_html_e( 'The unique slug of this campaign. Used for shortcodes and embed scripts.', 'optin-monster-api' ); ?>"><?php echo $optin->post_name; ?></span>
+				<span class="omapi-links"><?php echo $this->get_optin_links( $optin->ID ); ?></span>
+			</div>
+			<?php $first = false; endforeach; ?>
 		<?php else : ?>
-		<p><strong><?php _e( 'No campaigns could be retrieved for this site.', 'optin-monster-api' ); ?></strong></p>
-		<?php
+			<p><strong><?php esc_html_e( 'No campaigns could be retrieved for this site.', 'optin-monster-api' ); ?></strong></p>
+			<?php
 		endif;
-
 	}
 
 	/**
@@ -295,12 +395,15 @@ class OMAPI_Content {
 	 * @since 1.0.0
 	 *
 	 * @param string $panel  The panel name we are targeting.
-	 * @param object $object The menu object (useful for settings helpers).
+	 * @param object $object The menu object.
+	 * @param bool   $active  Whether current panel is active.
 	 */
-	public function settings( $panel, $object ) {
+	public function settings( $panel, $object, $active ) {
+		if ( empty( $active ) ) {
+			return;
+		}
 
 		echo $object->get_setting_ui( 'settings', 'cookies' );
-
 	}
 
 	/**
@@ -309,13 +412,23 @@ class OMAPI_Content {
 	 * @since 1.7.0
 	 *
 	 * @param string $panel  The panel name we are targeting.
-	 * @param object $object The menu object (useful for settings helpers).
+	 * @param object $object The menu object.
+	 * @param bool   $active  Whether current panel is active.
 	 */
-	public function woocommerce( $panel, $object ) {
+	public function woocommerce( $panel, $object, $active ) {
 		echo $object->get_setting_ui( 'woocommerce', 'settings' ); // WPCS: XSS ok.
 	}
 
-	public function support( $panel, $object ) {
+	/**
+	 * Loads the content output for the Support panel.
+	 *
+	 * @since 1.1.5
+	 *
+	 * @param string $panel  The panel name we are targeting.
+	 * @param object $object The menu object.
+	 * @param bool   $active  Whether current panel is active.
+	 */
+	public function support( $panel, $object, $active ) {
 
 		echo $object->get_setting_ui( 'support', 'video' );
 		echo $object->get_setting_ui( 'support', 'links' );
@@ -328,11 +441,12 @@ class OMAPI_Content {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param object $object The menu object (useful for settings helpers).
+	 * @param object $object The menu object.
+	 * @param bool   $active  Whether current panel is active.
 	 */
 	public function optin_edit( $object ) {
 
-		//Check for existing optins
+		// Check for existing optins
 		if ( $this->optin ) {
 			$type = get_post_meta( $this->optin->ID, '_omapi_type', true );
 			echo $object->get_setting_ui( 'optins', 'enabled' );
@@ -340,10 +454,9 @@ class OMAPI_Content {
 			if ( 'sidebar' !== $type ) {
 				if ( OMAPI_Utils::is_inline_type( $type ) ) {
 					echo $object->get_setting_ui( 'optins', 'automatic' );
-					echo $object->get_setting_ui( 'optins', 'automatic_shortcode');
-				} else {
-					echo $object->get_setting_ui( 'optins', 'global' );
+					echo $object->get_setting_ui( 'optins', 'automatic_shortcode' );
 				}
+
 				echo $object->get_setting_ui( 'optins', 'users' );
 			}
 
@@ -358,29 +471,29 @@ class OMAPI_Content {
 
 				// Add WooCommerce Toggle
 				if ( $this->base->is_woocommerce_active() ) {
-					echo $object->get_setting_ui( 'toggle', 'woocommerce-start');
+					echo $object->get_setting_ui( 'toggle', 'woocommerce-start' );
 
-					echo $object->get_setting_ui( 'optins', 'show_on_woocommerce');
+					echo $object->get_setting_ui( 'optins', 'show_on_woocommerce' );
 					// Don't show if output can't use the_content filter
 					if ( ! OMAPI_Utils::is_inline_type( $type ) ) {
 						echo $object->get_setting_ui( 'optins', 'is_wc_shop' );
 					}
-					echo $object->get_setting_ui( 'optins', 'is_wc_product');
-					echo $object->get_setting_ui( 'optins', 'is_wc_cart');
-					echo $object->get_setting_ui( 'optins', 'is_wc_checkout');
-					echo $object->get_setting_ui( 'optins', 'is_wc_account');
-					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint');
-					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_order_pay');
-					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_order_received');
-					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_view_order');
-					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_edit_account');
-					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_edit_address');
-					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_lost_password');
-					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_customer_logout');
-					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_add_payment_method');
+					echo $object->get_setting_ui( 'optins', 'is_wc_product' );
+					echo $object->get_setting_ui( 'optins', 'is_wc_cart' );
+					echo $object->get_setting_ui( 'optins', 'is_wc_checkout' );
+					echo $object->get_setting_ui( 'optins', 'is_wc_account' );
+					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint' );
+					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_order_pay' );
+					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_order_received' );
+					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_view_order' );
+					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_edit_account' );
+					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_edit_address' );
+					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_lost_password' );
+					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_customer_logout' );
+					echo $object->get_setting_ui( 'optins', 'is_wc_endpoint_add_payment_method' );
 					echo $object->get_setting_ui( 'optins', 'is_wc_product_category' );
 					echo $object->get_setting_ui( 'optins', 'is_wc_product_tag' );
-					echo $object->get_setting_ui( 'toggle', 'woocommerce-end');
+					echo $object->get_setting_ui( 'toggle', 'woocommerce-end' );
 				}
 
 				// Advanced Settings
@@ -393,13 +506,12 @@ class OMAPI_Content {
 				echo $object->get_setting_ui( 'toggle', 'advanced-end' );
 			}
 
-			if ( 'sidebar' == $type || 'inline' == $type ) {
-				echo $object->get_setting_ui('note', 'sidebar_widget_notice');
+			if ( 'sidebar' === $type || 'inline' === $type ) {
+				echo $object->get_setting_ui( 'note', 'sidebar_widget_notice' );
 			}
-
 		} else {
 			?>
-			<p><strong><?php _e( 'No campaign could be retrieved for the ID specified.', 'optin-monster-api' ); ?></strong></p>
+			<p><strong><?php esc_html_e( 'No campaign could be retrieved for the ID specified.', 'optin-monster-api' ); ?></strong></p>
 			<?php
 		}
 
@@ -418,22 +530,39 @@ class OMAPI_Content {
 		$optin       = get_post( $optin_id );
 		$slug        = $optin->post_name;
 		$status      = (bool) get_post_meta( $optin_id, '_omapi_enabled', true );
-		$status_link = $status ? __( 'Disable', 'optin-monster-api' ) : __( 'Go Live', 'optin-monster-api' );
+		$status_link = $status ? esc_html__( 'Disable', 'optin-monster-api' ) : esc_html__( 'Go Live', 'optin-monster-api' );
 		$status_desc = $status ? esc_attr__( 'Disable this campaign', 'optin-monster-api' ) : esc_attr__( 'Go live with this campaign', 'optin-monster-api' );
-		$links       = array();
-		$links['editd']  = '<a href="' . esc_url_raw( OPTINMONSTER_APP_URL . '/campaigns/' . $slug . '/edit/' ) . '" title="' . esc_attr__( 'Edit this campaign on the OptinMonster App', 'optin-monster-api' ) . '" target="_blank">' . __( 'Edit Design', 'optin-monster-api' ) . '</a>';
-		$links['edito']  = '<a href="' . esc_url_raw( add_query_arg( array( 'optin_monster_api_view' => $this->view, 'optin_monster_api_action' => 'edit', 'optin_monster_api_id' => $optin_id ), admin_url( 'admin.php?page=optin-monster-api-settings' ) ) ) . '" title="' . esc_attr__( 'Edit the output settings for this campaign', 'optin-monster-api' ) . '">' . __( 'Edit Output Settings', 'optin-monster-api' ) . '</a>';
-		$links['status'] = '<a href="' . wp_nonce_url( esc_url_raw( add_query_arg( array( 'optin_monster_api_view' => $this->view, 'optin_monster_api_action' => 'status', 'optin_monster_api_id' => $optin_id ), admin_url( 'admin.php?page=optin-monster-api-settings' ) ) ), 'omapi-action' ) . '" title="' . $status_desc . '">' . $status_link . '</a>';
+
+		$edit_url   = $this->base->menu->get_settings_link(
+			$this->view,
+			array(
+				'optin_monster_api_action' => 'edit',
+				'optin_monster_api_id'     => $optin_id,
+			)
+		);
+		$status_url = $this->base->menu->get_settings_link(
+			$this->view,
+			array(
+				'optin_monster_api_action' => 'status',
+				'optin_monster_api_id'     => $optin_id,
+			)
+		);
+		$status_url = wp_nonce_url( $status_url, 'omapi-action' );
+
+		$links           = array();
+		$links['editd']  = '<a href="' . esc_url_raw( OPTINMONSTER_APP_URL . '/campaigns/' . $slug . '/edit/' ) . '" title="' . esc_attr__( 'Edit this campaign on the OptinMonster App', 'optin-monster-api' ) . '" target="_blank">' . esc_html__( 'Edit Design', 'optin-monster-api' ) . '</a>';
+		$links['edito']  = '<a href="' . esc_url_raw( $edit_url ) . '" title="' . esc_attr__( 'Edit the output settings for this campaign', 'optin-monster-api' ) . '">' . esc_html__( 'Edit Output Settings', 'optin-monster-api' ) . '</a>';
+		$links['status'] = '<a href="' . esc_url_raw( $status_url ) . '" title="' . $status_desc . '">' . $status_link . '</a>';
 
 		$links = apply_filters( 'optin_monster_api_action_links', $links, $optin_id );
-		return implode( ' | ', (array) $links );
 
+		return implode( ' | ', (array) $links );
 	}
 
 	public function migrate() {
 		?>
-		<p><?php _e( 'Your campaigns created within WordPress using the original OptinMonster plugin can be recreated manually in your OptinMonster account.', 'optin-monster-api' ); ?></p>
-		<p><a href="https://optinmonster.com/docs/old-wordpress-customers-migrating-to-the-new-optinmonster-app/"><?php _e( 'Read the full post about the changes.', 'optin-monster-api' ); ?></a></p>
+		<p><?php esc_html_e( 'Your campaigns created within WordPress using the original OptinMonster plugin can be recreated manually in your OptinMonster account.', 'optin-monster-api' ); ?></p>
+		<p><a href="https://optinmonster.com/docs/old-wordpress-customers-migrating-to-the-new-optinmonster-app/"><?php esc_html_e( 'Read the full post about the changes.', 'optin-monster-api' ); ?></a></p>
 		<?php
 	}
 

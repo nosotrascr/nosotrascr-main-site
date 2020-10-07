@@ -4,6 +4,14 @@
     Bootstrap Slider
     ======================================= */
 
+// if wp is not 5.5
+if ( ! function_exists( 'wp_body_open' ) ) {
+    function wp_body_open() {
+        do_action( 'wp_body_open' );
+    }
+}
+
+
 if ( ! function_exists( 'evolve_frontpage_bootstrap_slider' ) ) {
 	function evolve_frontpage_bootstrap_slider() {
 		if ( ( evolve_theme_mod( 'evl_bootstrap_slider_support', '0' ) == "1" && is_front_page() ) || ( get_post_meta( evolve_get_post_id(), 'evolve_slider_type', true ) == 'bootstrap' && evolve_theme_mod( 'evl_bootstrap_slider_support', '0' ) == '1' && is_home() ) ):
@@ -410,9 +418,26 @@ if ( ! function_exists( 'evolve_woocommerce_products' ) ) {
     Custom Content
     ======================================= */
 
+function  evolve_convertYoutube( $string ) {
+    return str_replace(	'fr-ame','frame', preg_replace(
+		"/\s*[a-zA-Z\/\/:\.]*youtu(be.com\/watch\?v=|.be\/)([a-zA-Z0-9\-_]+)([a-zA-Z0-9\/\*\-\_\?\&\;\%\=\.]*)/i",
+		"
+		
+		<ifr-ame style='width: 100%; min-height: 650px' 
+src=\"https://www.youtube.com/embed/$2\"
+ frameborder=\"0\" 
+allow=\"accelerometer; autoplay; 
+encrypted-media; gyroscope; picture-in-picture\"
+ allowfullscreen></ifr-ame>
+
+",
+		$string
+	));
+}
+
 if ( ! function_exists( 'evolve_custom_content' ) ) {
 	function evolve_custom_content() {
-		$content = evolve_theme_mod( "evl_fp_custom_content_editor", '' );
+		$content =  evolve_convertYoutube(evolve_theme_mod( "evl_fp_custom_content_editor", '' ));
 
 		$html = '';
 

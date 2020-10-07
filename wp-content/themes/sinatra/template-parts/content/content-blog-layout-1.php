@@ -23,7 +23,7 @@
 	} else {
 
 		$sinatra_blog_entry_elements = sinatra_get_blog_entry_elements();
-		
+
 		echo '<div class="si-blog-entry-content">';
 
 		if ( ! empty( $sinatra_blog_entry_elements ) ) {

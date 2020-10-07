@@ -48,7 +48,7 @@ if ( ! empty( $product_tabs ) ) : ?>
 		foreach ( $product_tabs as $key => $product_tab ) :
 			$sinatra_classes = 'description' === $key ? ' si-entry' : '';
 			?>
-			<div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--<?php echo esc_attr( $key ); ?><?php echo esc_attr( $sinatra_classes ); ?> panel entry-content wc-tab" id="tab-<?php echo esc_attr( $key ); ?>" role="tabpanel" aria-labelledby="tab-title-<?php echo esc_attr( $key ); ?>">
+			<div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--<?php echo esc_attr( $key ); echo esc_attr( $sinatra_classes ); ?> panel entry-content wc-tab" id="tab-<?php echo esc_attr( $key ); ?>" role="tabpanel" aria-labelledby="tab-title-<?php echo esc_attr( $key ); ?>">
 				<div class="si-container">
 					<?php
 					if ( isset( $product_tab['callback'] ) ) {

@@ -653,7 +653,7 @@ class Slide extends AbstractRenderableOwner {
         $this->parameters->set('backgroundTitle', $this->fill($this->parameters->get('backgroundTitle')));
         $this->parameters->set('backgroundVideoMp4', $this->fill($this->parameters->get('backgroundVideoMp4')));
         $this->parameters->set('backgroundColor', $this->fill($this->parameters->get('backgroundColor')));
-        $this->parameters->set('link', $this->fill($this->parameters->get('link')));
+        $this->parameters->set('href', $this->fill($this->parameters->get('href')));
     }
 
     private function getFilledLayers() {

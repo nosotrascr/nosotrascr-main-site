@@ -216,6 +216,14 @@ jQuery(document).on('click', '.b2sProFeatureModalBtn', function () {
     jQuery('#b2sProFeatureModal').find('.' + jQuery(this).attr('data-type')).show();
 });
 
+//PREMIUM-BUSINESS
+jQuery(document).on('click', '.b2sBusinessFeatureModalBtn', function () {
+    jQuery('#b2sBusinessFeatureModal').modal('show');
+    jQuery('#b2sBusinessFeatureModal').find('.modal-title').html(jQuery(this).attr('data-title'));
+    jQuery('#b2sBusinessFeatureModal').find('.modal-body').hide();
+    jQuery('#b2sBusinessFeatureModal').find('.' + jQuery(this).attr('data-type')).show();
+});
+
 jQuery(document).on('heartbeat-send', function (e, data) {
     data['client'] = 'b2s';
 });

@@ -81,7 +81,7 @@ $b2sPostBlogId = isset($_GET['b2sPostBlogId']) ? (int) $_GET['b2sPostBlogId'] : 
 <input type="hidden" id="b2sPostId" value="">
 
 
-<div class="modal fade b2s-delete-approve-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-delete-approve-modal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade b2s-delete-approve-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-delete-approve-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -102,7 +102,7 @@ $b2sPostBlogId = isset($_GET['b2sPostBlogId']) ? (int) $_GET['b2sPostBlogId'] : 
     </div>
 </div>
 
-<div class="modal fade b2s-publish-approve-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-publish-approve-modal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade b2s-publish-approve-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-publish-approve-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

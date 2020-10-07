@@ -32,6 +32,8 @@ class FadeOnLoad {
 
     public $placeholderBackground = '';
 
+    public $minimumHeight = 0;
+
     public function __construct($slider) {
 
         $this->slider = $slider;
@@ -43,6 +45,7 @@ class FadeOnLoad {
         $this->placeholderColor      = Color::colorToRGBA($this->slider->params->get('placeholder-color', 'FFFFFF00'));
         $this->placeholderBackground = ResourceTranslator::toUrl($this->slider->params->get('placeholder-background-image', ''));
         $this->customSpinner         = !!$this->slider->params->get('custom-placeholder', 0) ? ResourceTranslator::toUrl($this->slider->params->get('custom-spinner', '')) : '';
+        $this->minimumHeight         = intval($this->slider->params->get('responsiveSliderHeightMin', 0));
 
         if (!empty($this->fadeOnScroll) && $this->fadeOnScroll) {
             $this->fadeOnLoad   = 1;
@@ -83,7 +86,7 @@ class FadeOnLoad {
                 return Html::tag("div", array(
                     "id"     => $this->slider->elementId . "-placeholder",
                     "encode" => false,
-                    "style"  => 'position: relative;z-index:2;background-color:RGBA(0,0,0,0);' . Sanitize::esc_attr($style) . ' background-color:' . $this->placeholderColor . ';'
+                    "style"  => 'min-height:' . $this->minimumHeight . 'px;position: relative;z-index:2;background-color:RGBA(0,0,0,0);' . Sanitize::esc_attr($style) . ' background-color:' . $this->placeholderColor . ';'
                 ), $this->makeImage($sizes));
             } else {
                 $this->slider->addCSS("#{$this->slider->elementId} .n2-ss-load-fade{position: relative !important;}");

@@ -218,7 +218,7 @@ function sinatra_is_block_editor() {
 
 /**
  * Print help icon with a link to documentation.
- * 
+ *
  * @param  array $args Optional parameters.
  * @param  bool  $echo Return or print the link.
  * @since  1.0.0

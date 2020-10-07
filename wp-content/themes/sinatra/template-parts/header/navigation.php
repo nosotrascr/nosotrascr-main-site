@@ -9,7 +9,7 @@
 
 ?>
 
-<nav class="site-navigation main-navigation sinatra-primary-nav sinatra-nav si-header-element" role="navigation"<?php sinatra_schema_markup( 'site_navigation' ); ?> aria-label="<?php echo esc_attr( 'Site Navigation', 'sinatra' ); ?>">
+<nav class="site-navigation main-navigation sinatra-primary-nav sinatra-nav si-header-element" role="navigation"<?php sinatra_schema_markup( 'site_navigation' ); ?> aria-label="<?php esc_attr_e( 'Site Navigation', 'sinatra' ); ?>">
 <?php
 
 if ( has_nav_menu( 'sinatra-primary' ) ) {

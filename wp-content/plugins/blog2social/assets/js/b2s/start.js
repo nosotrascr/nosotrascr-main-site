@@ -10,7 +10,7 @@ jQuery(document).ready(function () {
         timeFormat: 'H:mm',
         customButtons: {
             showall: {
-                text: 'show full calendar',
+                text: jQuery('#showFullCalenderText').val(),
                 click: function () {
                     window.open('admin.php?page=blog2social-calendar', "_self");
                 }

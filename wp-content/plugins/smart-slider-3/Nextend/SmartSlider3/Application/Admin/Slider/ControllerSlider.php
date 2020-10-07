@@ -4,10 +4,13 @@
 namespace Nextend\SmartSlider3\Application\Admin\Slider;
 
 
+use Nextend\Framework\Data\Data;
 use Nextend\Framework\Notification\Notification;
+use Nextend\Framework\Parser\Common;
 use Nextend\Framework\Request\Request;
 use Nextend\SmartSlider3\Application\Admin\AbstractControllerAdmin;
 use Nextend\SmartSlider3\Application\Model\ModelSliders;
+use Nextend\SmartSlider3\Application\Model\ModelSlides;
 use Nextend\SmartSlider3\BackupSlider\ExportSlider;
 
 class ControllerSlider extends AbstractControllerAdmin {
@@ -74,6 +77,112 @@ class ControllerSlider extends AbstractControllerAdmin {
                 $view->display();
 
             }
+        }
+    }
+
+    public function actionSimpleEdit() {
+
+        if ($this->validatePermission('smartslider_edit')) {
+
+            $slidersModel = new ModelSliders($this);
+
+            $slider = $slidersModel->get($this->sliderID);
+
+            if (!$slider) {
+                $this->redirectToSliders();
+            }
+
+            $groupData = $this->getGroupData($this->sliderID);
+
+            if (Request::$POST->getInt('save') && $this->validateToken()) {
+                $sliderData = new Data(Request::$POST->getVar('slider'));
+
+                if ($sliderData->get('delete-slider') == 1) {
+                    $slidersModel->trash($this->sliderID, $groupData['group_id']);
+                    $this->redirectToSliders();
+                } else {
+
+                    $params = json_decode($slider['params'], true);
+
+                    $params['aria-label'] = $sliderData->get('aria-label', '');
+
+                    $slidersModel->saveSimple($this->sliderID, $sliderData->get('title'), $params);
+
+                    $slidesModel = new ModelSlides($this);
+
+                    $slides = Request::$POST->getVar('slide');
+
+                    $ordering = array();
+                    foreach ($slides as $slideID => $slide) {
+                        $slideData = new Data($slide);
+                        if ($slideData->get('delete-slide') == 1) {
+                            $slidesModel->delete($slideID);
+                        } else {
+
+                            $ordering[$slideID] = $slideData->get('ordering');
+
+                            $slideRow = $slidesModel->get($slideID);
+
+                            $slideParamsData = new Data($slideRow['params']);
+
+                            $linkV1 = $slideParamsData->get('link', '');
+                            if (!empty($linkV1)) {
+                                list($link, $target) = array_pad((array)Common::parse($linkV1), 2, '');
+                                $slideParamsData->un_set('link');
+                                $slideParamsData->set('href', $link);
+                                $slideParamsData->set('href-target', $target);
+                            }
+
+                            $slideParamsData->set('href', $slideData->get('href'));
+                            $slideParamsData->set('href-target', $slideData->get('href-target'));
+                            $slideParamsData->set('thumbnailType', $slideData->get('thumbnailType'));
+                            $slideParamsData->set('backgroundImage', $slideData->get('backgroundImage'));
+
+                            $slidesModel->saveSimple($slideID, $slideData->get('title'), $slideData->get('description'), $slideParamsData->toArray());
+                        }
+                    }
+                    asort($ordering, SORT_NUMERIC);
+
+                    $slidesModel->order($this->sliderID, array_keys($ordering));
+
+
+                    $this->redirect($this->getUrlSliderSimpleEdit($this->sliderID, $groupData['group_id']));
+                }
+            }
+
+            $view = new ViewSliderSimpleEdit($this);
+            $view->setGroupData($groupData['group_id'], $groupData['title']);
+            $view->setSlider($slider);
+            $view->display();
+        }
+    }
+
+    public function actionSimpleEditAddSlide() {
+
+        if ($this->validatePermission('smartslider_edit')) {
+
+            $slidersModel = new ModelSliders($this);
+
+            $slider = $slidersModel->get($this->sliderID);
+
+            if (!$slider) {
+                $this->redirectToSliders();
+            }
+
+            $groupData = $this->getGroupData($this->sliderID);
+
+            if (Request::$POST->getInt('save') && $this->validateToken()) {
+
+                $slidesModel = new ModelSlides($this);
+                $slidesModel->createSimpleEditAdd(Request::$POST->getVar('slide'), $this->sliderID);
+
+                $this->redirect($this->getUrlSliderSimpleEdit($this->sliderID, $groupData['group_id']));
+            }
+
+            $view = new ViewSliderSimpleEditAddSlide($this);
+            $view->setGroupData($groupData['group_id'], $groupData['title']);
+            $view->setSlider($slider);
+            $view->display();
         }
     }
 

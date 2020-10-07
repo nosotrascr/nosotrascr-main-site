@@ -1997,14 +1997,32 @@
     {
         "Bitter": {
             "variants": [
+                "100",
+                "200",
+                "300",
                 "regular",
+                "500",
+                "600",
+                "700",
+                "800",
+                "900",
+                "100italic",
+                "200italic",
+                "300italic",
                 "italic",
-                "700"
+                "500italic",
+                "600italic",
+                "700italic",
+                "800italic",
+                "900italic"
             ],
             "category": "serif",
             "subsets": [
+                "cyrillic",
+                "cyrillic-ext",
                 "latin",
-                "latin-ext"
+                "latin-ext",
+                "vietnamese"
             ]
         }
     },
@@ -2283,12 +2301,12 @@
         "Cabin": {
             "variants": [
                 "regular",
-                "italic",
                 "500",
-                "500italic",
                 "600",
-                "600italic",
                 "700",
+                "italic",
+                "500italic",
+                "600italic",
                 "700italic"
             ],
             "category": "sans-serif",
@@ -2898,7 +2916,10 @@
         "Cinzel": {
             "variants": [
                 "regular",
+                "500",
+                "600",
                 "700",
+                "800",
                 "900"
             ],
             "category": "serif",
@@ -4222,6 +4243,36 @@
         }
     },
     {
+        "Epilogue": {
+            "variants": [
+                "100",
+                "200",
+                "300",
+                "regular",
+                "500",
+                "600",
+                "700",
+                "800",
+                "900",
+                "100italic",
+                "200italic",
+                "300italic",
+                "italic",
+                "500italic",
+                "600italic",
+                "700italic",
+                "800italic",
+                "900italic"
+            ],
+            "category": "sans-serif",
+            "subsets": [
+                "latin",
+                "latin-ext",
+                "vietnamese"
+            ]
+        }
+    },
+    {
         "Erica One": {
             "variants": [
                 "regular"
@@ -5302,6 +5353,36 @@
         }
     },
     {
+        "Grandstander": {
+            "variants": [
+                "100",
+                "200",
+                "300",
+                "regular",
+                "500",
+                "600",
+                "700",
+                "800",
+                "900",
+                "100italic",
+                "200italic",
+                "300italic",
+                "italic",
+                "500italic",
+                "600italic",
+                "700italic",
+                "800italic",
+                "900italic"
+            ],
+            "category": "display",
+            "subsets": [
+                "latin",
+                "latin-ext",
+                "vietnamese"
+            ]
+        }
+    },
+    {
         "Gravitas One": {
             "variants": [
                 "regular"
@@ -5347,6 +5428,27 @@
                 "900italic"
             ],
             "category": "serif",
+            "subsets": [
+                "latin",
+                "latin-ext",
+                "vietnamese"
+            ]
+        }
+    },
+    {
+        "Grenze Gotisch": {
+            "variants": [
+                "100",
+                "200",
+                "300",
+                "regular",
+                "500",
+                "600",
+                "700",
+                "800",
+                "900"
+            ],
+            "category": "display",
             "subsets": [
                 "latin",
                 "latin-ext",
@@ -5532,12 +5634,14 @@
     {
         "Harmattan": {
             "variants": [
-                "regular"
+                "regular",
+                "700"
             ],
             "category": "sans-serif",
             "subsets": [
                 "arabic",
-                "latin"
+                "latin",
+                "latin-ext"
             ]
         }
     },
@@ -5557,9 +5661,11 @@
         "Heebo": {
             "variants": [
                 "100",
+                "200",
                 "300",
                 "regular",
                 "500",
+                "600",
                 "700",
                 "800",
                 "900"
@@ -7008,6 +7114,31 @@
         }
     },
     {
+        "Kufam": {
+            "variants": [
+                "regular",
+                "500",
+                "600",
+                "700",
+                "800",
+                "900",
+                "italic",
+                "500italic",
+                "600italic",
+                "700italic",
+                "800italic",
+                "900italic"
+            ],
+            "category": "display",
+            "subsets": [
+                "arabic",
+                "latin",
+                "latin-ext",
+                "vietnamese"
+            ]
+        }
+    },
+    {
         "Kulim Park": {
             "variants": [
                 "200",
@@ -7049,6 +7180,20 @@
             "category": "display",
             "subsets": [
                 "gujarati",
+                "latin",
+                "latin-ext"
+            ]
+        }
+    },
+    {
+        "Kumbh Sans": {
+            "variants": [
+                "300",
+                "regular",
+                "700"
+            ],
+            "category": "sans-serif",
+            "subsets": [
                 "latin",
                 "latin-ext"
             ]
@@ -7548,18 +7693,27 @@
     {
         "Literata": {
             "variants": [
+                "200",
+                "300",
                 "regular",
                 "500",
                 "600",
                 "700",
+                "800",
+                "900",
+                "200italic",
+                "300italic",
                 "italic",
                 "500italic",
                 "600italic",
-                "700italic"
+                "700italic",
+                "800italic",
+                "900italic"
             ],
             "category": "serif",
             "subsets": [
                 "cyrillic",
+                "cyrillic-ext",
                 "greek",
                 "greek-ext",
                 "latin",
@@ -8383,18 +8537,24 @@
         "Merriweather Sans": {
             "variants": [
                 "300",
-                "300italic",
                 "regular",
-                "italic",
+                "500",
+                "600",
                 "700",
-                "700italic",
                 "800",
+                "300italic",
+                "italic",
+                "500italic",
+                "600italic",
+                "700italic",
                 "800italic"
             ],
             "category": "sans-serif",
             "subsets": [
+                "cyrillic-ext",
                 "latin",
-                "latin-ext"
+                "latin-ext",
+                "vietnamese"
             ]
         }
     },
@@ -8967,7 +9127,7 @@
         }
     },
     {
-        "Muli": {
+        "Mulish": {
             "variants": [
                 "200",
                 "300",
@@ -8987,6 +9147,27 @@
                 "900italic"
             ],
             "category": "sans-serif",
+            "subsets": [
+                "latin",
+                "latin-ext",
+                "vietnamese"
+            ]
+        }
+    },
+    {
+        "MuseoModerno": {
+            "variants": [
+                "100",
+                "200",
+                "300",
+                "regular",
+                "500",
+                "600",
+                "700",
+                "800",
+                "900"
+            ],
+            "category": "display",
             "subsets": [
                 "latin",
                 "latin-ext",
@@ -10344,11 +10525,30 @@
     {
         "Petrona": {
             "variants": [
-                "regular"
+                "100",
+                "200",
+                "300",
+                "regular",
+                "500",
+                "600",
+                "700",
+                "800",
+                "900",
+                "100italic",
+                "200italic",
+                "300italic",
+                "italic",
+                "500italic",
+                "600italic",
+                "700italic",
+                "800italic",
+                "900italic"
             ],
             "category": "serif",
             "subsets": [
-                "latin"
+                "latin",
+                "latin-ext",
+                "vietnamese"
             ]
         }
     },
@@ -10908,7 +11108,9 @@
             ],
             "category": "sans-serif",
             "subsets": [
-                "latin"
+                "latin",
+                "latin-ext",
+                "vietnamese"
             ]
         }
     },
@@ -11012,28 +11214,31 @@
         "Raleway": {
             "variants": [
                 "100",
-                "100italic",
                 "200",
-                "200italic",
                 "300",
-                "300italic",
                 "regular",
-                "italic",
                 "500",
-                "500italic",
                 "600",
-                "600italic",
                 "700",
-                "700italic",
                 "800",
-                "800italic",
                 "900",
+                "100italic",
+                "200italic",
+                "300italic",
+                "italic",
+                "500italic",
+                "600italic",
+                "700italic",
+                "800italic",
                 "900italic"
             ],
             "category": "sans-serif",
             "subsets": [
+                "cyrillic",
+                "cyrillic-ext",
                 "latin",
-                "latin-ext"
+                "latin-ext",
+                "vietnamese"
             ]
         }
     },
@@ -11178,6 +11383,24 @@
         }
     },
     {
+        "Recursive": {
+            "variants": [
+                "300",
+                "regular",
+                "500",
+                "600",
+                "700",
+                "800",
+                "900"
+            ],
+            "category": "sans-serif",
+            "subsets": [
+                "latin",
+                "vietnamese"
+            ]
+        }
+    },
+    {
         "Red Hat Display": {
             "variants": [
                 "regular",
@@ -11210,6 +11433,21 @@
             "subsets": [
                 "latin",
                 "latin-ext"
+            ]
+        }
+    },
+    {
+        "Red Rose": {
+            "variants": [
+                "300",
+                "regular",
+                "700"
+            ],
+            "category": "display",
+            "subsets": [
+                "latin",
+                "latin-ext",
+                "vietnamese"
             ]
         }
     },
@@ -11374,14 +11612,18 @@
         "Roboto Mono": {
             "variants": [
                 "100",
-                "100italic",
+                "200",
                 "300",
-                "300italic",
                 "regular",
-                "italic",
                 "500",
-                "500italic",
+                "600",
                 "700",
+                "100italic",
+                "200italic",
+                "300italic",
+                "italic",
+                "500italic",
+                "600italic",
                 "700italic"
             ],
             "category": "monospace",
@@ -11389,7 +11631,6 @@
                 "cyrillic",
                 "cyrillic-ext",
                 "greek",
-                "greek-ext",
                 "latin",
                 "latin-ext",
                 "vietnamese"
@@ -11536,6 +11777,21 @@
         }
     },
     {
+        "Rowdies": {
+            "variants": [
+                "300",
+                "regular",
+                "700"
+            ],
+            "category": "display",
+            "subsets": [
+                "latin",
+                "latin-ext",
+                "vietnamese"
+            ]
+        }
+    },
+    {
         "Rozha One": {
             "variants": [
                 "regular"
@@ -11552,19 +11808,24 @@
         "Rubik": {
             "variants": [
                 "300",
-                "300italic",
                 "regular",
-                "italic",
                 "500",
-                "500italic",
+                "600",
                 "700",
-                "700italic",
+                "800",
                 "900",
+                "300italic",
+                "italic",
+                "500italic",
+                "600italic",
+                "700italic",
+                "800italic",
                 "900italic"
             ],
             "category": "sans-serif",
             "subsets": [
                 "cyrillic",
+                "cyrillic-ext",
                 "hebrew",
                 "latin",
                 "latin-ext"
@@ -12282,13 +12543,15 @@
             "variants": [
                 "300",
                 "regular",
+                "500",
                 "600",
                 "700"
             ],
             "category": "sans-serif",
             "subsets": [
                 "latin",
-                "latin-ext"
+                "latin-ext",
+                "vietnamese"
             ]
         }
     },
@@ -12536,6 +12799,25 @@
         }
     },
     {
+        "Sora": {
+            "variants": [
+                "100",
+                "200",
+                "300",
+                "regular",
+                "500",
+                "600",
+                "700",
+                "800"
+            ],
+            "category": "sans-serif",
+            "subsets": [
+                "latin",
+                "latin-ext"
+            ]
+        }
+    },
+    {
         "Sorts Mill Goudy": {
             "variants": [
                 "regular",
@@ -12608,14 +12890,27 @@
     {
         "Source Serif Pro": {
             "variants": [
+                "200",
+                "200italic",
+                "300",
+                "300italic",
                 "regular",
+                "italic",
                 "600",
-                "700"
+                "600italic",
+                "700",
+                "700italic",
+                "900",
+                "900italic"
             ],
             "category": "serif",
             "subsets": [
+                "cyrillic",
+                "cyrillic-ext",
+                "greek",
                 "latin",
-                "latin-ext"
+                "latin-ext",
+                "vietnamese"
             ]
         }
     },
@@ -13072,6 +13367,22 @@
             "category": "sans-serif",
             "subsets": [
                 "latin"
+            ]
+        }
+    },
+    {
+        "Syne": {
+            "variants": [
+                "regular",
+                "500",
+                "600",
+                "700",
+                "800"
+            ],
+            "category": "sans-serif",
+            "subsets": [
+                "latin",
+                "latin-ext"
             ]
         }
     },
@@ -13696,6 +14007,23 @@
             "category": "sans-serif",
             "subsets": [
                 "hebrew",
+                "latin",
+                "latin-ext",
+                "vietnamese"
+            ]
+        }
+    },
+    {
+        "Varta": {
+            "variants": [
+                "300",
+                "regular",
+                "500",
+                "600",
+                "700"
+            ],
+            "category": "sans-serif",
+            "subsets": [
                 "latin",
                 "latin-ext",
                 "vietnamese"

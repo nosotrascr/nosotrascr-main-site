@@ -466,7 +466,7 @@ if ( ! class_exists( 'Sinatra_Meta_Boxes' ) ) :
 					<div class="components-base-control__field">
 						<span class="components-checkbox-control__input-container si-checkbox-wrapper">
 							<input type="checkbox" class="components-checkbox-control__input" id="<?php echo esc_attr( $setting['id'] ); ?>" name="<?php echo esc_attr( $setting['id'] ); ?>"<?php checked( $saved, true ); ?>>
-							<svg aria-hidden="true" role="img" focusable="false" class="si-checked-icon dashicon dashicons-yes components-checkbox-control__checked" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M14.83 4.89l1.34.94-5.81 8.38H9.02L5.78 9.67l1.34-1.25 2.57 2.4z"></path></svg>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" class="si-checked-icon components-checkbox-control__checked" aria-hidden="true" focusable="false"><path d="M9 18.6L3.5 13l1-1L9 16.4l9.5-9.9 1 1z"></path></svg>
 						</span>
 						<label class="components-checkbox-control__label" for="<?php echo esc_attr( $setting['id'] ); ?>"><?php echo esc_html( $setting['name'] ); ?></label>
 					</div>

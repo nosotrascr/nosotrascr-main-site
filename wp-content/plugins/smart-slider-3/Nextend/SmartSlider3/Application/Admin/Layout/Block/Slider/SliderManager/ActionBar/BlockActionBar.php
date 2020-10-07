@@ -42,6 +42,7 @@ class BlockActionBar extends AbstractBlock {
             $blockButton->setUrl($this->getUrlTrash());
             $blockButton->setLabel(n2_('View trash'));
             $blockButton->setSmall();
+            $blockButton->setTabIndex(-1);
             $blockButton->display();
         }
     }

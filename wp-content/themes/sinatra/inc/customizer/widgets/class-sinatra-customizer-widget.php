@@ -190,7 +190,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Widget' ) ) :
 												data-option-name="location">
 												<label 
 													class="switch-label" 
-													for="<?php echo esc_attr( $this->id ) . '-' . esc_attr( $this->number ) . '-' . esc_attr( $id ); ?>-location"><?php echo esc_attr( $name ); ?>
+													for="<?php echo esc_attr( $this->id ) . '-' . esc_attr( $this->number ) . '-' . esc_attr( $id ); ?>-location"><?php echo esc_html( $name ); ?>
 												</label>
 											</input>
 										<?php } ?>

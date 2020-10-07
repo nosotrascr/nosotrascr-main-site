@@ -515,7 +515,8 @@ var sinatraTriggerEvent = function sinatraTriggerEvent(el, typeArg) {
   //--------------------------------------------------------------------//
   // Variable caching
   //--------------------------------------------------------------------//
-  var sinatraScrollButton = document.querySelector('#si-scroll-top'); //--------------------------------------------------------------------//
+  var sinatraScrollButton = document.querySelector('#si-scroll-top');
+  var pageWrapper = document.getElementById('page'); //--------------------------------------------------------------------//
   // Local helper functions
   //--------------------------------------------------------------------//
 
@@ -598,6 +599,103 @@ var sinatraTriggerEvent = function sinatraTriggerEvent(el, typeArg) {
     }
   };
   /**
+   * Handles Sticky Header functionality.
+   *
+   * @since 1.0.0
+   */
+
+
+  var sinatraStickyHeader = function sinatraStickyHeader() {
+    // Check if sticky is enabled.
+    if (!sinatra_vars['sticky-header']) {
+      return;
+    }
+
+    var header = document.getElementById('sinatra-header');
+    var headerInner = document.getElementById('sinatra-header-inner');
+    var wpadminbar = document.getElementById('wpadminbar'); // Check for header layout 3.
+
+    if (document.body.classList.contains('sinatra-header-layout-3')) {
+      header = document.querySelector('#sinatra-header .si-nav-container');
+      headerInner = document.querySelector('#sinatra-header .si-nav-container .si-container');
+    } // Mobile nav active.
+
+
+    if (window.outerWidth <= sinatra_vars['responsive-breakpoint']) {
+      var header = document.getElementById('sinatra-header');
+      var headerInner = document.getElementById('sinatra-header-inner');
+    } // Check if elements exist.
+
+
+    if (null === header || null === headerInner) {
+      return;
+    } // Calculate the initial sticky position.
+
+
+    var stickyPosition = header.getBoundingClientRect().top;
+    var sticky = stickyPosition - tolerance <= 0;
+    var tolerance;
+    var stickyPlaceholder; // Check if there is a top bar.
+
+    if (null === wpadminbar) {
+      tolerance = 0;
+    } else if (window.outerWidth <= 600) {
+      tolerance = 0;
+    } else {
+      tolerance = wpadminbar.getBoundingClientRect().height;
+    }
+
+    var checkPosition = function checkPosition() {
+      if (null === wpadminbar) {
+        tolerance = 0;
+      } else if (window.outerWidth <= 600) {
+        tolerance = 0;
+      } else {
+        tolerance = wpadminbar.getBoundingClientRect().height;
+      }
+
+      stickyPosition = header.getBoundingClientRect().top;
+      sticky = stickyPosition - tolerance <= 0;
+      maybeStickHeader();
+    };
+
+    var maybeStickHeader = function maybeStickHeader() {
+      if (sticky) {
+        if (!document.body.classList.contains('si-sticky-header')) {
+          stickyPlaceholder = document.createElement('div');
+          stickyPlaceholder.setAttribute('id', 'si-sticky-placeholder');
+          stickyPlaceholder.style.height = headerInner.getBoundingClientRect().height + 'px';
+          header.appendChild(stickyPlaceholder);
+          document.body.classList.add('si-sticky-header');
+        }
+      } else {
+        if (document.body.classList.contains('si-sticky-header')) {
+          document.body.classList.remove('si-sticky-header');
+          document.getElementById('si-sticky-placeholder').remove();
+        }
+      }
+    }; // Debounce scroll.
+
+
+    if ('true' !== header.getAttribute('data-scroll-listener')) {
+      window.addEventListener('scroll', function () {
+        sinatraDebounce(checkPosition());
+      });
+      header.setAttribute('data-scroll-listener', 'true');
+    } // Debounce resize.
+
+
+    if ('true' !== header.getAttribute('data-resize-listener')) {
+      window.addEventListener('resize', function () {
+        sinatraDebounce(checkPosition());
+      });
+      header.setAttribute('data-resize-listener', 'true');
+    } // Trigger scroll.
+
+
+    sinatraTriggerEvent(window, 'scroll');
+  };
+  /**
    * Handles smooth scrolling of elements that have 'si-smooth-scroll' class.
    * 
    * @since 1.0.0
@@ -674,6 +772,16 @@ var sinatraTriggerEvent = function sinatraTriggerEvent(el, typeArg) {
     document.body.addEventListener('mousedown', function (e) {
       document.body.classList.remove('using-keyboard');
     });
+  };
+  /**
+   * Calculates screen width without scrollbars.
+   *
+   * @since 1.1.4
+   */
+
+
+  var sinatraCalcScreenWidth = function sinatraCalcScreenWidth() {
+    document.body.style.setProperty('--si-screen-width', document.body.clientWidth + 'px');
   };
   /**
    * Adds visibility delay on navigation submenus.
@@ -779,7 +887,7 @@ var sinatraTriggerEvent = function sinatraTriggerEvent(el, typeArg) {
 
       document.addEventListener('keydown', esc_close_search); // Attach the outside click listener
 
-      document.getElementById('page').addEventListener('click', outside_close_search);
+      pageWrapper.addEventListener('click', outside_close_search);
     }; // Close search
 
 
@@ -791,7 +899,7 @@ var sinatraTriggerEvent = function sinatraTriggerEvent(el, typeArg) {
 
       document.removeEventListener('keydown', esc_close_search); // Unhook the click listener
 
-      document.getElementById('page').removeEventListener('click', outside_close_search);
+      pageWrapper.removeEventListener('click', outside_close_search);
     }; // Esc support to close search
 
 
@@ -820,7 +928,7 @@ var sinatraTriggerEvent = function sinatraTriggerEvent(el, typeArg) {
 
 
   var sinatraMobileMenu = function sinatraMobileMenu() {
-    var page = document.getElementById('page'),
+    var page = pageWrapper,
         nav = document.querySelector('#sinatra-header-inner .sinatra-nav'),
         current;
     document.querySelectorAll('.si-mobile-nav > button').forEach(function (item) {
@@ -1062,6 +1170,8 @@ var sinatraTriggerEvent = function sinatraTriggerEvent(el, typeArg) {
     sinatraSmartSubmenus();
     sinatraCommentsClick();
     sinatraCartDropdownDelay();
+    sinatraStickyHeader();
+    sinatraCalcScreenWidth();
   }); // Window load
 
   window.addEventListener('load', function () {
@@ -1075,13 +1185,15 @@ var sinatraTriggerEvent = function sinatraTriggerEvent(el, typeArg) {
   window.addEventListener('resize', function () {
     sinatraDebounce(sinatraSmartSubmenus());
     sinatraDebounce(sinatraCheckMobileMenu());
+    sinatraDebounce(sinatraCalcScreenWidth());
   }); // Sinatra ready
 
   sinatraTriggerEvent(document.body, 'si-ready'); //--------------------------------------------------------------------//
   // Global
   //--------------------------------------------------------------------//
 
-  window.sinatra = window.sinatra || {}; // Make preloader function available globally (needed for Customizer preview)
+  window.sinatra = window.sinatra || {}; // Make these function global.
 
   window.sinatra.preloader = sinatraPreloader;
+  window.sinatra.stickyHeader = sinatraStickyHeader;
 })();

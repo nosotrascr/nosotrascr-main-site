@@ -21,12 +21,14 @@ class B2S_Post_Item {
     protected $searchUserAuthId;
     protected $searchBlogPostId;
     protected $searchPostSharedById;
+    protected $searchSharedAtDateStart;
+    protected $searchSharedAtDateEnd;
     protected $userLang;
     protected $results_per_page = null;
     public $currentPage = 0;
     public $type;
 
-    function __construct($type = 'all', $title = "", $authorId = 0, $postStatus = "", $shareStatus = "", $publishDate = '', $schedDate = '', $showByDate = '', $showByNetwork = 0, $userAuthId = 0, $blogPostId = 0, $currentPage = 0, $postCat = 0, $postType = "", $userLang = "en", $results_per_page = B2S_PLUGIN_POSTPERPAGE, $searchPostSharedById = 0) {
+    function __construct($type = 'all', $title = "", $authorId = 0, $postStatus = "", $shareStatus = "", $publishDate = '', $schedDate = '', $showByDate = '', $showByNetwork = 0, $userAuthId = 0, $blogPostId = 0, $currentPage = 0, $postCat = 0, $postType = "", $userLang = "en", $results_per_page = B2S_PLUGIN_POSTPERPAGE, $searchPostSharedById = 0, $searchSharedToNetwork = 0, $searchSharedAtDateStart = 0, $searchSharedAtDateEnd = 0) {
         $this->type = $type;
         $this->searchPostTitle = $title;
         $this->searchAuthorId = (int) $authorId;
@@ -44,6 +46,9 @@ class B2S_Post_Item {
         $this->userLang = $userLang; //Plugin: qTranslate
         $this->results_per_page = (int) $results_per_page;
         $this->searchPostSharedById = (int) $searchPostSharedById;
+        $this->searchSharedToNetwork = (int) $searchSharedToNetwork;
+        $this->searchSharedAtDateStart = $searchSharedAtDateStart;
+        $this->searchSharedAtDateEnd = $searchSharedAtDateEnd;
     }
 
     protected function getData() {
@@ -87,6 +92,16 @@ class B2S_Post_Item {
         } else {
             //V5.0.0 include Content Curation (post_status = private)
             $addSearchType = " (posts.`post_status` = 'publish' OR posts.`post_status` = 'pending' OR posts.`post_status` = 'future' " . (($this->type != 'all') ? " OR posts.`post_status` = 'private'" : "") . ") ";
+        }
+        
+        if (!empty($this->searchSharedToNetwork)) {
+            $sharedToNetworkSelect = ", b2sNetwork.network_id  ";
+            $sharedToNetworkJoin = "LEFT JOIN `{$wpdb->prefix}b2s_posts_network_details` b2sNetwork on a.network_details_id = b2sNetwork.id ";
+            $sharedToNetworkWhere = " AND filter.network_id = " . $this->searchSharedToNetwork;
+        } else {
+            $sharedToNetworkSelect = " ";
+            $sharedToNetworkJoin = " ";
+            $sharedToNetworkWhere = " ";
         }
 
         if (!empty($this->searchPostShareStatus)) {
@@ -190,12 +205,12 @@ class B2S_Post_Item {
                 $sqlPosts = "SELECT DISTINCT posts.`ID`, posts.`post_author`,posts.`post_type`,posts.`post_title`, " . $select . ", filter.`id` 
                             FROM `$wpdb->posts` posts $leftJoin $leftJoin2
                                 INNER JOIN(
-                                        SELECT a.`id`,$selectInnerJoin, a.`blog_user_id`, a.`post_id`
-                                            FROM `{$wpdb->prefix}b2s_posts` a $addInnerJoinLeftJoin $addInnerJoinLeftJoinNetwork
-                                                  WHERE $addInnnerJoinLeftJoinWhere $addInnnerJoinLeftJoinWhereNetwork $addSearchBlogPostId $addSearchShowByDate $where
+                                        SELECT a.`id`,$selectInnerJoin, a.`blog_user_id`, a.`post_id` $sharedToNetworkSelect
+                                            FROM `{$wpdb->prefix}b2s_posts` a $addInnerJoinLeftJoin $addInnerJoinLeftJoinNetwork $sharedToNetworkJoin
+                                                  WHERE $addInnnerJoinLeftJoinWhere $addInnnerJoinLeftJoinWhereNetwork $addSearchBlogPostId $addSearchShowByDate $where 
                                          ) filter
                                      ON posts.`ID` = filter.`post_id`
-                             WHERE $addSearchType $addSearchAuthorId $addSearchPostTitle AND $postTypes $leftJoinWhere $orderBy
+                             WHERE $addSearchType $addSearchAuthorId $addSearchPostTitle AND $postTypes $sharedToNetworkWhere $leftJoinWhere $orderBy
                         LIMIT " . (($this->currentPage - 1) * $this->results_per_page) . "," . $this->results_per_page;
 
                 $this->postData = $wpdb->get_results($sqlPosts);
@@ -268,12 +283,24 @@ class B2S_Post_Item {
 
         if ($this->type == 'draft-post') {
             if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}b2s_posts_drafts'") == $wpdb->prefix . 'b2s_posts_drafts') {
+                if ($this->searchSharedAtDateStart != 0) {
+                    $startDate = " AND {$wpdb->prefix}b2s_posts_drafts.`last_save_date` >= '".date('Y-m-d H:i:s', strtotime($this->searchSharedAtDateStart))."' ";
+                } else {
+                    $startDate = "";
+                }
+                if ($this->searchSharedAtDateEnd != 0) {
+                    $endDate = " AND {$wpdb->prefix}b2s_posts_drafts.`last_save_date` <= '".date('Y-m-d H:i:s', strtotime($this->searchSharedAtDateEnd))."' ";
+                } else {
+                    $endDate = "";
+                }
+                
                 $sqlPosts = "SELECT {$wpdb->prefix}b2s_posts_drafts.`ID` AS draft_id, posts.`ID`, {$wpdb->prefix}b2s_posts_drafts.`post_id`, {$wpdb->prefix}b2s_posts_drafts.`last_save_date`, {$wpdb->prefix}b2s_posts_drafts.`data`, posts.post_author, posts.post_type, posts.post_title 
 		FROM `$wpdb->posts` posts LEFT JOIN {$wpdb->prefix}b2s_posts_drafts ON {$wpdb->prefix}b2s_posts_drafts.post_id = posts.ID $leftJoin $leftJoin2 $leftJoin3 $leftJoin4
                 WHERE {$wpdb->prefix}b2s_posts_drafts.`blog_user_id` = " . B2S_PLUGIN_BLOG_USER_ID . " 
                 AND {$wpdb->prefix}b2s_posts_drafts.`save_origin` = 0 
                 AND $postTypes 
                 AND $addSearchType 
+                $startDate $endDate 
                 $addSearchAuthorId $addSearchPostTitle $addNotAdmin $leftJoinWhere 
 		ORDER BY `last_save_date` " . $sortType . "
                 LIMIT " . (($this->currentPage - 1) * $this->results_per_page) . "," . $this->results_per_page;
@@ -285,6 +312,7 @@ class B2S_Post_Item {
                 AND {$wpdb->prefix}b2s_posts_drafts.`save_origin` = 0                 
                 AND $postTypes 
                 AND $addSearchType 
+                $startDate $endDate 
                 $addSearchAuthorId $addSearchPostTitle $addNotAdmin $leftJoinWhere";
                 $this->postTotal = $wpdb->get_var($sqlPostsTotal);
             }
@@ -846,7 +874,7 @@ class B2S_Post_Item {
                     $userInfoLastEdit = ((int) $var->last_edit_blog_user_id > 0 && (int) $var->last_edit_blog_user_id != (int) $var->blog_user_id) ? get_user_meta($var->last_edit_blog_user_id) : '';
                     $lastEdit = (!empty($userInfoLastEdit)) ? ' | ' . sprintf(esc_html__('last modified by %s', 'blog2social'), '<a href="' . get_author_posts_url($var->last_edit_blog_user_id) . '">' . esc_html((isset($userInfoLastEdit['nickname'][0]) ? $userInfoLastEdit['nickname'][0] : '-')) . '</a> | ') : '';
 
-                    $schedInProcess = ($var->sched_date_utc <= gmdate('Y-m-d H:i:s')) ? ' <span class="glyphicon glyphicon-exclamation-sign glyphicon-info"></span> ' . esc_html__('is processed by the network', 'blog2social') : '';
+                    $schedInProcess = ($var->sched_date_utc <= gmdate('Y-m-d H:i:s')) ? ' <span class="glyphicon glyphicon-exclamation-sign glyphicon-info"></span> ' . esc_html__('is currently being processed by the network', 'blog2social') : '';
 
                     $content .= '<img class="pull-left hidden-xs" src="' . plugins_url('/assets/images/portale/' . $var->network_id . '_flat.png', B2S_PLUGIN_FILE) . '" alt="posttype">
                                             <div class="media-body">

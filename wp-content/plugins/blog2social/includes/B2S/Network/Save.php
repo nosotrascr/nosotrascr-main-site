@@ -2,9 +2,13 @@
 
 class B2S_Network_Save {
 
-    public static function saveUserMandant($mandantName) {
+    public static function saveUserMandant($mandantName, $allow_delete = true, $assignToken = false) {
         require_once B2S_PLUGIN_DIR . 'includes/B2S/Network/Item.php';
-        $postData = array('action' => 'saveUserMandant', 'mandant' => $mandantName, 'token' => B2S_PLUGIN_TOKEN);
+        $userToken = B2S_PLUGIN_TOKEN;
+        if($assignToken != false) {
+            $userToken = $assignToken;
+        }
+        $postData = array('action' => 'saveUserMandant', 'mandant' => $mandantName, 'token' => $userToken, 'allow_delete' => $allow_delete);
         $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $postData));
 
         $newMandant = array('result' => false,

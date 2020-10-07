@@ -73,7 +73,7 @@ $networkData = $networkItem->getData();
 </div>
 <input type="hidden" id="lang" value="<?php echo substr(B2S_LANGUAGE, 0, 2); ?>">
 
-<div class="modal fade" id="b2s-network-add-mandant" tabindex="-1" role="dialog" aria-labelledby="b2s-network-add-mandant" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2s-network-add-mandant" tabindex="-1" role="dialog" aria-labelledby="b2s-network-add-mandant" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -95,7 +95,7 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
-<div class="modal fade" id="b2s-network-delete-mandant" tabindex="-1" role="dialog"  aria-labelledby="b2s-network-delete-mandant" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2s-network-delete-mandant" tabindex="-1" role="dialog"  aria-labelledby="b2s-network-delete-mandant" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -113,7 +113,7 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
-<div class="modal fade" id="b2sInfoNetwork18" tabindex="-1" role="dialog"  aria-labelledby="b2sInfoNetwork18" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sInfoNetwork18" tabindex="-1" role="dialog"  aria-labelledby="b2sInfoNetwork18" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -135,7 +135,7 @@ $networkData = $networkItem->getData();
 
 
 
-<div class="modal fade" id="b2s-network-delete-auth" tabindex="-1" role="dialog" aria-labelledby="b2s-network-delete-auth" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2s-network-delete-auth" tabindex="-1" role="dialog" aria-labelledby="b2s-network-delete-auth" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -177,7 +177,7 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
-<div class="modal fade" id="b2s-modify-board-and-group-network-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-modify-board-and-group-network-modal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2s-modify-board-and-group-network-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-modify-board-and-group-network-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -206,7 +206,7 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
-<div class="modal fade" id="b2s-edit-template" tabindex="-1" role="dialog" aria-labelledby="b2s-edit-template" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2s-edit-template" tabindex="-1" role="dialog" aria-labelledby="b2s-edit-template" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -214,7 +214,19 @@ $networkData = $networkItem->getData();
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-1" alt="Facebook" src="<?php echo plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-2" alt="Twitter" src="<?php echo plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-3" alt="LinkedIn" src="<?php echo plugins_url('/assets/images/portale/3_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-4" alt="Tumblr" src="<?php echo plugins_url('/assets/images/portale/4_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-6" alt="Pinterest" src="<?php echo plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-7" alt="Flickr" src="<?php echo plugins_url('/assets/images/portale/7_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-9" alt="Diigo" src="<?php echo plugins_url('/assets/images/portale/9_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-11" alt="Medium" src="<?php echo plugins_url('/assets/images/portale/11_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-12" alt="Instagram" src="<?php echo plugins_url('/assets/images/portale/12_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-14" alt="Torial" src="<?php echo plugins_url('/assets/images/portale/14_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-15" alt="Reddit" src="<?php echo plugins_url('/assets/images/portale/15_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-16" alt="Bloglovin" src="<?php echo plugins_url('/assets/images/portale/16_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-17" alt="VKontakte" src="<?php echo plugins_url('/assets/images/portale/17_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-18" alt="Google My Business" src="<?php echo plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-19" alt="Xing" src="<?php echo plugins_url('/assets/images/portale/19_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-24" alt="Telegram" src="<?php echo plugins_url('/assets/images/portale/24_flat.png', B2S_PLUGIN_FILE); ?>" style="display: none;">
                 <h4 class="modal-title b2s-edit-template-title"><?php esc_html_e('Edit Post Template', 'blog2social') ?></h4> <?php echo ((B2S_PLUGIN_USER_VERSION == 0) ? '<span class="label label-success">' . esc_html__('SMART', 'blog2social') . '</span>' : '') ?>
             </div>
             <div class="row b2s-loading-area width-100">
@@ -234,7 +246,7 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
-<div class="modal fade" id="b2sInfoNoCache" tabindex="-1" role="dialog" aria-labelledby="b2sInfoNoCache" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sInfoNoCache" tabindex="-1" role="dialog" aria-labelledby="b2sInfoNoCache" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -248,7 +260,7 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
-<div class="modal fade" id="b2sInfoFormat" tabindex="-1" role="dialog" aria-labelledby="b2sInfoFormat" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sInfoFormat" tabindex="-1" role="dialog" aria-labelledby="b2sInfoFormat" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -273,7 +285,7 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
-<div class="modal fade" id="b2sInfoContent" tabindex="-1" role="dialog" aria-labelledby="b2sInfoContent" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sInfoContent" tabindex="-1" role="dialog" aria-labelledby="b2sInfoContent" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -298,7 +310,7 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
-<div class="modal fade" id="b2sInfoCharacterLimit" tabindex="-1" role="dialog" aria-labelledby="b2sInfoCharacterLimit" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sInfoCharacterLimit" tabindex="-1" role="dialog" aria-labelledby="b2sInfoCharacterLimit" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -314,7 +326,7 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
-<div class="modal fade" id="b2sAuthNetwork6Modal" tabindex="-1" role="dialog" aria-labelledby="b2sAuthNetwork6Modal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sAuthNetwork6Modal" tabindex="-1" role="dialog" aria-labelledby="b2sAuthNetwork6Modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -388,7 +400,7 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
-<div class="modal fade" id="b2s-edit-network-auth-settings" tabindex="-1" role="dialog" aria-labelledby="b2s-edit-network-auth-settings" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2s-edit-network-auth-settings" tabindex="-1" role="dialog" aria-labelledby="b2s-edit-network-auth-settings" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -545,17 +557,36 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
-<div class="modal fade" id="b2sNetworkAddInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sNetworkAddInfoModal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sNetworkAddPageInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sNetworkAddPageInfoModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sNetworkAddInfoModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sNetworkAddPageInfoModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><?php esc_html_e('Add Page', 'blog2social') ?></h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
                         <?php echo sprintf(__('Please make sure to log in with your account which manages your pages and <a href="%s" target="_blank">follow this guide to select all your pages</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('fb_page_auth'))); ?>
+                        <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="b2sNetworkAddGroupInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sNetworkAddGroupInfoModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sNetworkAddGroupInfoModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php esc_html_e('Add Group', 'blog2social') ?></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?php echo sprintf(__('Please make sure to log in with your account which manages your groups and <a href="%s" target="_blank">follow this guide to select all your groups</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('fb_group_auth'))); ?>
                         <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
                     </div>
                 </div>

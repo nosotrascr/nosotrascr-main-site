@@ -90,8 +90,8 @@ if ( ! class_exists( 'Sinatra_Customizer_Single_Post' ) ) :
 					'type'     => 'sinatra-alignment',
 					'label'    => esc_html__( 'Title Alignment', 'sinatra' ),
 					'section'  => 'sinatra_section_blog_single_post',
-					'choices' => 'horizontal',
-					'icons'   => array(
+					'choices'  => 'horizontal',
+					'icons'    => array(
 						'left'   => 'dashicons dashicons-editor-alignleft',
 						'center' => 'dashicons dashicons-editor-aligncenter',
 						'right'  => 'dashicons dashicons-editor-alignright',
@@ -106,7 +106,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Single_Post' ) ) :
 				),
 			);
 
-			// Spacing
+			// Spacing.
 			$options['setting']['sinatra_single_title_spacing'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_responsive',
@@ -123,7 +123,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Single_Post' ) ) :
 					'unit'        => array(
 						'px',
 					),
-					'required' => array(
+					'required'    => array(
 						array(
 							'control'  => 'sinatra_single_post_layout_heading',
 							'value'    => true,
@@ -256,9 +256,9 @@ if ( ! class_exists( 'Sinatra_Customizer_Single_Post' ) ) :
 				'transport'         => 'refresh',
 				'sanitize_callback' => 'sinatra_sanitize_toggle',
 				'control'           => array(
-					'type'    => 'sinatra-toggle',
-					'section' => 'sinatra_section_blog_single_post',
-					'label'   => esc_html__( 'Show avatar and icons in post meta', 'sinatra' ),
+					'type'     => 'sinatra-toggle',
+					'section'  => 'sinatra_section_blog_single_post',
+					'label'    => esc_html__( 'Show avatar and icons in post meta', 'sinatra' ),
 					'required' => array(
 						array(
 							'control'  => 'sinatra_single_post_elements_heading',

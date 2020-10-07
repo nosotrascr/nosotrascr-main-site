@@ -320,42 +320,6 @@ jQuery(document).on('click', '#b2s-user-network-settings-allow-shortcode', funct
     return false;
 });
 
-jQuery(document).on('click', '#b2s-user-network-settings-allow-hashtag', function () {
-    jQuery('.b2s-settings-user-success').hide();
-    jQuery('.b2s-settings-user-error').hide();
-    jQuery(".b2s-loading-area").show();
-    jQuery(".b2s-user-settings-area").hide();
-    jQuery('.b2s-server-connection-fail').hide();
-    jQuery.ajax({
-        url: ajaxurl,
-        type: "POST",
-        dataType: "json",
-        cache: false,
-        data: {
-            'action': 'b2s_user_network_settings',
-            'allow_hashtag': jQuery('#b2s-user-network-settings-allow-hashtag').val(),
-            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
-        },
-        error: function () {
-            jQuery('.b2s-server-connection-fail').show();
-            return false;
-        },
-        success: function (data) {
-            if (data.result == true) {
-                window.location.href = window.location.pathname + "?page=blog2social-settings&b2s-settings-user-success=true";
-            } else {
-                if(data.error == 'nonce') {
-                    jQuery('.b2s-nonce-check-fail').show();
-                }
-                jQuery(".b2s-loading-area").hide();
-                jQuery(".b2s-user-settings-area").show();
-                jQuery('.b2s-settings-user-error').show();
-            }
-        }
-    });
-    return false;
-});
-
 
 jQuery(document).on('click', '#b2s-general-settings-legacy-mode', function () {
     jQuery('.b2s-settings-user-success').hide();
@@ -488,9 +452,6 @@ jQuery(document).on('click', '.b2sInfoUrlShortenerModalBtn', function () {
 });
 jQuery(document).on('click', '.b2sInfoAllowShortcodeModalBtn', function () {
     jQuery('#b2sInfoAllowShortcodeModal').modal('show');
-});
-jQuery(document).on('click', '.b2sInfoAllowHashTagModalBtn', function () {
-    jQuery('#b2sInfoAllowHashTagModal').modal('show');
 });
 jQuery(document).on('click', '.b2sInfoLegacyModeBtn', function () {
     jQuery('#b2sInfoLegacyMode').modal('show');

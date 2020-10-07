@@ -40,48 +40,99 @@ class B2S_AutoPost_Item {
         $content .='</div>';
         $content .='</div>';
         $content .='<h4 class="b2s-auto-post-header">' . esc_html__('Autoposter', 'blog2social') . '</h4><a target="_blank" href="'.B2S_Tools::getSupportLink('auto_post_manuell').'">Info</a>';
-        $content .='<p class="b2s-bold">' . esc_html__('Set up your autoposter to automatically share your new or updated posts, pages and custom post types on your social media channels.', 'blog2social') . '</p>';
-        $content .='<form id = "b2s-user-network-settings-auto-post-own" method = "post">';
-        $content .='<div class="' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
-        $content .='<input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" ' . (($autoPostActive) ? 'checked' : '') . '  name="b2s-manuell-auto-post" class="b2s-auto-post-area-toggle" data-area-type="manuell" value="1" type="checkbox">';
-        $content .='</div>';
-        $content .='<div class="b2s-auto-post-area" data-area-type="manuell"'.(($autoPostActive) ? '' : ' style="display:none;"').'>';
-        $content .='<br>';
-        $content .='<div class="' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
-        $content .='<div class="alert alert-danger b2s-auto-post-error" data-error-reason="no-auth-in-mandant" style="display:none;">' . esc_html__('There are no social network accounts assigned to your selected network collection. Please assign at least one social network account or select another network collection.', 'blog2social') . '<a href="' . esc_url(((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/admin.php?page=blog2social-network') . '" target="_bank">' . esc_html__('Network settings', 'blog2social') . '</a></div>';
-        $content .='<p class="b2s-bold">' . esc_html__('Select your preferred network collection for autoposting. This collection defines the social media accounts on which the autoposter will share your social media posts automatically.', 'blog2social') . '</p>';
-        $content .= $this->getMandantSelect((isset($optionAutoPost['profile']) ? $optionAutoPost['profile'] : 0), (isset($optionAutoPost['twitter']) ? $optionAutoPost['twitter'] : 0));
-        $content .='</div>';
-        $content .='<br>';
-        $content .='<div class="alert alert-danger b2s-auto-post-error" data-error-reason="no-post-type" style="display:none;">'.esc_html__('Please select a post type', 'blog2social').'</div>';
-        $content .='<div class="row ' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
-        $content .='<div class="col-xs-12 col-md-2">';
-        $content .='<label class="b2s-auto-post-publish-label">' . esc_html__('new posts', 'blog2social') . '</label>';
-        $content .='<br><small><button class="btn btn-link btn-xs hidden-xs b2s-post-type-select-btn" data-post-type="publish" data-select-toogle-state="0" data-select-toogle-name="' . esc_attr__('Unselect all', 'blog2social') . '">' . esc_html__('Select all', 'blog2social') . '</button></small>';
-        $content .='</div>';
-        $content .='<div class="col-xs-12 col-md-6">';
-        $content .= $this->getPostTypesHtml($optionAutoPost);
-        $content .='</div>';
-        $content .='</div>';
-        $content .='<br>';
-        $content .='<div class="row ' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
-        $content .='<div class="col-md-12"><div class="panel panel-group b2s-auto-post-own-update-warning" style="display: none;"><div class="panel-body"><span class="glyphicon glyphicon-exclamation-sign glyphicon-warning"></span> ' . esc_html__('By enabling this feature your previously published social media posts will be sent again to your selected social media channels as soon as the post is updated.', 'blog2social') . '</div></div></div>';
-        $content .='<div class"clearfix"></div>';
-        $content .='<div class="col-xs-12 col-md-2">';
-        $content .='<label class="b2s-auto-post-update-label">' . esc_html__('updating existing posts', 'blog2social') . '</label>';
-        $content .='<br><small><button class="btn btn-link btn-xs hidden-xs b2s-post-type-select-btn" data-post-type="update" data-select-toogle-state="0" data-select-toogle-name="' . esc_html__('Unselect all', 'blog2social') . '">' . esc_html__('Select all', 'blog2social') . '</button></small>';
-        $content .='</div>';
-        $content .='<div class="col-xs-12 col-md-6">';
-        $content .= $this->getPostTypesHtml($optionAutoPost, 'update');
-        $content .='</div>';
-        $content .='</div>';
-        $content .='<br>';
-        $content .='<div class="row ' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
-        $content .='<div class="col-md-12">';
-        $content .='<input id="b2s-auto-post-best-times" class="b2s-auto-post-best-times" name="b2s-auto-post-best-times" type="checkbox" value="1" '.((isset($optionAutoPost['best_times']) && (int) $optionAutoPost['best_times'] == 1) ? 'checked' : '').'><label for="b2s-auto-post-best-times"> ' . esc_html__('Apply best times', 'blog2social') . '</label>';
-        $content .='</div>';
-        $content .='</div>';
-        $content .='</div>';
+        
+        if(isset($optionAutoPost['assignBy']) && (int) $optionAutoPost['assignBy'] > 0) {
+            $content .='<div class="panel panel-group b2s-auto-post-own-general-warning"><div class="panel-body">';
+            $content .='<span class="glyphicon glyphicon-exclamation-sign glyphicon-warning"></span>' . esc_html__('The settings for the Auto-Poster were configured for you by a WordPress admin.', 'blog2social') . '  ';
+            $content .='<a href="#" id="b2s-auto-post-assign-by-disconnect">' . esc_html__('Disconnect', 'blog2social') . '</a>';
+            $content .='</div>';
+            $content .='</div>';
+        } else {
+            $content .='<p class="b2s-bold">' . esc_html__('Set up your autoposter to automatically share your new or updated posts, pages and custom post types on your social media channels.', 'blog2social') . '</p>';
+            $content .='<form id = "b2s-user-network-settings-auto-post-own" method = "post">';
+            $content .='<div class="' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
+            $content .='<input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" ' . (($autoPostActive) ? 'checked' : '') . '  name="b2s-manuell-auto-post" class="b2s-auto-post-area-toggle" data-area-type="manuell" value="1" type="checkbox">';
+            $content .='</div>';
+            $content .='<div class="b2s-auto-post-area" data-area-type="manuell"'.(($autoPostActive) ? '' : ' style="display:none;"').'>';
+            $content .='<br>';
+            $content .='<div class="' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
+            $content .='<div class="alert alert-danger b2s-auto-post-error" data-error-reason="no-auth-in-mandant" style="display:none;">' . esc_html__('There are no social network accounts assigned to your selected network collection. Please assign at least one social network account or select another network collection.', 'blog2social') . '<a href="' . esc_url(((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/admin.php?page=blog2social-network') . '" target="_bank">' . esc_html__('Network settings', 'blog2social') . '</a></div>';
+            $content .='<p class="b2s-bold">' . esc_html__('Select your preferred network collection for autoposting. This collection defines the social media accounts on which the autoposter will share your social media posts automatically.', 'blog2social') . '</p>';
+            $content .= $this->getMandantSelect((isset($optionAutoPost['profile']) ? $optionAutoPost['profile'] : 0), (isset($optionAutoPost['twitter']) ? $optionAutoPost['twitter'] : 0));
+            $content .='</div>';
+            $content .='<br>';
+            $content .='<div class="alert alert-danger b2s-auto-post-error" data-error-reason="no-post-type" style="display:none;">'.esc_html__('Please select a post type', 'blog2social').'</div>';
+            $content .='<div class="row ' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
+            $content .='<div class="col-xs-12 col-md-2">';
+            $content .='<label class="b2s-auto-post-publish-label">' . esc_html__('new posts', 'blog2social') . '</label>';
+            $content .='<br><small><button class="btn btn-link btn-xs hidden-xs b2s-post-type-select-btn" data-post-type="publish" data-select-toogle-state="0" data-select-toogle-name="' . esc_attr__('Unselect all', 'blog2social') . '">' . esc_html__('Select all', 'blog2social') . '</button></small>';
+            $content .='</div>';
+            $content .='<div class="col-xs-12 col-md-6">';
+            $content .= $this->getPostTypesHtml($optionAutoPost);
+            $content .='</div>';
+            $content .='</div>';
+            $content .='<br>';
+            $content .='<div class="row ' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
+            $content .='<div class="col-md-12"><div class="panel panel-group b2s-auto-post-own-update-warning" style="display: none;"><div class="panel-body"><span class="glyphicon glyphicon-exclamation-sign glyphicon-warning"></span> ' . esc_html__('By enabling this feature your previously published social media posts will be sent again to your selected social media channels as soon as the post is updated.', 'blog2social') . '</div></div></div>';
+            $content .='<div class"clearfix"></div>';
+            $content .='<div class="col-xs-12 col-md-2">';
+            $content .='<label class="b2s-auto-post-update-label">' . esc_html__('updating existing posts', 'blog2social') . '</label>';
+            $content .='<br><small><button class="btn btn-link btn-xs hidden-xs b2s-post-type-select-btn" data-post-type="update" data-select-toogle-state="0" data-select-toogle-name="' . esc_html__('Unselect all', 'blog2social') . '">' . esc_html__('Select all', 'blog2social') . '</button></small>';
+            $content .='</div>';
+            $content .='<div class="col-xs-12 col-md-6">';
+            $content .= $this->getPostTypesHtml($optionAutoPost, 'update');
+            $content .='</div>';
+            $content .='</div>';
+            $content .='<br>';
+            $content .='<div class="row ' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
+            $content .='<div class="col-md-12">';
+            $content .='<input id="b2s-auto-post-best-times" class="b2s-auto-post-best-times" name="b2s-auto-post-best-times" type="checkbox" value="1" '.((isset($optionAutoPost['best_times']) && (int) $optionAutoPost['best_times'] == 1) ? 'checked' : '').'><label for="b2s-auto-post-best-times"> ' . esc_html__('Apply best times', 'blog2social') . '</label>';
+            $content .='</div>';
+            $content .='</div>';
+
+            if(current_user_can('administrator')) {
+                global $wpdb;
+                $blogUserTokenResult = $wpdb->get_results("SELECT token FROM `{$wpdb->prefix}b2s_user`");
+                $blogUserToken = array();
+                foreach ($blogUserTokenResult as $k => $row) {
+                    array_push($blogUserToken, $row->token);
+                }
+                $data = array('action' => 'getTeamAssignUserAuth', 'token' => B2S_PLUGIN_TOKEN, 'networkAuthId' => 0, 'blogUser' => $blogUserToken);
+                $networkAuthAssignment = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $data, 30), true);
+                if (isset($networkAuthAssignment['userList']) && !empty($networkAuthAssignment['userList']) && count($networkAuthAssignment['userList']) > 1) {
+                    $doneIds = array();
+                    $content .='<br>';
+                    $content .='<div class="row">';
+                    $content .='<div class="col-md-12">';
+                    $content .='<span class="b2s-bold">'.esc_html__('Share posts from other authors automatically with your Auto-Poster settings', 'blog2social').' </span>';
+                    $content .='<a class="b2sInfoAssignAutoPostBtn" href="#">'.esc_html__('Info', 'blog2social').'</a><br>';
+                    $content .='<select name="b2s-auto-post-assign-user-data[]" multiple="" data-placeholder="Select User" class="b2s-auto-post-assign-user">';
+                    foreach ($networkAuthAssignment['userList'] as $k => $listUser) {
+                        if ((int) $listUser != B2S_PLUGIN_BLOG_USER_ID && !in_array($listUser, $doneIds)) {
+                            array_push($doneIds, $listUser);
+                            $userDetails = get_option('B2S_PLUGIN_USER_VERSION_' . $listUser);
+                            if (isset($userDetails['B2S_PLUGIN_USER_VERSION']) && (int) $userDetails['B2S_PLUGIN_USER_VERSION'] == 3) {
+                                $displayName = stripslashes(get_user_by('id', $listUser)->display_name);
+                                if(!empty($displayName) && $displayName != false) {
+                                    $selected = '';
+                                    if(isset($optionAutoPost['assignUser']) && !empty($optionAutoPost['assignUser']) && in_array($listUser, $optionAutoPost['assignUser'])) {
+                                        $selected = 'selected="selected"';
+                                    }
+                                    $content .= '<option value="' . esc_attr($listUser) . '" ' . $selected . '>' . esc_html($displayName) . '</option>';
+                                }
+                            }
+                        }
+                    }
+                    $content .='</select>';
+                    $content .='</div>';
+                    $content .='</div>';
+                }
+
+
+                $content .='</div>';
+            }
+        }
+        
         $content .='<br>';
         $content .='<hr>';
         $content .='<h4 class="b2s-auto-post-header">' . esc_html__('Autoposter for Imported Posts', 'blog2social') . '</h4><a target="_blank" href="'.B2S_Tools::getSupportLink('auto_post_import').'">Info</a>';

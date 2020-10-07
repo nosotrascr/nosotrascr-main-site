@@ -657,6 +657,22 @@
 	});
 
 	/**
+	 * Responsive sidebar position.
+	 */
+	api( 'sinatra_sidebar_responsive_position', function( value ) {
+		value.bind( function( newval ) {
+
+			$body.removeClass( function (index, className) {
+			    return (className.match (/(^|\s)si-sidebar-r__\S+/g) || []).join(' ');
+			});
+
+			if ( newval ) {
+				$body.addClass( 'si-sidebar-r__' + newval );
+			}
+		});
+	});
+
+	/**
 	 * Featured Image Position (Horizontal Blog layout)
 	 */
 	api( 'sinatra_blog_image_position', function( value ) {
@@ -1366,7 +1382,8 @@
 			 				 '.si-pre-footer-cta-style-2 #si-pre-footer::after' +
 			 				 '{ background-image: none; }';
 			} else {
-				style_css += sinatra_design_options_css( '.si-pre-footer-cta-style-1 #si-pre-footer .si-flex-row::after, .si-pre-footer-cta-style-2 #si-pre-footer::after', newval, 'background' );
+				style_css += sinatra_design_options_css( '.si-pre-footer-cta-style-1 #si-pre-footer .si-flex-row::after', newval, 'background' );
+				style_css += sinatra_design_options_css( '.si-pre-footer-cta-style-2 #si-pre-footer::after', newval, 'background' );
 			}
 
 			if ( 'image' === newval['background-type'] && newval['background-color-overlay'] && newval['background-image'] ) {
@@ -2117,7 +2134,9 @@
 						 	'max-width: ' + newval.value + 'px;' +
 						 '}';
 
-			style_css += '.sinatra-layout__boxed #page { max-width: ' + ( parseInt( newval.value) + 100 ) + 'px; }';
+			style_css += '.sinatra-layout__boxed #page, .sinatra-layout__boxed.si-sticky-header.sinatra-is-mobile #sinatra-header-inner, ' +
+						 '.sinatra-layout__boxed.si-sticky-header:not(.sinatra-header-layout-3) #sinatra-header-inner, ' +
+						 '.sinatra-layout__boxed.si-sticky-header:not(.sinatra-is-mobile).sinatra-header-layout-3 #sinatra-header-inner .si-nav-container > .si-container { max-width: ' + ( parseInt( newval.value) + 100 ) + 'px; }';
 
 	 		$style_tag.html( style_css );
 
@@ -2331,7 +2350,10 @@
 			}
 
 			$style_tag = sinatra_get_style_tag( 'sinatra_page_header_background' );
-			var style_css = sinatra_design_options_css( '.page-header', newval, 'background' );
+			
+			var style_css = '';
+			style_css += sinatra_design_options_css( '.page-header', newval, 'background' );
+			style_css += sinatra_design_options_css( '.si-tsp-header:not(.si-tsp-absolute) #masthead', newval, 'background' );
 			
 			$style_tag.html( style_css );
 		});

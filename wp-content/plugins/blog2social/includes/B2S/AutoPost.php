@@ -19,7 +19,7 @@ class B2S_AutoPost {
     private $userVersion;
     private $allowHtml = array(4, 11, 14);
 
-    function __construct($postId = 0, $blogPostData = array(), $current_user_date = '0000-00-00 00:00:00', $myTimeSettings = false, $title = '', $content = '', $excerpt = '', $url = '', $imageUrl = '', $keywords = '', $b2sPostLang = 'en', $optionPostFormat = array(), $allowHashTag = true, $userVersion=0) {
+    function __construct($postId = 0, $blogPostData = array(), $current_user_date = '0000-00-00 00:00:00', $myTimeSettings = false, $title = '', $content = '', $excerpt = '', $url = '', $imageUrl = '', $keywords = '', $b2sPostLang = 'en', $optionPostFormat = array(), $allowHashTag = true, $userVersion = 0) {
         $this->postId = $postId;
         $this->blogPostData = $blogPostData;
         $this->current_user_date = $current_user_date;
@@ -39,28 +39,28 @@ class B2S_AutoPost {
     }
 
     public function prepareShareData($networkAuthId = 0, $networkId = 0, $networkType = 0) {
-        
-        if(B2S_PLUGIN_USER_VERSION >= 3) {
+
+        if (B2S_PLUGIN_USER_VERSION >= 3) {
             global $wpdb;
             $sqlGetData = $wpdb->prepare("SELECT `data` FROM `{$wpdb->prefix}b2s_posts_network_details` WHERE `network_auth_id` = %d", (int) $networkAuthId);
             $dataString = $wpdb->get_var($sqlGetData);
             if ($dataString !== NULL && !empty($dataString)) {
                 $networkAuthData = unserialize($dataString);
-                if(!empty($this->url) && $networkAuthData != false && is_array($networkAuthData) && isset($networkAuthData['url_parameter'][0]['querys']) && !empty($networkAuthData['url_parameter'][0]['querys'])) {
+                if (!empty($this->url) && $networkAuthData != false && is_array($networkAuthData) && isset($networkAuthData['url_parameter'][0]['querys']) && !empty($networkAuthData['url_parameter'][0]['querys'])) {
                     $this->url = B2S_Util::addUrlParameter($this->url, $networkAuthData['url_parameter'][0]['querys']);
                 }
             }
         }
-        
+
         if ((int) $networkId > 0 && (int) $networkAuthId > 0) {
             $postData = array('content' => '', 'custom_title' => '', 'tags' => array(), 'network_auth_id' => (int) $networkAuthId);
 
-            if ((int)$this->userVersion < 1 || $this->optionPostFormat == false || !isset($this->optionPostFormat[$networkId][$networkType])) {
+            if ((int) $this->userVersion < 1 || $this->optionPostFormat == false || !isset($this->optionPostFormat[$networkId][$networkType])) {
                 $tempOptionPostFormat = unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT);
             } else {
                 $tempOptionPostFormat = $this->optionPostFormat;
             }
-            
+
             //PostFormat
             if (in_array($networkId, array(1, 2, 3, 12, 17, 19))) {
                 //Get: client settings
@@ -79,11 +79,11 @@ class B2S_AutoPost {
                 }
                 $postData['content'] = $tempOptionPostFormat[$networkId][$networkType]['content'];
 
-                $preContent = addcslashes(B2S_Util::getExcerpt($this->content, (int) $tempOptionPostFormat[$networkId][$networkType]['short_text']['range_min'], (int) $tempOptionPostFormat[$networkId][$networkType]['short_text']['range_max']),"\\$");   
+                $preContent = addcslashes(B2S_Util::getExcerpt($this->content, (int) $tempOptionPostFormat[$networkId][$networkType]['short_text']['range_min'], (int) $tempOptionPostFormat[$networkId][$networkType]['short_text']['range_max']), "\\$");
                 $postData['content'] = preg_replace("/\{CONTENT\}/", $preContent, $postData['content']);
 
                 $title = sanitize_text_field($this->title);
-                $postData['content'] = preg_replace("/\{TITLE\}/", addcslashes($title,"\\$"), $postData['content']);
+                $postData['content'] = preg_replace("/\{TITLE\}/", addcslashes($title, "\\$"), $postData['content']);
 
                 $defaultSchema = unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT);
                 if (!isset($tempOptionPostFormat[$networkId][$networkType]['short_text']['excerpt_range_max'])) {
@@ -92,20 +92,16 @@ class B2S_AutoPost {
                 if (!isset($tempOptionPostFormat[$networkId][$networkType]['short_text']['excerpt_range_min'])) {
                     $tempOptionPostFormat[$networkId][$networkType]['short_text']['excerpt_range_min'] = $defaultSchema[$networkId][$networkType]['short_text']['excerpt_range_min'];
                 }
-                $excerpt = (isset($this->excerpt) && !empty($this->excerpt)) ? addcslashes(B2S_Util::getExcerpt($this->excerpt, (int) $tempOptionPostFormat[$networkId][$networkType]['short_text']['excerpt_range_min'], (int) $tempOptionPostFormat[$networkId][$networkType]['short_text']['excerpt_range_max']),"\\$") : '';
-               
+                $excerpt = (isset($this->excerpt) && !empty($this->excerpt)) ? addcslashes(B2S_Util::getExcerpt($this->excerpt, (int) $tempOptionPostFormat[$networkId][$networkType]['short_text']['excerpt_range_min'], (int) $tempOptionPostFormat[$networkId][$networkType]['short_text']['excerpt_range_max']), "\\$") : '';
+
                 $postData['content'] = preg_replace("/\{EXCERPT\}/", $excerpt, $postData['content']);
 
                 $hashtagcount = substr_count($postData['content'], '#');
                 if (strpos($postData['content'], "{KEYWORDS}") !== false) {
-                    $hashtags = $this->getHashTagsString("", (($networkId == 12) ? 30-$hashtagcount : -1));
-                    $postData['content'] = preg_replace("/\{KEYWORDS\}/", addcslashes($hashtags,"\\$"), $postData['content']);
-                } else if ($this->allowHashTag) {
-                    $add = ($networkId != 2) ? "\n\n" : "";
-                    $hashtags = $this->getHashTagsString($add, (($networkId == 12) ? 30-$hashtagcount : -1));
-                    $postData['content'] .= " " . $hashtags;
+                    $hashtags = ($this->allowHashTag) ? $this->getHashTagsString("", (($networkId == 12) ? 30 - $hashtagcount : -1)) : '';
+                    $postData['content'] = preg_replace("/\{KEYWORDS\}/", addcslashes($hashtags, "\\$"), $postData['content']);
                 }
-                
+
                 $authorId = get_post_field('post_author', $this->postId);
                 if (isset($authorId) && !empty($authorId) && (int) $authorId > 0) {
                     $hook_filter = new B2S_Hook_Filter();
@@ -114,20 +110,19 @@ class B2S_AutoPost {
                 } else {
                     $postData['content'] = preg_replace("/\{AUTHOR\}/", "", $postData['content']);
                 }
-                
+
                 if (in_array($networkId, $this->allowHtml)) {
                     $postData['content'] = preg_replace("/\\n/", "<br>", $postData['content']);
-                    
+
                     //Feature Image Html-Network
                     if (!empty($this->imageUrl)) {
                         $postData['content'] = '<img src="' . esc_url($this->imageUrl) . '" alt="' . esc_attr($title) . '"/><br>' . $postData['content'];
                     }
                 }
-                
-                if(isset($tempOptionPostFormat[$networkId][$networkType]['short_text']['limit']) && (int) $tempOptionPostFormat[$networkId][$networkType]['short_text']['limit'] > 0) {
+
+                if (isset($tempOptionPostFormat[$networkId][$networkType]['short_text']['limit']) && (int) $tempOptionPostFormat[$networkId][$networkType]['short_text']['limit'] > 0) {
                     $postData['content'] = B2S_Util::getExcerpt($postData['content'], 0, $tempOptionPostFormat[$networkId][$networkType]['short_text']['limit']);
                 }
-                
             } else {
                 if ($networkId == 4) {
                     $postData['custom_title'] = strip_tags($this->title);
@@ -218,30 +213,30 @@ class B2S_AutoPost {
                     }
                 }
             }
-            
+
             return $postData;
         }
         return false;
     }
 
     private function getHashTagsString($add = "\n\n", $limit = -1) {// limit = -1 => no limit
-        if($limit != 0){
+        if ($limit != 0) {
             $hashTags = '';
             if (is_array($this->keywords) && !empty($this->keywords)) {
                 foreach ($this->keywords as $tag) {
                     $hashTags .= ' #' . str_replace(array(" ", "-", '"', "'", "!", "?", ",", ".", ";", ":"), "", $tag->name);
                 }
             }
-            if($limit > 0) {
+            if ($limit > 0) {
                 $pos = 0;
                 $temp_str = $hashTags;
-                for($i = 0; $i <= $limit; $i++){
+                for ($i = 0; $i <= $limit; $i++) {
                     $pos = strpos($temp_str, '#');
-                    $temp_str = substr($temp_str, $pos+1);
+                    $temp_str = substr($temp_str, $pos + 1);
                 }
-                if($pos !== false){
+                if ($pos !== false) {
                     $pos = strpos($hashTags, $temp_str);
-                    $hashTags = substr($hashTags, 0, $pos-1);
+                    $hashTags = substr($hashTags, 0, $pos - 1);
                 }
             }
             return (!empty($hashTags) ? (!empty($add) ? $add . $hashTags : $hashTags) : '');
@@ -252,13 +247,13 @@ class B2S_AutoPost {
 
     public function saveShareData($shareData = array(), $network_id = 0, $network_type = 0, $network_auth_id = 0, $shareApprove = 0, $network_display_name = '') {
 
-        if(isset($shareData['image_url']) && !empty($shareData['image_url'])){
+        if (isset($shareData['image_url']) && !empty($shareData['image_url'])) {
             $image_data = wp_check_filetype($shareData['image_url']);
-            if(isset($image_data['ext']) && $image_data['ext'] == 'gif' && in_array($network_id, unserialize(B2S_PLUGIN_NETWORK_NOT_ALLOW_GIF))){
+            if (isset($image_data['ext']) && $image_data['ext'] == 'gif' && in_array($network_id, unserialize(B2S_PLUGIN_NETWORK_NOT_ALLOW_GIF))) {
                 $shareData['image_url'] = '';
             }
         }
-        
+
         $sched_type = $this->blogPostData['sched_type'];
         $sched_date = $this->blogPostData['sched_date'];
         $sched_date_utc = $this->blogPostData['sched_date_utc'];
@@ -317,7 +312,7 @@ class B2S_AutoPost {
         if (isset($networkDetailsIdSelect[0])) {
             $networkDetailsId = (int) $networkDetailsIdSelect[0];
         } else {
-            $wpdb->insert($wpdb->prefix.'b2s_posts_network_details', array(
+            $wpdb->insert($wpdb->prefix . 'b2s_posts_network_details', array(
                 'network_id' => (int) $network_id,
                 'network_type' => (int) $network_type,
                 'network_auth_id' => (int) $network_auth_id,
@@ -328,7 +323,7 @@ class B2S_AutoPost {
         if ($networkDetailsId > 0) {
             //DeprecatedNetwork-8 31 march
             if ($network_id == 8 && $sched_date_utc >= '2019-03-30 23:59:59') {
-                $wpdb->insert($wpdb->prefix.'b2s_posts', array(
+                $wpdb->insert($wpdb->prefix . 'b2s_posts', array(
                     'post_id' => $this->postId,
                     'blog_user_id' => $this->blogPostData['blog_user_id'],
                     'user_timezone' => $this->blogPostData['user_timezone'],
@@ -336,9 +331,9 @@ class B2S_AutoPost {
                     'publish_error_code' => 'DEPRECATED_NETWORK_8',
                     'network_details_id' => $networkDetailsId), array('%d', '%d', '%s', '%s', '%s', '%d'));
             } else {
-                $wpdb->insert($wpdb->prefix.'b2s_posts_sched_details', array('sched_data' => serialize($shareData), 'image_url' => (isset($shareData['image_url']) ? $shareData['image_url'] : '')), array('%s', '%s'));
+                $wpdb->insert($wpdb->prefix . 'b2s_posts_sched_details', array('sched_data' => serialize($shareData), 'image_url' => (isset($shareData['image_url']) ? $shareData['image_url'] : '')), array('%s', '%s'));
                 $schedDetailsId = $wpdb->insert_id;
-                $wpdb->insert($wpdb->prefix.'b2s_posts', array(
+                $wpdb->insert($wpdb->prefix . 'b2s_posts', array(
                     'post_id' => $this->postId,
                     'blog_user_id' => $this->blogPostData['blog_user_id'],
                     'user_timezone' => $this->blogPostData['user_timezone'],
@@ -350,7 +345,7 @@ class B2S_AutoPost {
                     'network_details_id' => $networkDetailsId,
                     'post_for_approve' => (int) $shareApprove,
                     'hook_action' => (((int) $shareApprove == 0) ? 1 : 0)), array('%d', '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d', '%d'));
-                $insertId =$wpdb->insert_id;
+                $insertId = $wpdb->insert_id;
                 B2S_Rating::trigger();
                 return $insertId;
             }

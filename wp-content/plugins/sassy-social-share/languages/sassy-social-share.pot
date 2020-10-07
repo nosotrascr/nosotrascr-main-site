@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sassy Social Share\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-08 12:13+0530\n"
-"PO-Revision-Date: 2020-04-08 12:13+0530\n"
+"POT-Creation-Date: 2020-08-19 14:14+0530\n"
+"PO-Revision-Date: 2020-08-19 14:15+0530\n"
 "Last-Translator: Heateor <hello@heateor.com>\n"
 "Language-Team: Heateor <hello@heateor.com>\n"
 "Language: en_IN\n"
@@ -57,11 +57,7 @@ msgid "Floating sharing"
 msgstr ""
 
 #: ../admin/class-sassy-social-share-admin.php:409
-msgid "Click to show help"
-msgstr ""
-
-#: ../admin/class-sassy-social-share-admin.php:409
-msgid "Click to hide help"
+msgid "Click to toggle help"
 msgstr ""
 
 #: ../admin/class-sassy-social-share-admin.php:442
@@ -97,12 +93,10 @@ msgstr ""
 #: ../admin/class-sassy-social-share-admin.php:616
 #: ../admin/class-sassy-social-share-admin.php:642
 #: ../admin/class-sassy-social-share-admin.php:665
-#: ../admin/class-sassy-social-share-admin.php:689
 msgid "Okay"
 msgstr ""
 
 #: ../admin/class-sassy-social-share-admin.php:616
-#: ../admin/class-sassy-social-share-admin.php:689
 #, php-format
 msgid ""
 "This plugin is GDPR compliant. You need to update the privacy policy of your "
@@ -127,15 +121,15 @@ msgid ""
 "your website %s with them. No need to copy-paste any code from their website."
 msgstr ""
 
-#: ../admin/class-sassy-social-share-admin.php:706
+#: ../admin/class-sassy-social-share-admin.php:683
 msgid "Add-Ons"
 msgstr ""
 
-#: ../admin/class-sassy-social-share-admin.php:707
+#: ../admin/class-sassy-social-share-admin.php:684
 msgid "Support Documentation"
 msgstr ""
 
-#: ../admin/class-sassy-social-share-admin.php:708
+#: ../admin/class-sassy-social-share-admin.php:685
 msgid "Settings"
 msgstr ""
 

@@ -76,7 +76,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Widget_Nav' ) ) :
 				</p>
 
 				<p class="sinatra-widget-nav-empty">
-					<?php 
+					<?php
 					printf(
 						/* Translators: %1$s - anchor tag start. %2$s anchor tag end. */
 						esc_html__( 'No menus found: %1$sCreate a new menu?%2$s', 'sinatra' ),

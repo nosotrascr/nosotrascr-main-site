@@ -106,16 +106,16 @@ if ( ! class_exists( 'Sinatra_Customizer_Breadcrumbs' ) ) :
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_select',
 				'control'           => array(
-					'type'    => 'sinatra-alignment',
-					'label'   => esc_html__( 'Alignment', 'sinatra' ),
-					'section' => 'sinatra_section_breadcrumbs',
-					'choices' => 'horizontal',
-					'icons'   => array(
+					'type'     => 'sinatra-alignment',
+					'label'    => esc_html__( 'Alignment', 'sinatra' ),
+					'section'  => 'sinatra_section_breadcrumbs',
+					'choices'  => 'horizontal',
+					'icons'    => array(
 						'left'   => 'dashicons dashicons-editor-alignleft',
 						'center' => 'dashicons dashicons-editor-aligncenter',
 						'right'  => 'dashicons dashicons-editor-alignright',
 					),
-					'required'    => array(
+					'required' => array(
 						array(
 							'control'  => 'sinatra_breadcrumbs_enable',
 							'value'    => true,
@@ -130,7 +130,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Breadcrumbs' ) ) :
 				),
 			);
 
-			// Spacing
+			// Spacing.
 			$options['setting']['sinatra_breadcrumbs_spacing'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_responsive',
@@ -165,7 +165,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Breadcrumbs' ) ) :
 					'type'     => 'sinatra-heading',
 					'label'    => esc_html__( 'Design Options', 'sinatra' ),
 					'section'  => 'sinatra_section_breadcrumbs',
-					'required'    => array(
+					'required' => array(
 						array(
 							'control'  => 'sinatra_breadcrumbs_enable',
 							'value'    => true,

@@ -54,7 +54,7 @@ function sinatra_get_display_choices() {
 		),
 		'archive'    => array(
 			'title' => esc_html__( 'Archive', 'sinatra' ),
-			'desc'  => esc_html__( 'Dynamic pages such as categories, tags, custom taxonomies...' ),
+			'desc'  => esc_html__( 'Dynamic pages such as categories, tags, custom taxonomies...', 'sinatra' ),
 		),
 		'post'       => array(
 			'title' => esc_html__( 'Single Post', 'sinatra' ),

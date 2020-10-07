@@ -184,13 +184,11 @@ class SliderParams extends Data {
     }
 
     private function upgradeLoadingType() {
-        if (!$this->has('loading-type')) {
-            if (!empty($this->get('dependency'))) {
-                $this->set('loading-type', 'afterSlider');
-            } else {
-                if ($this->get('delay') > 0) {
-                    $this->set('loading-type', 'afterDelay');
-                }
+        if (!empty($this->get('dependency'))) {
+            $this->set('loading-type', 'afterOnLoad');
+        } else {
+            if (!$this->has('loading-type') && $this->get('delay') > 0) {
+                $this->set('loading-type', 'afterDelay');
             }
         }
     }

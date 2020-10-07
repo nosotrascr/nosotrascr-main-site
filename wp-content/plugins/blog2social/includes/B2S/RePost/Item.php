@@ -52,6 +52,9 @@ class B2S_RePost_Item {
         $content .= '<br>';
         $content .='<input type="checkbox" name="b2s-re-post-favorites-active" id="b2s-re-post-favorites-active" value="1">';
         $content .='<label for="b2s-re-post-favorites-active"> ' . sprintf(__('include <a href="%s" target="_blank">favorites posts</a> only', 'blog2social'), 'admin.php?page=blog2social-favorites') . ' </label>';
+        $content .= '<br>';
+        $content .='<input type="checkbox" name="b2s-re-post-images-active" id="b2s-re-post-images-active" value="1">';
+        $content .='<label for="b2s-re-post-images-active"> ' . esc_html__('include posts with images only', 'blog2social') . ' </label>';
         $content .= '</div>';
         $content .= '</div>';
         

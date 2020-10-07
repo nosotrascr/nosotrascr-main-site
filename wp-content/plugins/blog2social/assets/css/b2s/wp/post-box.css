@@ -319,3 +319,10 @@
 .b2s-bold {
     font-weight: 600;
 }
+
+.b2s-info-assignd-by {
+    border: 1px solid orange !important;
+    padding: 5px !important;
+    font-weight: bold;
+    margin: 5px 0px;
+}

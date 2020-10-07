@@ -23,7 +23,6 @@ class B2S_Loader {
 
         $this->b2s_register_custom_post_type();
 
-        require_once(B2S_PLUGIN_DIR . 'includes/B2S/Hook/Filter.php');
         require_once(B2S_PLUGIN_DIR . 'includes/Options.php');
         require_once(B2S_PLUGIN_DIR . 'includes/B2S/AutoPost.php');
         require_once(B2S_PLUGIN_DIR . 'includes/B2S/Rating.php');
@@ -32,13 +31,14 @@ class B2S_Loader {
         require_once(B2S_PLUGIN_DIR . 'includes/B2S/Api/Get.php');
         require_once(B2S_PLUGIN_DIR . 'includes/Util.php');
         require_once(B2S_PLUGIN_DIR . 'includes/Tools.php');
+        require_once(B2S_PLUGIN_DIR . 'includes/B2S/Hook/Filter.php');
 
         define('B2S_PLUGIN_POSTPERPAGE', '15');
         define('B2S_PLUGIN_VERSION_TYPE', serialize(array(0 => 'Free', 1 => 'Smart', 2 => 'Pro', 3 => 'Business', 4 => 'Premium')));
-        define('B2S_PLUGIN_NETWORK', serialize(array(1 => 'Facebook', 2 => 'Twitter', 3 => 'Linkedin', 4 => 'Tumblr', 5 => 'Storify', 6 => 'Pinterest', 7 => 'Flickr', 8 => 'Xing', 9 => 'Diigo', 10 => 'Google+', 11 => 'Medium', 12 => 'Instagram', 13 => 'Delicious', 14 => 'Torial', 15 => 'Reddit', 16 => 'Bloglovin', 17 => 'VKontakte', 18 => 'Google My Business', 19 => 'Xing', 20 => 'Pinterest', 21 => 'Imgur')));
+        define('B2S_PLUGIN_NETWORK', serialize(array(1 => 'Facebook', 2 => 'Twitter', 3 => 'Linkedin', 4 => 'Tumblr', 5 => 'Storify', 6 => 'Pinterest', 7 => 'Flickr', 8 => 'Xing', 9 => 'Diigo', 10 => 'Google+', 11 => 'Medium', 12 => 'Instagram', 13 => 'Delicious', 14 => 'Torial', 15 => 'Reddit', 16 => 'Bloglovin', 17 => 'VKontakte', 18 => 'Google My Business', 19 => 'Xing', 20 => 'Pinterest', 21 => 'Imgur', 24 => 'Telegram')));
         define('B2S_PLUGIN_SCHED_DEFAULT_TIMES', serialize(array(1 => array(18, 22), 2 => array(8, 10), 3 => array(8, 10), 4 => array(16, 22), 5 => array(), 6 => array(19, 22), 7 => array(7, 9), 8 => array(7, 10), 9 => array(16, 19), 10 => array(7, 10), 11 => array(16, 19), 12 => array(19, 22), 13 => array(11, 13), 14 => array(18, 22), 15 => array(8, 11), 16 => array(16, 19), 17 => array(19, 23), 18 => array(17, 18), 19 => array(7, 10))));
         define('B2S_PLUGIN_SCHED_DEFAULT_TIMES_INFO', serialize(array(1 => array(0 => array(13, 16), 1 => array(18, 22)), 2 => array(0 => array(8, 10), 1 => array(11, 13), 2 => array(16, 19)), 3 => array(0 => array(8, 10), 1 => array(16, 18)), 4 => array(), 5 => array(), 6 => array(0 => array(12, 14), 1 => array(19, 22)), 7 => array(0 => array(7, 9), 1 => array(17, 19)), 8 => array(0 => array(7, 10), 1 => array(17, 18)), 9 => array(0 => array(8, 10), 1 => array(11, 13), 2 => array(16, 19)), 10 => array(0 => array(7, 10), 1 => array(14, 15)), 11 => array(), 12 => array(0 => array(12, 14), 1 => array(19, 22)), 13 => array(0 => array(8, 10), 1 => array(11, 13), 2 => array(16, 19)), 14 => array(), 15 => array(0 => array(8, 11)), 16 => array(0 => array(16, 19)), 17 => array(0 => array(19, 23)), 18 => array(0 => array(17, 18)), 19 => array(0 => array(7, 10), 1 => array(17, 18)), 20 => array(0 => array(12, 14), 1 => array(19, 22)))));
-        define('B2S_PLUGIN_NETWORK_ALLOW_PROFILE', serialize(array(1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21)));
+        define('B2S_PLUGIN_NETWORK_ALLOW_PROFILE', serialize(array(1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24)));
         define('B2S_PLUGIN_NETWORK_ALLOW_PAGE', serialize(array(1, 3, 10, 17, 19)));
         define('B2S_PLUGIN_NETWORK_ALLOW_GROUP', serialize(array(1, 10, 11, 17, 19)));
         define('B2S_PLUGIN_NETWORK_CROSSPOSTING_LIMIT', serialize(array(19 => array(2 => 3)))); //2=group
@@ -47,30 +47,32 @@ class B2S_Loader {
         define('B2S_PLUGIN_RE_POST_LIMIT', serialize(array(0 => 0, 1 => 25, 2 => 50, 3 => 100, 4 => 100)));
         define('B2S_PLUGIN_NETWORK_OAUTH', serialize(array(1, 2, 3, 4, 7, 8, 11, 15, 17, 18, 20, 21)));
         define('B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT', serialize(array(
-            1 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 500), 'content' => '{CONTENT}', 'format' => 0),
-                1 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 0), 'content' => '{CONTENT}', 'format' => 0),
-                2 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 0), 'content' => '{CONTENT}', 'format' => 0)
+            1 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 500), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0, 'addLink' => false),
+                1 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 0), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0, 'addLink' => false),
+                2 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 0), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0, 'addLink' => false)
             ),
-            2 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 255, 'range_max' => 256, 'excerpt_range_min' => 255, 'excerpt_range_max' => 256, 'limit' => 280), 'content' => '{CONTENT}', 'format' => 1)),
-            3 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 1300), 'content' => '{CONTENT}', 'format' => 0),
-                1 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 1300), 'content' => '{CONTENT}', 'format' => 0),
+            2 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 255, 'range_max' => 256, 'excerpt_range_min' => 255, 'excerpt_range_max' => 256, 'limit' => 280), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 1)),
+            3 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 1300), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0),
+                1 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 400, 'excerpt_range_min' => 239, 'excerpt_range_max' => 400, 'limit' => 1300), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0),
             ),
             4 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false)),
-            6 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 494, 'range_max' => 495, 'excerpt_range_min' => 494, 'excerpt_range_max' => 495, 'limit' => 495), 'content' => '{CONTENT}', 'format' => false)),
+            6 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 420, 'range_max' => 421, 'excerpt_range_min' => 420, 'excerpt_range_max' => 421, 'limit' => 495), 'content' => '{CONTENT} {KEYWORDS}', 'format' => false)),
             7 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false)),
             9 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 249, 'range_max' => 250, 'excerpt_range_min' => 249, 'excerpt_range_max' => 250, 'limit' => 250), 'content' => '{CONTENT}', 'format' => false)),
-            11 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false)),
-            12 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 240, 'range_max' => 400, 'excerpt_range_min' => 240, 'excerpt_range_max' => 400, 'limit' => 2000), 'content' => '{CONTENT}', 'format' => 1, 'addLink' => false)),
+            11 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false),
+                2 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false)),
+            12 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 240, 'range_max' => 400, 'excerpt_range_min' => 240, 'excerpt_range_max' => 400, 'limit' => 2000), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 1, 'addLink' => false)),
             14 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false)),
             15 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 299, 'range_max' => 300, 'excerpt_range_min' => 299, 'excerpt_range_max' => 300, 'limit' => 300), 'content' => '{CONTENT}', 'format' => false)),
             16 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => false)),
-            17 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => 0),
-                1 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => 0),
-                2 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT}', 'format' => 0)),
-            18 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 1500), 'content' => '{CONTENT}', 'format' => false)),
-            19 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 320, 'excerpt_range_min' => 239, 'excerpt_range_max' => 320, 'limit' => 420), 'content' => '{CONTENT}', 'format' => 0),
+            17 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0),
+                1 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0),
+                2 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 0), 'content' => '{CONTENT} {KEYWORDS}', 'format' => 0)),
+            18 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 1499, 'range_max' => 1500, 'excerpt_range_min' => 1499, 'excerpt_range_max' => 1500, 'limit' => 1500), 'content' => '{CONTENT} {KEYWORDS}', 'format' => false)),
+            19 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 320, 'excerpt_range_min' => 239, 'excerpt_range_max' => 320, 'limit' => 1000), 'content' => '{CONTENT}', 'format' => 0),
                 1 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 320, 'excerpt_range_min' => 239, 'excerpt_range_max' => 320, 'limit' => 420), 'content' => '{CONTENT}', 'format' => 1),
-                2 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 320, 'excerpt_range_min' => 239, 'excerpt_range_max' => 320, 'limit' => 10000), 'content' => '{CONTENT}', 'format' => 1))
+                2 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 320, 'excerpt_range_min' => 239, 'excerpt_range_max' => 320, 'limit' => 10000), 'content' => '{CONTENT}', 'format' => 1)),
+            24 => array(0 => array('short_text' => array('active' => 0, 'range_min' => 239, 'range_max' => 320, 'excerpt_range_min' => 239, 'excerpt_range_max' => 320, 'limit' => 420), 'content' => '{CONTENT}', 'format' => 0))
         )));
         define('B2S_PLUGIN_SYSTEMREQUIREMENT_WORDPRESSVERSION', '4.7.0');
         define('B2S_PLUGIN_SYSTEMREQUIREMENT_PHPVERSION', '5.5.3');
@@ -85,7 +87,7 @@ class B2S_Loader {
         define('B2S_PLUGIN_SYSTEMREQUIREMENT_OPENSSL', true);
         define('B2S_PLUGIN_PAGE_SLUG', serialize(array('blog2social', 'blog2social-post', 'blog2social-calendar', 'blog2social-curation', 'blog2social-network', 'blog2social-settings', 'prg-post', 'blog2social-support', 'blog2social-premium', 'blog2social-sched', 'blog2social-approve', 'blog2social-publish', 'blog2social-notice', 'blog2social-ship', 'blog2social-curation-draft', 'blog2social-draft-post', 'prg-login', 'prg-ship')));
         define('B2S_PLUGIN_NETWORK_NOT_ALLOW_GIF', json_encode(array(16, 18)));
-        define('B2S_PLUGIN_NETWORK_ANIMATE_GIF', json_encode(array(1 => array(0 => false, 1 => true), 2 => array(0 => false, 1 => true), 3 => array(0 => true, 1 => true), 4 => array(0 => true), 6 => array(0 => true), 7 => array(0 => false), 11 => array(0 => true), 12 => array(0 => false, 1 => false), 14 => array(0 => true), 15 => array(0 => false), 17 => array(0 => false), 19 => array(0 => true, 1 => true), 21 => array(0 => true))));
+        define('B2S_PLUGIN_NETWORK_ANIMATE_GIF', json_encode(array(1 => array(0 => false, 1 => true), 2 => array(0 => false, 1 => true), 3 => array(0 => true, 1 => true), 4 => array(0 => true), 6 => array(0 => true), 7 => array(0 => false), 11 => array(0 => true), 12 => array(0 => false, 1 => false), 14 => array(0 => true), 15 => array(0 => false), 17 => array(0 => false), 19 => array(0 => true, 1 => true), 21 => array(0 => true), 24 => array(0 => true))));
         define('B2S_PLUGIN_NETWORK_META_TAGS', json_encode(array('og' => array(1, 3, 15, 19, 17), 'twitter' => array(2))));
         define('B2S_PLUGIN_SHORTENER', serialize(array(0 => esc_html__('Bitly', 'blog2social'), 1 => esc_html__('Rebrandly', 'blog2social'), 2 => esc_html__('Sniply', 'blog2social'))));
 
@@ -280,14 +282,18 @@ class B2S_Loader {
 
                                 if ($limit) {
                                     global $wpdb;
-                                    $optionPostFormat = $options->_getOption('post_template');
-                                    $image_url = wp_get_attachment_url(get_post_thumbnail_id((int) $post->ID));
                                     $hook_filter = new B2S_Hook_Filter();
-                                    $keywords = $hook_filter->get_wp_post_hashtag((int) $post->ID, $post->post_type);
+                                    $optionPostFormat = $options->_getOption('post_template');
                                     $url = get_permalink($post->ID);
                                     $title = isset($post->post_title) ? B2S_Util::getTitleByLanguage(strip_tags($post->post_title)) : '';
+                                    $keywords = $hook_filter->get_wp_post_hashtag((int) $post->ID, $post->post_type);
+                                    if (($keywords == false || empty($keywords)) && is_plugin_active('wp-automatic/wp-automatic.php')) {
+                                        $keywords = B2S_Tools::extractKeywords($title);
+                                    }
                                     $content = (isset($post->post_content) && !empty($post->post_content)) ? trim($post->post_content) : '';
                                     $excerpt = (isset($post->post_excerpt) && !empty($post->post_excerpt)) ? trim($post->post_excerpt) : '';
+                                    $images_urls = $hook_filter->get_wp_post_image((int) $post->ID, true, $content);
+                                    $image_url = ((!empty($images_urls) && isset(array_values($images_urls)[0][0])) ? array_values($images_urls)[0][0] : false);
                                     $delay = (isset($autoPostData['ship_state']) && (int) $autoPostData['ship_state'] = 0) ? 0 : (isset($autoPostData['ship_delay_time']) ? (int) $autoPostData['ship_delay_time'] : 0);
                                     $current_user_datetime = date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate($current_utc_datetime, $userTimeZoneOffset)));
 
@@ -296,8 +302,6 @@ class B2S_Loader {
                                     $time = ($delay == 0) ? "-30 seconds" : "+" . $delay . " minutes";
                                     $sched_date = date('Y-m-d H:i:s', strtotime($time, strtotime($current_user_datetime)));
                                     $sched_date_utc = date('Y-m-d H:i:s', strtotime($time, strtotime($current_utc_datetime)));
-                                    $optionUserHashTag = $options->_getOption('user_allow_hashtag');
-                                    $allowHashTag = ($optionUserHashTag === false || $optionUserHashTag == 1) ? true : false;
 
                                     $defaultPostData = array('default_titel' => $title,
                                         'image_url' => ($image_url !== false) ? trim(urldecode($image_url)) : '',
@@ -307,7 +311,7 @@ class B2S_Loader {
 
                                     $defaultBlogPostData = array('post_id' => (int) $post->ID, 'blog_user_id' => (int) $post->post_author, 'user_timezone' => $userTimeZoneOffset, 'sched_type' => $sched_type, 'sched_date' => $sched_date, 'sched_date_utc' => $sched_date_utc);
 
-                                    $autoShare = new B2S_AutoPost((int) $post->ID, $defaultBlogPostData, $current_user_date, false, $title, $content, $excerpt, $url, $image_url, $keywords, trim(strtolower(substr(B2S_LANGUAGE, 0, 2))), $optionPostFormat, $allowHashTag, $userVersion);
+                                    $autoShare = new B2S_AutoPost((int) $post->ID, $defaultBlogPostData, $current_user_date, false, $title, $content, $excerpt, $url, $image_url, $keywords, trim(strtolower(substr(B2S_LANGUAGE, 0, 2))), $optionPostFormat, true, $userVersion);
 
 //TOS Twitter 032018 - none multiple Accounts - User select once
                                     $networkTos = true;
@@ -447,7 +451,7 @@ class B2S_Loader {
                             $_POST['content'] = $content->post_content;
                         }
                     }
-
+                    $hook_filter = new B2S_Hook_Filter();
                     $b2sPostLang = (isset($_POST['b2s-user-lang']) && !empty($_POST['b2s-user-lang'])) ? sanitize_text_field($_POST['b2s-user-lang']) : 'en';
                     //OgMeta
                     if (isset($_POST['isOgMetaChecked']) && (int) $_POST['isOgMetaChecked'] == 1 && (int) $_POST['post_ID'] > 0 && isset($_POST['content']) && isset($_POST['post_title'])) {
@@ -459,7 +463,8 @@ class B2S_Loader {
                         } else {
                             $desc = str_replace("\r\n", ' ', substr(sanitize_textarea_field(strip_shortcodes($_POST['content'])), 0, 160));
                         }
-                        $image_url = wp_get_attachment_url(get_post_thumbnail_id((int) $_POST['post_ID']));
+                        $images_urls = $hook_filter->get_wp_post_image((int) $_POST['post_ID'], true, ((isset($_POST['content']) && !empty($_POST['content'])) ? trim($_POST['content']) : ''));
+                        $image_url = ((!empty($images_urls) && isset(array_values($images_urls)[0][0])) ? array_values($images_urls)[0][0] : false);
                         $meta->setMeta('og_title', $title);
                         $meta->setMeta('og_desc', $desc);
                         $meta->setMeta('og_image', (($image_url !== false) ? trim(esc_url(urldecode($image_url))) : ''));
@@ -476,7 +481,8 @@ class B2S_Loader {
                         } else {
                             $desc = str_replace("\r\n", ' ', substr(sanitize_textarea_field(strip_shortcodes($_POST['content'])), 0, 160));
                         }
-                        $image_url = wp_get_attachment_url(get_post_thumbnail_id((int) $_POST['post_ID']));
+                        $images_urls = $hook_filter->get_wp_post_image((int) $_POST['post_ID'], true, ((isset($_POST['content']) && !empty($_POST['content'])) ? trim($_POST['content']) : ''));
+                        $image_url = ((!empty($images_urls) && isset(array_values($images_urls)[0][0])) ? array_values($images_urls)[0][0] : false);
                         $meta->setMeta('card_title', $title);
                         $meta->setMeta('card_desc', $desc);
                         $meta->setMeta('card_image', (($image_url !== false) ? trim(esc_url(urldecode($image_url))) : ''));
@@ -536,7 +542,7 @@ class B2S_Loader {
                                             $sched_date = $current_user_date;
                                             $sched_date_utc = date('Y-m-d H:i:s', strtotime("-30 seconds", strtotime($current_utc_date)));
                                             $myTimeSettings = false;
-                                            
+
                                             //allow for User Post Date (Schedule)
                                             if (!empty($post_date) && $current_user_date <= $post_date) {
                                                 $sched_type = 2;
@@ -556,19 +562,17 @@ class B2S_Loader {
                                             }
 
                                             delete_option('B2S_PLUGIN_POST_CONTENT_' . (int) $_POST['post_ID']);
-                                            $image_url = wp_get_attachment_url(get_post_thumbnail_id((int) $_POST['post_ID']));
-                                            $hook_filter = new B2S_Hook_Filter();
                                             $keywords = $hook_filter->get_wp_post_hashtag((int) $_POST['post_ID'], get_post_type((int) $_POST['post_ID']));
                                             $url = get_permalink($_POST['post_ID']);
                                             $title = isset($_POST['post_title']) ? B2S_Util::getTitleByLanguage(strip_tags($_POST['post_title']), strtolower($b2sPostLang)) : '';
                                             $content = (isset($_POST['content']) && !empty($_POST['content'])) ? trim($_POST['content']) : '';
                                             $excerpt = (isset($_POST['excerpt']) && !empty($_POST['excerpt'])) ? trim($_POST['excerpt']) : get_the_excerpt((int) $_POST['post_ID']);
+                                            $images_urls = $hook_filter->get_wp_post_image((int) $_POST['post_ID'], true, $content);
+                                            $image_url = ((!empty($images_urls) && isset(array_values($images_urls)[0][0])) ? array_values($images_urls)[0][0] : false);
 
                                             $options = new B2S_Options((int) $_POST['user_ID']);
                                             $optionPostFormat = $options->_getOption('post_template');
-                                            $optionUserHashTag = $options->_getOption('user_allow_hashtag');
-                                            $allowHashTag = ($optionUserHashTag === false || $optionUserHashTag == 1) ? true : false;
-
+                                           
                                             $defaultPostData = array('default_titel' => $title,
                                                 'image_url' => ($image_url !== false) ? trim(urldecode($image_url)) : '',
                                                 'lang' => trim(strtolower(substr(B2S_LANGUAGE, 0, 2))),
@@ -577,7 +581,7 @@ class B2S_Loader {
 
                                             $defaultBlogPostData = array('post_id' => (int) $_POST['post_ID'], 'blog_user_id' => (int) $_POST['user_ID'], 'user_timezone' => $user_timezone, 'sched_type' => $sched_type, 'sched_date' => $sched_date, 'sched_date_utc' => $sched_date_utc);
 
-                                            $autoShare = new B2S_AutoPost((int) $_POST['post_ID'], $defaultBlogPostData, $current_user_date, $myTimeSettings, $title, $content, $excerpt, $url, $image_url, $keywords, $b2sPostLang, $optionPostFormat, $allowHashTag);
+                                            $autoShare = new B2S_AutoPost((int) $_POST['post_ID'], $defaultBlogPostData, $current_user_date, $myTimeSettings, $title, $content, $excerpt, $url, $image_url, $keywords, $b2sPostLang, $optionPostFormat);
                                             define('B2S_SAVE_META_BOX_AUTO_SHARE', (int) $_POST['post_ID']);
                                             if (isset($_POST['b2s-user-last-selected-profile-id']) && (int) $_POST['b2s-user-last-selected-profile-id'] != (int) $_POST['b2s-post-meta-box-profil-dropdown'] && (int) $_POST['b2s-post-meta-box-profil-dropdown'] != 0) {
                                                 update_option('B2S_PLUGIN_SAVE_META_BOX_AUTO_SHARE_PROFILE_USER_' . (int) $_POST['user_ID'], (int) $_POST['b2s-post-meta-box-profil-dropdown'], false);
@@ -617,57 +621,62 @@ class B2S_Loader {
                                                 }
                                                 if (isset($value->networkAuthId) && (int) $value->networkAuthId > 0 && isset($value->networkId) && (int) $value->networkId > 0 && isset($value->networkType)) {
                                                     //TOS Twitter 032018 - none multiple Accounts - User select once
-                                                        if ((int) $value->networkId == 2) {
-                                                            if((int) $selectedTwitterProfile > 0 && (int) $selectedTwitterProfile == (int) $value->networkAuthId) {
-                                                                $initialTwitterPost = true;
-                                                            } else {
-                                                                array_push($otherTwitterProfiles, (int) $value->networkAuthId);
-                                                                continue;
-                                                            }
-                                                            //TOS Crossposting ignore
-                                                        }
-                                                        //Filter: TOS Crossposting ignore
-                                                        if (isset($tosCrossPosting[$value->networkId][$value->networkType])) {
+                                                    if ((int) $value->networkId == 2) {
+                                                        if ((int) $selectedTwitterProfile > 0 && (int) $selectedTwitterProfile == (int) $value->networkAuthId) {
+                                                            $initialTwitterPost = true;
+                                                        } else {
+                                                            array_push($otherTwitterProfiles, (int) $value->networkAuthId);
                                                             continue;
                                                         }
-                                                        $res = $autoShare->prepareShareData($value->networkAuthId, $value->networkId, $value->networkType);
-                                                        if ($res !== false && is_array($res)) {
-                                                            $ship = true;
-                                                            $res = array_merge($res, $defaultPostData);
-                                                            $shareApprove = (isset($value->instant_sharing) && (int) $value->instant_sharing == 1) ? 1 : 0;
-                                                            $insert = $autoShare->saveShareData($res, $value->networkId, $value->networkType, $value->networkAuthId, $shareApprove, strip_tags($value->networkUserName));
-                                                            
-                                                            if($initialTwitterPost && (int) $insert > 0) {
-                                                                $initialTwitterPostId = $insert;
-                                                            }
-                                                            
-                                                            //Start - Change/Set MetaTags
-                                                            //TODO Check Enable Feature
-                                                            if ((int) $value->networkId == 1 && $metaOg == false && (int) $_POST['post_ID'] > 0 && isset($res['post_format']) && (int) $res['post_format'] == 0) {  //LinkPost
-                                                                $metaOg = true;
-                                                                $meta = B2S_Meta::getInstance();
-                                                                $meta->getMeta((int) $_POST['post_ID']);
-                                                                if (isset($res['image_url']) && !empty($res['image_url'])) {
-                                                                    $meta->setMeta('og_image', trim(esc_url($res['image_url'])));
-                                                                    $meta->updateMeta((int) $_POST['post_ID']);
-                                                                }
-                                                            }
-                                                            if ((int) $value->networkId == 2 && $metaCard == false && (int) $_POST['post_ID'] > 0 && isset($res['post_format']) && (int) $res['post_format'] == 0) {  //LinkPost
-                                                                $metaCard = true;
-                                                                $meta = B2S_Meta::getInstance();
-                                                                $meta->getMeta((int) $_POST['post_ID']);
-                                                                if (isset($res['image_url']) && !empty($res['image_url'])) {
-                                                                    $meta->setMeta('card_image', trim(esc_url($res['image_url'])));
-                                                                    $meta->updateMeta((int) $_POST['post_ID']);
-                                                                }
-                                                            }
-                                                            //END MetaTags
+                                                        //TOS Crossposting ignore
+                                                    }
+                                                    //Filter: TOS Crossposting ignore
+                                                    if (isset($tosCrossPosting[$value->networkId][$value->networkType])) {
+                                                        continue;
+                                                    }
+                                                    $res = $autoShare->prepareShareData($value->networkAuthId, $value->networkId, $value->networkType);
+                                                    if ($res !== false && is_array($res)) {
+                                                        $ship = true;
+                                                        $res = array_merge($res, $defaultPostData);
+                                                        if ((int) $value->networkId == 12 && isset($optionPostFormat[12][0]['addLink']) && $optionPostFormat[12][0]['addLink'] === false) {
+                                                            $res['url'] = '';
                                                         }
-                                                    
+                                                        if ((int) $value->networkId == 1 && isset($optionPostFormat[1][$value->networkType]['format']) && $optionPostFormat[1][$value->networkType]['format'] == 1 && isset($optionPostFormat[1][$value->networkType]['addLink']) && $optionPostFormat[1][$value->networkType]['addLink'] === false) {
+                                                            $res['url'] = '';
+                                                        }
+                                                        $shareApprove = (isset($value->instant_sharing) && (int) $value->instant_sharing == 1) ? 1 : 0;
+                                                        $insert = $autoShare->saveShareData($res, $value->networkId, $value->networkType, $value->networkAuthId, $shareApprove, strip_tags($value->networkUserName));
+
+                                                        if ($initialTwitterPost && (int) $insert > 0) {
+                                                            $initialTwitterPostId = $insert;
+                                                        }
+
+                                                        //Start - Change/Set MetaTags
+                                                        //TODO Check Enable Feature
+                                                        if ((int) $value->networkId == 1 && $metaOg == false && (int) $_POST['post_ID'] > 0 && isset($res['post_format']) && (int) $res['post_format'] == 0) {  //LinkPost
+                                                            $metaOg = true;
+                                                            $meta = B2S_Meta::getInstance();
+                                                            $meta->getMeta((int) $_POST['post_ID']);
+                                                            if (isset($res['image_url']) && !empty($res['image_url'])) {
+                                                                $meta->setMeta('og_image', trim(esc_url($res['image_url'])));
+                                                                $meta->updateMeta((int) $_POST['post_ID']);
+                                                            }
+                                                        }
+                                                        if ((int) $value->networkId == 2 && $metaCard == false && (int) $_POST['post_ID'] > 0 && isset($res['post_format']) && (int) $res['post_format'] == 0) {  //LinkPost
+                                                            $metaCard = true;
+                                                            $meta = B2S_Meta::getInstance();
+                                                            $meta->getMeta((int) $_POST['post_ID']);
+                                                            if (isset($res['image_url']) && !empty($res['image_url'])) {
+                                                                $meta->setMeta('card_image', trim(esc_url($res['image_url'])));
+                                                                $meta->updateMeta((int) $_POST['post_ID']);
+                                                            }
+                                                        }
+                                                        //END MetaTags
+                                                    }
                                                 }
                                             }
                                             //Reweet Twitter
-                                            if(!empty($otherTwitterProfiles) && (int) $initialTwitterPostId > 0 && (int) $_POST['post_ID'] > 0) {
+                                            if (!empty($otherTwitterProfiles) && (int) $initialTwitterPostId > 0 && (int) $_POST['post_ID'] > 0) {
                                                 global $wpdb;
                                                 $updateIntTwitter = $wpdb->prepare("UPDATE {$wpdb->prefix}b2s_posts SET post_for_relay = 1 WHERE id = %d", (int) $initialTwitterPostId);
                                                 $wpdb->get_results($updateIntTwitter);
@@ -676,8 +685,8 @@ class B2S_Loader {
                                                 foreach ($otherTwitterProfiles as $key => $value) {
                                                     $getNetworkDetails = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}b2s_posts_network_details WHERE network_auth_id = %d", (int) $value);
                                                     $networkDetails = $wpdb->get_results($getNetworkDetails);
-                                                    if(isset($networkDetails[0]->id) && $networkDetails[0]->id > 0) {
-                                                        $wpdb->insert($wpdb->prefix.'b2s_posts', array(
+                                                    if (isset($networkDetails[0]->id) && $networkDetails[0]->id > 0) {
+                                                        $wpdb->insert($wpdb->prefix . 'b2s_posts', array(
                                                             'post_id' => (int) $_POST['post_ID'],
                                                             'blog_user_id' => B2S_PLUGIN_BLOG_USER_ID,
                                                             'user_timezone' => $user_timezone,
@@ -1325,6 +1334,10 @@ class B2S_Loader {
         if (B2S_Tools::showNotice() == false) {
             wp_enqueue_script('B2SVALIDATEJS');
             wp_enqueue_style('B2SPOSTDRAFTCSS');
+            wp_enqueue_style('B2SDATEPICKERCSS');
+            wp_enqueue_script('B2SDATEPICKERJS');
+            wp_enqueue_script('B2SDATEPICKERDEJS');
+            wp_enqueue_script('B2SDATEPICKERENJS');
             wp_enqueue_script('B2SPOSTJS');
             require_once( B2S_PLUGIN_DIR . 'views/b2s/post.draft.php');
         } else {

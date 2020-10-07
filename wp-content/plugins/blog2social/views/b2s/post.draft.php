@@ -72,7 +72,7 @@ require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Filter.php');
 <input type="hidden" id="b2sPostId" value="">
 
 
-<div class="modal fade b2s-delete-draft-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-delete-draft-modal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade b2s-delete-draft-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-delete-draft-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

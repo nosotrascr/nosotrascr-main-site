@@ -39,7 +39,11 @@ class B2S_Ship_Portale {
                     if($portal->id == 6) {
                         $html .= '<a href="#" class="btn btn-primary btn-sm b2s-network-list-add-btn" data-auth-method="client">+ ' . esc_html__('Profile', 'blog2social') . '</a>';
                     } else {
-                        $html .= ($portal->id != 18 || (B2S_PLUGIN_USER_VERSION >= 2 && $portal->id == 18)) ? ('<a href="#" onclick="wop(\'' . $b2sAuthUrl . '&choose=profile\', \'Blog2Social Network\'); return false;" class="btn btn-primary btn-sm b2s-network-list-add-btn">+ ' . esc_html($name) . '</a>') : '<button type="button" class="btn btn-primary btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">+ ' . esc_html__('Profile', 'blog2social') . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</a></button>';
+                        if($portal->id == 24 && B2S_PLUGIN_USER_VERSION < 3) {
+                            $html .= '<button type="button" class="btn btn-primary btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sBusinessFeatureModalBtn" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">+ ' . esc_html__('Profile', 'blog2social') . ' <span class="label label-success">' . esc_html__("BUSINESS", "blog2social") . '</a></button>';
+                        } else {
+                            $html .= ($portal->id != 18 || (B2S_PLUGIN_USER_VERSION >= 2 && $portal->id == 18)) ? ('<a href="#" onclick="wop(\'' . $b2sAuthUrl . '&choose=profile\', \'Blog2Social Network\'); return false;" class="btn btn-primary btn-sm b2s-network-list-add-btn">+ ' . esc_html($name) . '</a>') : '<button type="button" class="btn btn-primary btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">+ ' . esc_html__('Profile', 'blog2social') . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</a></button>';
+                        }
                     }
                 }
                 $html .= '</li>';

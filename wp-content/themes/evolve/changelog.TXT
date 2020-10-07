@@ -1,5 +1,33 @@
 === Changelog ===
 
+Version  4.3.1
+Date:       4/10/20
+
+- Language files fixed
+- Solved a compatibility issue with plugins for post likes
+- Corrected the capability of Twitter sharing
+- Woocommerce templates updated
+- Some other bug fixes and compatibility improvements
+
+
+Version  4.3.0
+Date:       13/08/20
+
+- Hotfixes
+
+
+Version  4.2.9
+Date:       12/08/20
+
+- Rolled back the requirement for PHP 7.4
+
+Version  4.2.8
+Date:       12/08/20
+
+- Ability to add a Youtube video to Custom Content on the home page added.
+- Some minor bug fixes.
+- Updated Kirki for compatibility with Wordpress 5.5
+
 Version  4.2.7
 Date:       04/06/20
 

@@ -1,7 +1,7 @@
 /* ==========================================================
- * edit.js
+ * settings.js
  * ==========================================================
- * Copyright 2018 Awesome Motive.
+ * Copyright 2020 Awesome Motive.
  * https://awesomemotive.com
  * ========================================================== */
 jQuery(document).ready(function ($) {
@@ -31,54 +31,34 @@ jQuery(document).ready(function ($) {
 	omapiFindTooltips();
 
 	// Add "Connect to OptinMonster" functionality
-	omapiHandleApiKeyConnect();
+	omapiHandleApiKeyButtons();
+
+	omapiInitInstallButtons();
+	omapiRemoveQueryVars();
 
 	/**
 	 * Add the listeners necessary for the connect to OptinMonster button
 	 */
-	function omapiHandleApiKeyConnect() {
-		function updateForm(val, $btn) {
-			var field = document.getElementById('omapi-field-apikey');
-			field.value = val;
-
-			// Start spinner.
-			$('.om-api-key-spinner').remove();
-			$btn.after('<div class="om-api-key-spinner spinner is-active" style="float: none;margin-top: 13px;"></div>');
-
-			HTMLFormElement.prototype.submit.call(field.form)
-		}
-
-		$('#omapiAuthorizeButton').click(function (e) {
-			e.preventDefault();
-			var w = window.open(OMAPI.app_url + 'wordpress/connect/', '_blank', 'location=no,width=500,height=730,scrollbars=0');
-			w.focus();
-		});
-
-		window.addEventListener('message', function(msg) {
-			if (msg.origin.replace(/\/$/, '') !== OMAPI.app_url.replace(/\/$/, '')) {
-				return;
-			}
-
-			if (!msg.data || 'string' !== typeof msg.data) {
-				console.error('Messages from "' + OMAPI.app_url + '" must contain an api key string.');
-				return;
-			}
-
-			updateForm(msg.data, $('#omapiAuthorizeButton'));
-		});
+	function omapiHandleApiKeyButtons() {
 
 		// Also initialize the "Click Here to enter an API Key" link
 		$('#omapiShowApiKey').click(function (e) {
 			e.preventDefault();
 			$('#omapi-form-api .omapi-hidden').removeClass('omapi-hidden');
 			$('#omapi-field-apikey').focus().select();
+		});
 
+		$('#omapiShowApiKeys').click(function (e) {
+			e.preventDefault();
+			$('#omapi-form-woocommerce .omapi-hidden').removeClass('omapi-hidden');
+			$('.manually-connect-wc').hide();
+			$('#omapi-field-consumer_key').focus().select();
 		});
 
 		// Add the listener for disconnecting the API Key.
 		$('#omapiDisconnectButton').click(function (e) {
 			e.preventDefault();
-			updateForm('', $(this));
+			OMAPI.updateForm('', $(this));
 		});
 	}
 
@@ -102,7 +82,7 @@ jQuery(document).ready(function ($) {
 	 */
 	function omapiResetSettings() {
 		$(document).on('click', 'input[name=reset]', function (e) {
-			return confirm(omapi.confirm);
+			return confirm(OMAPI.confirm);
 		});
 	}
 
@@ -117,7 +97,7 @@ jQuery(document).ready(function ($) {
 		var $mpPhone   = $('#omapi-field-mailpoet_use_phone');
 
 		var toggleAutoSetting = function() {
-			var method = $automatic.is(':checked') ? 'show' : 'hide';
+			var method = $automatic.is(':checked') ? 'hide' : 'show';
 			$('.omapi-field-box-automatic_shortcode')[method]();
 		};
 
@@ -160,7 +140,7 @@ jQuery(document).ready(function ($) {
 				initSelection: function (el, cb) {
 					var ids = $(el).val();
 					ids = ids.split(',');
-					items = data.filter(function(d) {
+					var items = data.filter(function(d) {
 						return ids.indexOf(d.id) > -1;
 					});
 					cb(items);
@@ -175,44 +155,38 @@ jQuery(document).ready(function ($) {
 	 * @since 1.1.5
 	 */
 	function omapiBuildSupportPDF() {
-		var selector = $('#js--omapi-support-pdf');
+		var $selector = $('#js--omapi-support-pdf');
 
-		selector.click(function (e) {
-			e.preventDefault();
-
+		const generateDoc = data => {
 			var doc = new jsPDF('p', 'mm', 'letter');
-
-			var supportData = omapi.supportData;
-			var serverData = supportData.server;
-			var optinData = supportData.optins;
 
 			// Doc Title
 			doc.text(10, 10, 'OptinMonster Support Assistance');
 
 			// Server Info
-			i = 10;
-			$.each(serverData, function (key, value) {
+			var i = 10;
+			$.each(data.server, function (key, value) {
 				i += 10;
 				doc.text(10, i, key + ' : ' + value);
 			});
 
 			// Optin Info
-			$.each(optinData, function (key, value) {
+			$.each(data.campaigns, function (key, value) {
 
-				//Move down 10mm
-				i = 10;
+				// Move down 10mm
+				var i = 10;
 				// Add a new page
 				doc.addPage();
-				//Title as slug
+				// Title as slug
 				doc.text(10, 10, key);
 				$.each(value, function (key, value) {
 
 					// Keep from outputing ugly Object text
-					output = ($.isPlainObject(value) ? '' : value);
+					var output = ( $.isPlainObject(value) ? '' : value );
 					// new line
 					i += 10;
 					doc.text(10, i, key + ' : ' + output);
-					//Output any object data from the value
+					// Output any object data from the value
 					if ($.isPlainObject(value)) {
 						$.each(value, function (key, value) {
 							i += 10;
@@ -225,6 +199,24 @@ jQuery(document).ready(function ($) {
 
 			// Save the PDF
 			doc.save('OMSupportHelp.pdf');
+		}
+
+		$selector.click(function (e) {
+			e.preventDefault();
+
+			// Start spinner.
+			$('.om-api-key-spinner').remove();
+			$selector.after('<div class="om-api-key-spinner spinner is-active" style="float: none;margin-top:7px;"></div>');
+
+			$.ajax( {
+				url: OMAPI.root + 'omapp/v1/support?format=pdf',
+				beforeSend: xhr => xhr.setRequestHeader( 'X-WP-Nonce', OMAPI.nonce ),
+				dataType: 'json',
+				data: { format : 'pdf' },
+				success: generateDoc,
+			} )
+			.done( () => $('.om-api-key-spinner').remove() )
+			.fail( ( jqXHR, textStatus ) => console.error({ jqXHR, textStatus }) );
 
 		});
 	}
@@ -296,6 +288,90 @@ jQuery(document).ready(function ($) {
 
 	function omapiFindTooltips() {
 		$('[data-toggle="tooltip"]').tooltip()
+	}
+
+	function omapiInitInstallButtons() {
+		$('.install-plugin-form').submit((e) => {
+			e.preventDefault();
+			let fields          = $(e.currentTarget).serializeArray();
+			let nonce           = fields.find((field) => 'nonce' === field.name).value;
+			let plugin          = fields.find((field) => 'plugin' === field.name).value;
+			let pluginClassName = plugin.replace('.', '').replace('/', '');
+			let installAction   = fields.find((field) => 'action' === field.name).value;
+			let url             = fields.find((field) => 'url' === field.name).value;
+			let el              = $(`.omapi-plugin-recommendation--${pluginClassName}`);
+
+			if (! el.length) {
+				el = $('html')
+			}
+
+			$('.button-install', el).html('Installing...');
+			$('.button-activate', el).html('Activating...');
+			$('#om-plugin-alerts').hide();
+
+			$.post(ajaxurl, {
+				action: 'om_plugin_install',
+				'optin-monster-ajax-route': true,
+				nonce,
+				plugin,
+				installAction,
+				url
+			}, function (data) {
+				if (data.success) {
+					window.location.reload();
+				} else {
+					$('.button-install', el).html('Install Plugin');
+					$('.button-activate', el).html('Activate Plugin');
+
+					$('#om-plugin-alerts').show().html($( '<p/>' ).html( data.data || 'Something went wrong!' ));
+				}
+			});
+		})
+	}
+
+	/**
+	 * Helper to remove the OM query vars.
+	 *
+	 * @since  1.9.9
+	 *
+	 * @return {void}
+	 */
+	function omapiRemoveQueryVars() {
+		if ( window.history.replaceState && window.location.search ) {
+			function removeParam(parameter, url) {
+				var urlparts = url.split('?');
+				if ( urlparts.length < 2) {
+					return url;
+				}
+
+				var prefix = encodeURIComponent(parameter) + '=';
+				var pars   = urlparts[1].split(/[&;]/g);
+				for ( var i = pars.length; i-- > 0;) {
+					if (pars[i].lastIndexOf(prefix, 0) !== -1) {
+						pars.splice(i, 1);
+					}
+				}
+
+				return urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : '');
+			}
+
+			const toRemove = [
+				'optin_monster_api_action_done',
+				'optin_monster_api_action_type',
+				'optin_monster_api_action_id',
+			];
+			let url = document.location.href;
+
+			window.location.search.split('&').forEach( bit => {
+				toRemove.forEach( key => {
+					if ( 0 === bit.indexOf( key ) ) {
+						url = removeParam( bit.split('=')[0], url );
+					}
+				} );
+			});
+
+			window.history.replaceState( null, null, url );
+		}
 	}
 
 });

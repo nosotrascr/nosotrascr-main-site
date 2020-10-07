@@ -67,8 +67,8 @@ if ( ! class_exists( 'Sinatra_Customizer_Page_Header' ) ) :
 					'type'     => 'sinatra-alignment',
 					'label'    => esc_html__( 'Title Alignment', 'sinatra' ),
 					'section'  => 'sinatra_section_page_header',
-					'choices' => 'horizontal',
-					'icons'   => array(
+					'choices'  => 'horizontal',
+					'icons'    => array(
 						'left'   => 'dashicons dashicons-editor-alignleft',
 						'center' => 'dashicons dashicons-editor-aligncenter',
 						'right'  => 'dashicons dashicons-editor-alignright',
@@ -83,7 +83,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Page_Header' ) ) :
 				),
 			);
 
-			// Spacing
+			// Spacing.
 			$options['setting']['sinatra_page_header_spacing'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_responsive',

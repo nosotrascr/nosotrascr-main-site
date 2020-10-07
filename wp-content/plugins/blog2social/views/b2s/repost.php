@@ -74,7 +74,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
     var b2s_is_calendar = true;
 </script>
 
-<div class="modal fade b2s-delete-sched-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-delete-sched-modal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade b2s-delete-sched-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-delete-sched-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -96,7 +96,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
     </div>
 </div>
 
-<div id="b2s-post-ship-item-post-format-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-ship-item-post-format-modal" aria-hidden="true" data-backdrop="false" style="z-index: 1070">
+<div id="b2s-post-ship-item-post-format-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-ship-item-post-format-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -141,7 +141,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
     </div>
 </div>
 
-<div id="b2s-network-select-image" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" style="z-index: 1070">
+<div id="b2s-network-select-image" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" style="display:none;z-index: 1070">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -159,7 +159,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
     </div>
 </div>
 
-<div class="modal fade" id="b2sTwitterInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sTwitterInfoModal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sTwitterInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sTwitterInfoModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -173,7 +173,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
     </div>
 </div>
 
-<div id="b2sInfoNetworkModal" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false">
+<div id="b2sInfoNetworkModal" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

@@ -31,7 +31,7 @@ if ( ! function_exists( 'sinatra_breadcrumb_trail' ) ) {
 		if ( ! is_array( $wpseo_option ) ) {
 			unset( $wpseo_option );
 			$wpseo_option = array(
-				'breadcrumbs-enable' => $breadcrumb_enable 
+				'breadcrumbs-enable' => $breadcrumb_enable,
 			);
 		}
 
@@ -96,7 +96,7 @@ if ( ! function_exists( 'sinatra_breadcrumb_trail' ) ) {
 			$front_page     = get_option( 'page_on_front' );
 
 			if ( $page_for_posts && $front_page ) {
-				$posts_page_url = sprintf( '<a href="%s" rel="home">%s</a>', esc_url( get_permalink( $page_for_posts ) ), __( 'Blog', 'sinatra' ) );
+				$posts_page_url = sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $page_for_posts ) ), esc_html( get_the_title( $page_for_posts ) ) );
 
 				array_splice( $items, 1, 0, $posts_page_url );
 			}

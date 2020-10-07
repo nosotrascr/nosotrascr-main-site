@@ -140,7 +140,7 @@ function sinatra_option( $id, $prefix = 'sinatra_', $type = 'theme_mod' ) {
 
 /**
  * Get default for option.
- * 
+ *
  * @since 1.1.0
  *
  * @param  string $id Option ID.
@@ -239,7 +239,7 @@ function sinatra_is_header_transparent( $post_id = 0 ) {
 
 		$_meta = get_post_meta( $post_id, 'sinatra_transparent_header', true );
 
-		if ( 'enable' ===  $_meta ) {
+		if ( 'enable' === $_meta ) {
 			$enabled = true;
 		} elseif ( 'disable' === $_meta ) {
 			$enabled = false;
@@ -665,7 +665,7 @@ if ( ! function_exists( 'sinatra_get_prop' ) ) :
 	 * Provide a default value if you want to return a specific value if the property is not set.
 	 *
 	 * @since 1.0.0
-	 * 
+	 *
 	 * @param array  $array   Array from which the property's value should be retrieved.
 	 * @param string $prop    Name of the property to be retrieved.
 	 * @param string $default Optional. Value that should be returned if the property is not set or empty. Defaults to null.
@@ -867,7 +867,7 @@ if ( ! function_exists( 'sinatra_enable_page_builder_compatibility' ) ) :
 	 * Allow filter to enable/disable page builder compatibility.
 	 *
 	 * @since 1.0.0
-	 * 
+	 *
 	 * @return  bool True - If the page builder compatibility is enabled. False - IF the page builder compatibility is disabled.
 	 */
 	function sinatra_enable_page_builder_compatibility() {
@@ -928,7 +928,7 @@ function sinatra_get_background_color() {
  * Check if a section is disabled.
  *
  * @since 1.1.0
- * 
+ *
  * @param  array $disabled_on Array of pages where the section is disabled.
  * @param  int   $post_id     Current page ID.
  * @return bool               Section is displayed.
@@ -937,15 +937,15 @@ function sinatra_is_section_disabled( $disabled_on = array(), $post_id = 0 ) {
 
 	$disabled = false;
 
-	if ( is_front_page() && in_array( 'home', $disabled_on ) ) {
+	if ( is_front_page() && in_array( 'home', $disabled_on, true ) ) {
 		$disabled = true;
-	} elseif ( is_home() && in_array( 'posts_page', $disabled_on ) ) {
+	} elseif ( is_home() && in_array( 'posts_page', $disabled_on, true ) ) {
 		$disabled = true;
-	} elseif ( is_search() && in_array( 'search', $disabled_on ) ) {
+	} elseif ( is_search() && in_array( 'search', $disabled_on, true ) ) {
 		$disabled = true;
-	} elseif( is_archive() && in_array( 'archive', $disabled_on ) ) {
+	} elseif ( is_archive() && in_array( 'archive', $disabled_on, true ) ) {
 		$disabled = true;
-	} elseif ( is_404() && in_array( '404', $disabled_on ) ) {
+	} elseif ( is_404() && in_array( '404', $disabled_on, true ) ) {
 		$disabled = true;
 	} elseif ( is_singular() || ! empty( $post_id ) ) {
 
@@ -973,19 +973,19 @@ function sinatra_get_image_sizes() {
 	$default_image_sizes = get_intermediate_image_sizes();
 
 	foreach ( $default_image_sizes as $size ) {
-	    $image_sizes[ $size ][ 'width' ]  = intval( get_option( "{$size}_size_w" ) );
-	    $image_sizes[ $size ][ 'height' ] = intval( get_option( "{$size}_size_h" ) );
-	    $image_sizes[ $size ][ 'crop' ]   = get_option( "{$size}_crop" ) ? get_option( "{$size}_crop" ) : false;
+		$image_sizes[ $size ]['width']  = intval( get_option( "{$size}_size_w" ) );
+		$image_sizes[ $size ]['height'] = intval( get_option( "{$size}_size_h" ) );
+		$image_sizes[ $size ]['crop']   = get_option( "{$size}_crop" ) ? get_option( "{$size}_crop" ) : false;
 	}
 
 	if ( isset( $_wp_additional_image_sizes ) && count( $_wp_additional_image_sizes ) ) {
-	    $image_sizes = array_merge( $image_sizes, $_wp_additional_image_sizes );
+		$image_sizes = array_merge( $image_sizes, $_wp_additional_image_sizes );
 	}
 
-	$image_sizes[ 'full' ] = array(
+	$image_sizes['full'] = array(
 		'width'  => '',
 		'height' => '',
-		'crop'   => ''
+		'crop'   => '',
 	);
 
 	return $image_sizes;

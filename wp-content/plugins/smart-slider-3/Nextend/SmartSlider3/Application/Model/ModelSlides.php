@@ -145,6 +145,98 @@ class ModelSlides extends AbstractModelTable {
         return $slideID;
     }
 
+    public function createSimpleEditAdd($postData, $sliderId) {
+
+        $data = new Data($postData);
+
+        $title       = $data->get('title', '');
+        $description = $data->get('description', '');
+
+        $slideBuilder = new BuilderComponentSlide(array(
+            'title'                  => $title,
+            'description'            => $description,
+            'thumbnailType'          => $data->get('thumbnailType', ''),
+            'thumbnail'              => $data->get('backgroundImage', ''),
+            'background-type'        => 'image',
+            'backgroundImage'        => $data->get('backgroundImage', ''),
+            'backgroundImageOpacity' => 100,
+            'backgroundColor'        => '000000FF',
+            'href'                   => $data->get('href', ''),
+            'href-target'            => $data->get('href-target', '')
+        ));
+
+        $slideBuilder->content->set(array(
+            'desktopportraitpadding' => '10|*|100|*|10|*|100|*|px+',
+            'mobileportraitpadding'  => '10|*|10|*|10|*|10|*|px+'
+        ));
+
+        $videoUrl = $data->get('video', '');
+
+        if (!empty($videoUrl)) {
+            preg_match('/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/', $videoUrl, $matches);
+
+            if (!empty($matches)) {
+                /**
+                 * YouTube
+                 */
+                $thumbnail = 'https://i.ytimg.com/vi/' . $matches[2] . '/hqdefault.jpg';
+                $slideBuilder->set('thumbnail', $thumbnail);
+
+
+                $youtubeLayer = new BuilderComponentLayer($slideBuilder->content, 'youtube');
+                $youtubeLayer->item->set(array(
+                    'code'       => $matches[2],
+                    'youtubeurl' => $videoUrl,
+                    'image'      => $thumbnail
+                ));
+            } else {
+
+                preg_match('/https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/', $videoUrl, $matches);
+                if (!empty($matches)) {
+                    /**
+                     * Vimeo
+                     */
+
+                    $vimeoLayer = new BuilderComponentLayer($slideBuilder->content, 'vimeo');
+                    $vimeoLayer->item->set(array(
+                        'vimeourl' => $videoUrl
+                    ));
+                } else {
+                    /**
+                     * MP4
+                     */
+
+                    $mp4Layer = new BuilderComponentLayer($slideBuilder->content, 'video');
+                    $mp4Layer->item->set(array(
+                        'video_mp4' => $videoUrl
+                    ));
+                }
+            }
+        }
+
+        /*
+        if ($title) {
+            $heading = new BuilderComponentLayer($slideBuilder->content, 'heading');
+            $heading->item->set(array(
+                'heading' => '{name/slide}'
+            ));
+        }
+        */
+
+        $row = $this->convertSlideDataToDatabaseRow($slideBuilder->getData(), $sliderId);
+
+        $slideID = $this->create($row['slider'], $row['title'], $row['slide'], $row['thumbnail'], $row['params'], array(
+            'description'  => $row['description'],
+            'published'    => $row['published'],
+            'publish_up'   => $row['publish_up'],
+            'publish_down' => $row['publish_down']
+        ));
+
+        $this->markChanged($sliderId);
+
+        return $slideID;
+    }
+
     public function import($row, $sliderId) {
 
         if (!$row['params']->has('version')) {
@@ -168,7 +260,7 @@ class ModelSlides extends AbstractModelTable {
     private function create($sliderID, $title, $layers, $thumbnail, $params = array(), $optional = array()) {
 
         if (!isset($optional['ordering'])) {
-            $optional['ordering'] = $this->getNextOrdering($sliderID) + 1;
+            $optional['ordering'] = $this->getNextOrdering($sliderID);
         }
 
         if (!isset($params['version'])) {
@@ -247,6 +339,15 @@ class ModelSlides extends AbstractModelTable {
         $this->markChanged(Request::$REQUEST->getInt('sliderid'));
 
         return true;
+    }
+
+    public function saveSimple($slideID, $title, $description, $params) {
+
+        $this->table->update(array(
+            'title'       => $title,
+            'description' => $description,
+            'params'      => json_encode($params, JSON_UNESCAPED_SLASHES)
+        ), array('id' => $slideID));
     }
 
     /**
@@ -416,7 +517,7 @@ class ModelSlides extends AbstractModelTable {
                 $id = intval($id);
                 if ($id > 0) {
                     $this->table->update(array(
-                        'ordering' => $i,
+                        'ordering' => $i + 1,
                     ), array(
                         "id"     => $id,
                         "slider" => $sliderid
@@ -583,7 +684,7 @@ class ModelSlides extends AbstractModelTable {
             return $result['ordering'] + 1;
         }
 
-        return 0;
+        return 1;
     }
 
     /**

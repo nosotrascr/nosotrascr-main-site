@@ -98,7 +98,7 @@ if ( ! class_exists( 'Sinatra_DB_Updater' ) ) :
 		}
 
 		/**
-		 * v1.1.0 DB Update
+		 * DB Update v1.1.0
 		 *
 		 * @since  1.1.0
 		 * @return void
