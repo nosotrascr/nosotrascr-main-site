@@ -1,3 +1,5 @@
+@use "../base/breakpoints" as breakpoints;
+
 .wp-block-separator.partial-color-border{
     position: relative;
 	&:after{
@@ -34,6 +36,17 @@
 			left: 50%;
 			-ms-transform: translate(-50%, -50%);
 			transform: translate(-50%, -50%);
+		}
+	}
+
+	.wp-block-video,
+	.podcast {
+		& + p {
+			margin-bottom: 60px;
+
+			@media (min-width: breakpoints.$md-breakpoint) {
+				margin-bottom: 0;
+			}
 		}
 	}
 }
