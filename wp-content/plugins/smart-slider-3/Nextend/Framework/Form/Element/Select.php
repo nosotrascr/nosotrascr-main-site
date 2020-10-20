@@ -33,9 +33,10 @@ class Select extends AbstractFieldHidden {
         ));
 
         $selectAttributes = array(
-            'id'           => $this->fieldID . '_select',
-            'name'         => 'select' . $this->getFieldName(),
-            'autocomplete' => 'off'
+            'id'              => $this->fieldID . '_select',
+            'name'            => 'select' . $this->getFieldName(),
+            'aria-labelledby' => $this->fieldID,
+            'autocomplete'    => 'off'
         );
 
         if (!empty($this->size)) {
@@ -79,7 +80,7 @@ class Select extends AbstractFieldHidden {
      */
     protected function renderOptgroup() {
         $html = '';
-        foreach ($this->optgroup AS $label => $options) {
+        foreach ($this->optgroup as $label => $options) {
             if (is_array($options)) {
                 $html .= "<optgroup label='" . $label . "'>";
                 $html .= $this->renderOptions($options);
@@ -99,7 +100,7 @@ class Select extends AbstractFieldHidden {
      */
     protected function renderOptions($options) {
         $html = '';
-        foreach ($options AS $value => $label) {
+        foreach ($options as $value => $label) {
             $html .= $this->renderOption($value, $label);
         }
 

@@ -126,7 +126,7 @@ class B2S_Tools {
             return 'https://www.blog2social.com/' . (($lang == 'en') ? 'en/terms' : 'de/agb');
         }
         if ($type == 'privacy_policy') {
-            return 'https://www.blog2social.com/' . (($lang == 'en') ? 'privacy-policy' : 'de/datenschutz');
+            return 'https://www.blog2social.com/' . (($lang == 'en') ? 'en/privacy-policy' : 'de/datenschutz');
         }
         if ($type == 'userTimeSettings') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=5&id=32&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=5&id=43&artlang=de';
@@ -233,7 +233,10 @@ class B2S_Tools {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=3&id=165&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=3&id=162&artlang=de';
         }
         if($type == 'fb_page_auth'){
-            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=2&id=124&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=2&id=124&artlang=de&highlight=Facebook+Seite';
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=2&id=124&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=2&id=124&artlang=de';
+        }
+        if($type == 'fb_group_auth'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=2&id=82&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=2&id=86&artlang=de';
         }
         if($type == 'network_grouping'){
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=4&id=65&artlang=en&highlight=profile' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=4&id=73&artlang=de&highlight=profil';
@@ -243,6 +246,9 @@ class B2S_Tools {
         }
         if($type == 'community_lostpw'){
             return 'https://community.blog2social.com/lostpw';
+        }
+        if($type == 'auto_post_assign'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=3&id=72&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=3&id=79&artlang=de';
         }
     }
 
@@ -402,6 +408,34 @@ class B2S_Tools {
             return $linkNoCache;
         }
         return $default;
+    }
+    
+    public static function extractKeywords($string){
+        $stopWords = array('i','a','about','an','and','are','as','at','be','by','com','de','en','for','from','how','in','is','it','la','of','on','or','that','the','this','to','was','what','when','where','who','will','with','und','the','www');
+
+        $string = preg_replace('/\s\s+/i', '', $string); // replace whitespace
+        $string = trim($string); // trim the string
+        $string = preg_replace('/[^a-zA-Z0-9 -]/', '', $string); // only take alphanumerical characters, but keep the spaces and dashes too…
+        $string = strtolower($string); // make it lowercase
+
+        preg_match_all('/\b.*?\b/i', $string, $matchWords);
+        $matchWords = $matchWords[0];
+
+        foreach ( $matchWords as $key=>$item ) {
+            if ( $item == '' || in_array(strtolower($item), $stopWords) || strlen($item) <= 3 ) {
+                unset($matchWords[$key]);
+            }
+        }
+        $wordCountArr = array();
+        if ( is_array($matchWords) ) {
+            foreach ( $matchWords as $key => $val ) {
+                $val = strtolower($val);
+                $wordCountArr[] = $val;
+            }
+        }
+        arsort($wordCountArr);
+        $wordCountArr = array_slice($wordCountArr, 0, 10);
+        return $wordCountArr;
     }
     
 }

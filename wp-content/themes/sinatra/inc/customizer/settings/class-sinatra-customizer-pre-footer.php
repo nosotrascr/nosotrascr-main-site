@@ -98,7 +98,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Pre_Footer' ) ) :
 						'hide-tablet'        => esc_html__( 'Hide on Tablet', 'sinatra' ),
 						'hide-mobile-tablet' => esc_html__( 'Hide on Mobile and Tablet', 'sinatra' ),
 					),
-					'required' => array(
+					'required'    => array(
 						array(
 							'control'  => 'sinatra_pre_footer_cta',
 							'value'    => true,

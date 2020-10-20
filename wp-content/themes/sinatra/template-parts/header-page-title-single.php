@@ -9,7 +9,7 @@
 
 ?>
 
-<div <?php sinatra_page_header_classes(); sinatra_page_header_atts(); ?>>
+<div <?php sinatra_page_header_classes(); ?><?php sinatra_page_header_atts(); ?>>
 
 	<?php do_action( 'sinatra_page_header_start' ); ?>
 
@@ -22,7 +22,7 @@
 				if ( sinatra_single_post_displays( 'category' ) ) {
 					get_template_part( 'template-parts/entry/entry', 'category' );
 				}
-				
+
 				if ( sinatra_page_header_has_title() ) {
 					echo '<div class="si-page-header-title">';
 					sinatra_page_header_title();

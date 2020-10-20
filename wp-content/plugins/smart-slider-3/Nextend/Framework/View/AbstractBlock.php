@@ -30,7 +30,7 @@ abstract class AbstractBlock {
 
     protected function renderTemplatePart($templateName) {
 
-        include self::getPath() . '/' . $templateName . '.phtml';
+        include self::getPath() . '/' . $templateName . '.php';
     }
 
     /**

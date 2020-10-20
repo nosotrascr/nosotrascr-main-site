@@ -278,7 +278,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                             ?>
 
                             <!-- B2S-Network -->
-                            <div id="b2s-network-list-modal" class="modal fade" role="dialog" aria-labelledby="b2s-network-list-modal" aria-hidden="true" data-backdrop="false">
+                            <div id="b2s-network-list-modal" class="modal fade" role="dialog" aria-labelledby="b2s-network-list-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -294,7 +294,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                                     </div>
                                 </div>
                             </div>
-                            <div id="b2s-re-share-info" class="modal fade" role="dialog" aria-labelledby="b2s-re-share-info" aria-hidden="true" data-backdrop="false">
+                            <div id="b2s-re-share-info" class="modal fade" role="dialog" aria-labelledby="b2s-re-share-info" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -328,7 +328,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                                     </div>
                                 </div>
                             </div>
-                            <div id="b2s-network-setting-save" class="modal fade" role="dialog" aria-labelledby="b2s-network-setting-save" aria-hidden="true" data-backdrop="false">
+                            <div id="b2s-network-setting-save" class="modal fade" role="dialog" aria-labelledby="b2s-network-setting-save" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -347,7 +347,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                             </div>
 
 
-                            <div id="b2s-network-sched-post-info" class="modal fade" role="dialog" aria-labelledby="b2s-network-sched-post-info" aria-hidden="true" data-backdrop="false">
+                            <div id="b2s-network-sched-post-info" class="modal fade" role="dialog" aria-labelledby="b2s-network-sched-post-info" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -394,7 +394,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                             </div>
 
 
-                            <div id="b2s-sched-post-modal" class="modal fade" role="dialog" aria-labelledby="b2s-sched-post-modal" aria-hidden="true" data-backdrop="false">
+                            <div id="b2s-sched-post-modal" class="modal fade" role="dialog" aria-labelledby="b2s-sched-post-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -440,7 +440,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                             </div>
 
 
-                            <div id="b2s-network-select-image" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false">
+                            <div id="b2s-network-select-image" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -465,7 +465,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                             </div>
 
 
-                            <div class="modal fade b2s-publish-approve-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-publish-approve-modal" aria-hidden="true" data-backdrop="false">
+                            <div class="modal fade b2s-publish-approve-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-publish-approve-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -482,7 +482,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                             </div>
 
 
-                            <div id="b2s-tos-xing-group-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="b2s-tos-xing-group-modal" aria-hidden="true" data-backdrop="false">
+                            <div id="b2s-tos-xing-group-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="b2s-tos-xing-group-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -499,7 +499,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
 
 
 
-                            <div id="b2s-post-ship-item-post-format-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-ship-item-post-format-modal" aria-hidden="true" data-backdrop="false">
+                            <div id="b2s-post-ship-item-post-format-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-ship-item-post-format-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -543,7 +543,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                                 </div>
                             </div>
 
-                            <div id="b2s-save-draft-modal" class="modal fade" role="dialog" aria-labelledby="b2s-save-draft-modal" aria-hidden="true" data-backdrop="false">
+                            <div id="b2s-save-draft-modal" class="modal fade" role="dialog" aria-labelledby="b2s-save-draft-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog modal-md">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -561,7 +561,7 @@ if (isset($_GET['type']) && $_GET['type'] == 'draft' && isset($_GET['postId']) &
                                 </div>
                             </div>
 
-                            <div class="modal fade" id="b2sAuthNetwork6Modal" tabindex="-1" role="dialog" aria-labelledby="b2sAuthNetwork6Modal" aria-hidden="true" data-backdrop="false">
+                            <div class="modal fade" id="b2sAuthNetwork6Modal" tabindex="-1" role="dialog" aria-labelledby="b2sAuthNetwork6Modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">

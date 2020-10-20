@@ -1,6 +1,53 @@
 # Changelog
 All notable changes to the OptinMonster plugin will be documented in this file.
 
+### 1.9.15
+* Fixed a bug that caused issues for non-admin users when the plugin was not yet connected to an OptinMonster account.
+
+### 1.9.14
+* Fixed a bug that occasionally prevented changes in campaigns via the OptinMonster App to not properly sync to the plugin, due to cached responses.
+
+### 1.9.13
+* Fixed a bug that caused campaigns to be incorrectly referenced in the admin dashboard.
+
+### 1.9.12
+* Fixed a bug where the `Access-Control-Allow-Headers` was being improperly reset for REST requests.
+
+### 1.9.11
+* Fixed a bug that caused too many redirects in the admin when clicking on certain plugin settings links.
+* Removed a plugin action link that was not used.
+
+### 1.9.10
+* New Gutenberg block for embedding inline campaigns.
+* Improved syncing of data between the OptinMonster app and the WordPress plugin to help with shortcode parsing, and adding/removing campaigns when going live or pausing. Will also retain previously saved Output Settings when un-pausing a campaign and refreshing.
+* Improvements to a11y across the plugin's admin pages.
+* Updated Constant Contact branding
+* Updates to improve performance on the plugin's admin pages.
+* Minified assets to improve performance on the plugin's admin pages.
+* Increase timeout time for the WooCommerce auto-generate keys request to accomodate for some servers.
+* Clean up admin notices when on the OptinMonster plugin's admin pages.
+* New About Us page.
+* Added filter for auto-enabling new campaigns (true by default).
+* Added filter for changing the API enqueue location from the default footer.
+* Added plugin settings menu links to plugin action links in the Plugins table.
+* Improvements to the Welcome page to allow connecting account directly.
+* Improvements to the account-connection process.
+* Improvements to the Campaigns page.
+* Improvements to the Campaigns' Output Settings pages.
+* Fix bug with mailpoet phone number possibly being set to 0.
+* Fix bug to allow campaigns to show on categories, even when the category is registered to a non-"post" post-type.
+* Fixed potential issues with storing our embed code for multisite installations.
+* Fixed bug where cookie-delete button was not deleting all OptinMonster cookies for given user.
+* Improved WooCommerce connect screen by showing the auto-generate option by default.
+* Removed duplicate WooCommerce categories/tags from the Output Settings.
+* Various other bug fixes, and performance updates.
+* Improved debug output.
+
+### 1.9.9
+* Fix issue where if multiple post tags were selected, popups and other campaigns would only appear on the first tag selected.
+* Fix campaign shortcode suggestion in admin being incorrect.
+* Full security audit to patch any potential issues.
+
 ### 1.9.8
 * Fix compatibility with AMP.
 * Update compatibility with popular caching plugins.

@@ -7,6 +7,8 @@ use Nextend\SmartSlider3\Platform\AbstractSmartSlider3Platform;
 use Nextend\SmartSlider3\Platform\WordPress\Admin\AdminHelper;
 use Nextend\SmartSlider3\Platform\WordPress\Integration\ACF\ACF;
 use Nextend\SmartSlider3\Platform\WordPress\Integration\BeaverBuilder\BeaverBuilder;
+use Nextend\SmartSlider3\Platform\WordPress\Integration\BoldGrid\BoldGrid;
+use Nextend\SmartSlider3\Platform\WordPress\Integration\Brizy\Brizy;
 use Nextend\SmartSlider3\Platform\WordPress\Integration\Divi\Divi;
 use Nextend\SmartSlider3\Platform\WordPress\Integration\Elementor\Elementor;
 use Nextend\SmartSlider3\Platform\WordPress\Integration\Fusion\Fusion;
@@ -18,6 +20,7 @@ use Nextend\SmartSlider3\Platform\WordPress\Integration\OxygenBuilder\OxygenBuil
 use Nextend\SmartSlider3\Platform\WordPress\Integration\TablePress\TablePress;
 use Nextend\SmartSlider3\Platform\WordPress\Integration\Unyson\Unyson;
 use Nextend\SmartSlider3\Platform\WordPress\Integration\VisualComposer1\VisualComposer1;
+use Nextend\SmartSlider3\Platform\WordPress\Integration\VisualComposer2\VisualComposer2;
 use Nextend\SmartSlider3\Platform\WordPress\Integration\WPRocket\WPRocket;
 use Nextend\SmartSlider3\Platform\WordPress\Shortcode\Shortcode;
 use Nextend\SmartSlider3\Platform\WordPress\Widget\WidgetHelper;
@@ -83,6 +86,8 @@ class SmartSlider3PlatformWordPress extends AbstractSmartSlider3Platform {
 
         new VisualComposer1();
 
+        new VisualComposer2();
+
         new Elementor();
 
         new MotoPressCE();
@@ -100,6 +105,10 @@ class SmartSlider3PlatformWordPress extends AbstractSmartSlider3Platform {
         new OxygenBuilder();
 
         new NimbleBuilder();
+
+        new Brizy();
+
+        new BoldGrid();
     }
 
     /**

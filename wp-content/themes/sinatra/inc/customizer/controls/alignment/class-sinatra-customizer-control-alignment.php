@@ -131,7 +131,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Control_Alignment' ) ) :
 				$this->choices = $default_choices;
 			}
 
-			foreach ( $this->choices as $key => $value) {
+			foreach ( $this->choices as $key => $value ) {
 				$this->choices[ $key ] = true === $value ? '' : 'disabled';
 			}
 		}
@@ -187,13 +187,13 @@ if ( ! class_exists( 'Sinatra_Customizer_Control_Alignment' ) ) :
 								<span class="button display-options position"><span class="{{ data.icons['top-left'] }}" aria-hidden="true"></span></span>
 								<span class="screen-reader-text">{{{ data.l10n['top-left'] }}}</span>
 							</label>
-																
+
 							<label class="si-center {{{ data.choices['top']}}}">
 								<input class="screen-reader-text" name="{{ data.id }}-alignment-position" type="radio" value="top" {{{ data.link }}}>
 								<span class="button display-options position"><span class="{{ data.icons['top'] }}" aria-hidden="true"></span></span>
 								<span class="screen-reader-text">{{{ data.l10n['top'] }}}</span>
 							</label>
-							
+
 							<label class="si-right {{{ data.choices['top-right']}}}">
 								<input class="screen-reader-text" name="{{ data.id }}-alignment-position" type="radio" value="top-right" {{{ data.link }}}>
 								<span class="button display-options position"><span class="{{ data.icons['top-right'] }}" aria-hidden="true"></span></span>
@@ -201,7 +201,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Control_Alignment' ) ) :
 							</label>
 						</div>
 					<# } #>
-					
+
 					<# if ( ! data.choices['left'] && ! data.choices['center'] && ! data.choices['right'] ) { #>
 						<div class="button-group si-middle">
 							<label class="si-left {{{ data.choices['left']}}}">
@@ -223,7 +223,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Control_Alignment' ) ) :
 							</label>
 						</div>
 					<# } #>
-						
+
 					<# if ( ! data.choices['bottom-left'] && ! data.choices['bottom'] && ! data.choices['bottom-right'] ) { #>							
 						<div class="button-group si-bottom">
 							<label class="si-left {{{ data.choices['bottom-left']}}}">
@@ -231,7 +231,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Control_Alignment' ) ) :
 								<span class="button display-options position"><span class="{{ data.icons['bottom-left'] }}" aria-hidden="true"></span></span>
 								<span class="screen-reader-text">{{{ data.l10n['bottom-left'] }}}</span>
 							</label>
-																
+
 							<label class="si-center {{{ data.choices['bottom']}}}">
 								<input class="screen-reader-text" name="{{ data.id }}-alignment-position" type="radio" value="bottom" {{{ data.link }}}>
 								<span class="button display-options position"><span class="{{ data.icons['bottom'] }}" aria-hidden="true"></span></span>

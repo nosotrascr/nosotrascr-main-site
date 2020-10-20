@@ -485,7 +485,7 @@ add_action( 'sinatra_before_content', 'sinatra_archive_info' );
 
 /**
  * Outputs more posts button to author description box.
- * 
+ *
  * @since 1.0.0
  */
 function sinatra_add_author_posts_button() {
@@ -562,7 +562,7 @@ add_action( 'sinatra_main_start', 'sinatra_breadcrumb_after_header_output' );
 
 /**
  * Outputs breadcumbs in page header.
- * 
+ *
  * @since  1.1.0
  * @return void
  */

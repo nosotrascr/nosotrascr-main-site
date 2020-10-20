@@ -62,7 +62,7 @@ if ( ! class_exists( 'Sinatra_SocialSnap' ) ) :
 		 * @since 1.1.0
 		 * @param array $options Array of customizer options.
 		 */
-		public function register_options( $options ) {	
+		public function register_options( $options ) {
 
 			$options['setting']['sinatra_single_post_meta_elements']['control']['choices']['shares'] = esc_html__( 'Shares', 'sinatra' );
 
@@ -87,7 +87,8 @@ if ( ! class_exists( 'Sinatra_SocialSnap' ) ) :
 
 		/**
 		 * Removes Social Snap lite from recommended plugins if premium version of Social Snap is activated.
-		 * @param  array $plugins
+		 *
+		 * @param  array $plugins Plugins array.
 		 * @return array
 		 */
 		public function update_recommended_plugins( $plugins ) {

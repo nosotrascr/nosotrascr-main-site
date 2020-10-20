@@ -64,7 +64,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Control_Sortable' ) ) :
 				}
 			}
 
-			foreach ( $this->json['value'] as $key => $value) {
+			foreach ( $this->json['value'] as $key => $value ) {
 				if ( ! isset( $this->json['choices'][ $key ] ) ) {
 					unset( $this->json['value'][ $key ] );
 				}

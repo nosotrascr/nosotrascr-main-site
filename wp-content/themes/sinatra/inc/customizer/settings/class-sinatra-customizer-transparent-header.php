@@ -45,7 +45,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Transparent_Header' ) ) :
 			$options['section']['sinatra_section_transparent_header'] = array(
 				'title'    => esc_html__( 'Transparent Header', 'sinatra' ),
 				'panel'    => 'sinatra_panel_header',
-				'priority' => 20,
+				'priority' => 80,
 			);
 
 			// Enable Transparent Header.
@@ -75,7 +75,6 @@ if ( ! class_exists( 'Sinatra_Customizer_Transparent_Header' ) ) :
 				),
 				'post' => array(
 					'title' => esc_html__( 'Posts', 'sinatra' ),
-					// 'desc'  => esc_html__( '', 'sinatra' ),
 				),
 				'page' => array(
 					'title' => esc_html__( 'Pages', 'sinatra' ),
@@ -144,7 +143,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Transparent_Header' ) ) :
 						'select_image' => __( 'Select logo', 'sinatra' ),
 						'use_image'    => __( 'Select', 'sinatra' ),
 					),
-					'required'   => array(
+					'required'    => array(
 						array(
 							'control'  => 'sinatra_tsp_logo_heading',
 							'value'    => true,
@@ -221,7 +220,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Transparent_Header' ) ) :
 				'control'           => array(
 					'type'        => 'sinatra-spacing',
 					'label'       => esc_html__( 'Logo Margin', 'sinatra' ),
-					'description' => esc_html__( 'Specify spacing around logo on transparent header. Negative values are allowed.', 'sinatra' ),
+					'description' => esc_html__( 'Specify spacing around logo on transparent header. Negative values are allowed. Leave empty to inherit from Logos & Site Title » Logo Margin.', 'sinatra' ),
 					'section'     => 'sinatra_section_transparent_header',
 					'choices'     => array(
 						'top'    => esc_html__( 'Top', 'sinatra' ),
@@ -304,7 +303,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Transparent_Header' ) ) :
 				),
 			);
 
-			// Border
+			// Border.
 			$options['setting']['sinatra_tsp_header_border'] = array(
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_design_options',

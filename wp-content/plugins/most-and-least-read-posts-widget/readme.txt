@@ -3,8 +3,8 @@ Contributors: whiletrue
 Donate link: http://www.whiletrue.it/
 Tags: popular posts, post, posts, most read, least read, more read, top posts, less read, sidebar, widget, links 
 Requires at least: 2.9+
-Tested up to: 5.4
-Stable tag: 2.5.13
+Tested up to: 5.5
+Stable tag: 2.5.14
 
 Provide two widgets, showing lists of the most and reast read posts.
 
@@ -93,8 +93,8 @@ E.g. 50x50 pixels images, floating on the right:
 
 == Changelog ==
 
-= 2.5.13 =
-* Plugin tested up WordPress 5.4
+= 2.5.14 =
+* Plugin tested up WordPress 5.5
 
 = 2.5.5 =
 * Changed: Avangate ads removal

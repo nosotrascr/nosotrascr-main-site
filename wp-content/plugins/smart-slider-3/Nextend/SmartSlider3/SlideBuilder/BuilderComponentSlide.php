@@ -25,7 +25,8 @@ class BuilderComponentSlide extends AbstractBuilderComponent {
         "backgroundVideoLoop"    => 1,
         "backgroundVideoReset"   => 1,
         "backgroundVideoMode"    => "fill",
-        "link"                   => "|*|_self",
+        "href"                   => "",
+        "href-target"            => "",
         "slide-duration"         => 0
     );
 
@@ -52,7 +53,7 @@ class BuilderComponentSlide extends AbstractBuilderComponent {
 
     public function getData() {
         $this->data['layers'] = array();
-        foreach ($this->layers AS $layer) {
+        foreach ($this->layers as $layer) {
             $this->data['layers'][] = $layer->getData();
         }
 

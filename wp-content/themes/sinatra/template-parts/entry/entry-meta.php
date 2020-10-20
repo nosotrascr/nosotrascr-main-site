@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Only show meta tags for posts.
  */
-if ( 'post' !== get_post_type() ) {
+if ( ! in_array( get_post_type(), (array) apply_filters( 'sinatra_entry_meta_post_type', array( 'post' ) ), true ) ) {
 	return;
 }
 

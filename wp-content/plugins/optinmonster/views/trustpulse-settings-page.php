@@ -1,12 +1,21 @@
 <div id="wrap" class="trustpulse-wrap">
 	<h1 class="tp-heading">Boost Your Sales and Conversions with Social Proof Notifications</h1>
 	<div class="tp-admin-box">
-		<p>
-		TrustPulse helps you leverage the true power of social proof to instantly increase trust, conversions and sales by up to 15%
-		</p>
-		<div class="tp-content-row">
-			<a target="_blank" rel="noopener" href="<?php echo TRUSTPULSE_APP_URL; ?>checkout/1/monthly/?utm_source=orgplugin&utm_medium=link&utm_campaign=wpdashboard" class="tp-content-row__item tp-button tp-button--green">Get Started For Free</a>
-		</div>
+		<p>TrustPulse helps you leverage the true power of social proof to instantly increase trust, conversions and sales by up to 15%</p>
+		<div class="notice notice-error" style="display:none;" id="om-plugin-alerts"></div>
+		<form class="install-plugin-form">
+			<?php wp_nonce_field( 'install_plugin', 'nonce' ); ?>
+			<input type="hidden" name="plugin" value="trustpulse-api/trustpulse.php">
+			<input type="hidden" name="url" value="https://downloads.wordpress.org/plugin/trustpulse-api.zip">
+
+			<?php if ( $data['has_plugin'] ) : ?>
+				<input type="hidden" name="action" value="activate">
+				<button type="submit" id="activateButton" class="button button-primary button-activate">Activate the TrustPulse Plugin</button>
+			<?php else : ?>
+				<input type="hidden" name="action" value="install">
+				<button type="submit" id="installButton" class="button button-primary button-install">Install & Activate the TrustPulse Plugin</button>
+			<?php endif; ?>
+		</form>
 	</div>
 	<h2 class="tp-heading">Top 4 Reasons Why People Love TrustPulse</h2>
 	<p class="tp-subheading">Here's why smart business owners love TrustPulse, and you will too!</p>
@@ -60,14 +69,6 @@
 			<img class="tp-works-on__icon" src="<?php echo $this->url . 'assets/css/images/gravity-forms.png'; ?>" alt="Gravity Forms">
 			<img class="tp-works-on__icon" src="<?php echo $this->url . 'assets/css/images/memberpress-logo.svg'; ?>" alt="MemberPress">
 			<img class="tp-works-on__icon" src="<?php echo $this->url . 'assets/css/images/logo-formidable.png'; ?>" alt="Formidable">
-		</div>
-	</div>
-	<div class="tp-admin-box">
-		<p>
-			Join other smart business owners who use TrustPulse to convert visitors into subscribers and customers.
-		</p>
-		<div class="tp-content-row">
-			<a target="_blank" rel="noopener" href="<?php echo TRUSTPULSE_APP_URL; ?>checkout/1/monthly/?utm_source=orgplugin&utm_medium=link&utm_campaign=wpdashboard" class="tp-content-row__item tp-button tp-button--green">Get Started For Free</a>
 		</div>
 	</div>
 </div>

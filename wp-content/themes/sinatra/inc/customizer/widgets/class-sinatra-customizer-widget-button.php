@@ -81,7 +81,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Widget_Button' ) ) :
 					name="widget-button[<?php echo esc_attr( $this->number ); ?>][text]" 
 					data-option-name="text" 
 					value="<?php echo esc_html( $this->values['text'] ); ?>" 
-					placeholder="<?php esc_html_e( 'Button Text', 'sinatra' ); ?>"/>
+					placeholder="<?php esc_attr_e( 'Button Text', 'sinatra' ); ?>"/>
 			</p>
 
 			<!-- URL -->
@@ -93,7 +93,7 @@ if ( ! class_exists( 'Sinatra_Customizer_Widget_Button' ) ) :
 					name="widget-button[<?php echo esc_attr( $this->number ); ?>][url]" 
 					data-option-name="url" 
 					value="<?php echo esc_html( $this->values['url'] ); ?>" 
-					placeholder="<?php esc_html_e( 'Button URL', 'sinatra' ); ?>" />
+					placeholder="<?php esc_attr_e( 'Button URL', 'sinatra' ); ?>" />
 			</p>
 
 			<!-- Target -->

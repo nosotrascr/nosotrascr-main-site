@@ -43,6 +43,7 @@ class BlockFloatingMenu extends AbstractBlock {
      */
     public function setButton($button) {
 
+        $button->setTabIndex(-1);
         $button->addClass('n2_floating_menu__button n2_popover__trigger');
         $this->button = $button;
     }

@@ -1,11 +1,11 @@
 ﻿=== WP Date and Time Shortcode ===
 Contributors: denra, itinchev
 Donate link: https://www.paypal.me/itinchev
-Tags: wp, date, time, shortcode, shortcodes, wordpress, wptds, show, display, post, page, content, plugins, next, today, tomorrow, year, month, day, weekday, name, current, past, future
+Tags: wp, date, time, shortcode, shortcodes, wordpress, wpdts, show, display, post, page, content, plugins, next, today, tomorrow, year, month, day, weekday, name, current, past, future
 Requires at least: 4.0
-Tested up to: 5.4
+Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 2.4
+Stable tag: 2.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,7 +31,7 @@ Just put one of these shortcodes in your post or page and they will work out of 
 * `[wpdts-date-time]` - default date and time format from WordPress general settings
 * `[wpdts-date]` - default date format from WordPress general settings
 * `[wpdts-time]` - default time format from WordPress general settings
-* `[wpdts-custom]`- custom format using the PHP [date()](https://www.php.net/manual/en/function.date.php) characters
+* `[wpdts-custom]`- custom format using the PHP [date and time formatting characters](https://www.php.net/manual/en/datetime.format.php)
 * `[wpdts-years]`, `[wpdts-year]` - 4-digit year e.g. 1999 or 2134
 * `[wpdts-year-short]` - 2-digit year e.g. 99 or 34
 * `[wpdts-months]`, `[wpdts-month]` - month as number (1-12)
@@ -53,14 +53,15 @@ Just put one of these shortcodes in your post or page and they will work out of 
 * `[wpdts-timezone]` - timezone if included in the `start` attribute e.g. GMT, UTC, America/New_York, Europe/London, etc.
 * `[wpdts-timezone-abbreviation]` - show the timezone abbreviation if included in the `start` attribute e.g. EST, MDT, EET.
 
-= Examples of usage and custom attributes =
+== EXAMPLES of usage and custom attributes ==
 
 If you need to view real-time examples of usage or set up custom attributes to show specific date or time please see the page of [WP Date and Time Shortcode](https://denra.com/products/wordpress/plugins/wp-date-and-time-shortcode/) on [Denra.com](https://www.denra.com/).
 
 = Features =
 
 * Show date and/or time in the default WordPress formats.
-* Show date and/or time in custom format based on PHP [date()](https://www.php.net/manual/en/function.date.php) characters.
+* Show date and/or time in custom format based on the PHP [date and time formatting characters](https://www.php.net/manual/en/datetime.format.php)
+* Show date and/or time based on fixed SQL/date/time format or any [relative date and time format](https://www.php.net/manual/en/datetime.formats.relative.php)
 * Show year separately as 4 or 2-digit number (e.g. 1999 or 99).
 * Show month as number (1-12), full name (January-December) or 3-letter name (Jan-Dec).
 * Show day as number with or without leading zero, with or without suffix (st, nd, rd, th).
@@ -82,7 +83,7 @@ You can add the following attributes to **`[wpdts]`** to show the date and time 
 
 * `item` - what date and time information to show. The used values are:
     * `date-time` - default WP date and time format (default value)
-    * `custom` - custom format using the PHP [date()](https://www.php.net/manual/en/function.date.php) characters
+    * `custom` - custom format using the PHP [date and time formatting characters](https://www.php.net/manual/en/datetime.format.php)
     * `date` - default WP date format
     * `time` - default WP time format
     * `year`, `years` - 4-digit year
@@ -104,9 +105,9 @@ You can add the following attributes to **`[wpdts]`** to show the date and time 
     * `am-pm` - shows am/pm or AM/PM according to the am_pm attribute ("L" or "U")
     * `timezone` - show the timezone
     * `timezone-abbreviation` - show the timezone abbreviation
-* `format` - date format used with the [PHP date() function](https://www.php.net/manual/en/function.date.php) only when `item` is set to `custom`
+* `format` - date format used with the PHP [date and time formatting characters](https://www.php.net/manual/en/datetime.format.php) only when `item` is set to `custom`
 * `start` - set the basic date and time for the shortcode; defaults to the WordPress time in the current timezone.
-    * user selected initial date and time string preferably in SQL format - Y-m-d H:i:s e.g. "2019-09-16 17:45:53")
+    * initial date and/or time string based on fixed SQL/date/time formats (e.g. 2019-09-16 17:45:53 or Sep 16, 2019 17:45:53) or any [relative date and time format](https://www.php.net/manual/en/datetime.formats.relative.php)
     * `now` - the default initial current date and time based on the WordPress General settings timezone
     * `post-created` - gets the post/page creation date and time
     * `post-created-gmt` - gets the post/page creation date and time GMT
@@ -120,21 +121,21 @@ You can add the following attributes to **`[wpdts]`** to show the date and time 
 * `days_suffix` - set suffix st, nd, rd, th for the `day` and `days` item e.g. 1st, 2nd, 3rd, 4th, etc.
 * `hours_24` - set 12 or 24 hours format for the `hours` item.
 * `am_pm` - used with the `am-pm` item when 12 hours format is preferred: "L" for lowercase (am, pm) or "U" for uppercase (AM, PM)
-* `years` - change in years e.g. `years="+1"` or `years="-1"`
-* `months` - change in months e.g. `months="+2"` or `months="-2"`
-* `days` - change in days e.g. `days="+7"` or `days="-7"`
-* `hours` - change in hours e.g. `hours="+12"` or `hours="-12"`
-* `minutes`, `minutes_change` - change in minutes e.g. `minutes="+30"` or `minutes="-30"`
-* `seconds`, `seconds_change`  - change in seconds e.g. `seconds="+45"` or `seconds="-45"`
+* `years` - change in years e.g. `years="+1"` or `years="-1"` before showing
+* `months` - change in months e.g. `months="+2"` or `months="-2"` before showing
+* `days` - change in days e.g. `days="+7"` or `days="-7"` before showing
+* `hours` - change in hours e.g. `hours="+12"` or `hours="-12"` before showing
+* `minutes`, `minutes_change` - change in minutes e.g. `minutes="+30"` or `minutes="-30"` before showing
+* `seconds`, `seconds_change`  - change in seconds e.g. `seconds="+45"` or `seconds="-45"` before showing
 * `zero` - show loading zero when months, days, hours, minutes and seconds are displayed. Old ones '*x*-zero' for each separate item are still supported for compatibility.
 
-== (COMING SOON) 3.0 PRO EDITION with an annual subscription plan ==
+== (IN DEVELOPMENT) 3.0 PRO EDITION with an annual subscription plan ==
 
 WP Date and Time Shortcode is fully FREE and contains all main features that are needed by most users. Check them out!
 
 However, since we want to continue supporting this plugin and adding new non-basic features, we have decided to offer a Pro edition with an annual subscription plan offered at a very (very) affordable price per website. We are working hard to release the Pro edition although it took us a little bit more time to prepare it than expected in the beginnig.
 
-*Note*: All users who have already donated 9 or more EUR to this plugin until Apr 30, 2020 will get the first year of subscription for 1 website for free. They will be contacted when it is available.
+*Note*: All users who have already donated 9 or more EUR to this plugin until June 30, 2020 will get the first year of subscription for 1 website for free. They will be contacted when it is available.
 
 **What will you get with WP Date and Time Shortcode Pro in the near future?**
 
@@ -191,13 +192,34 @@ If you are using a caching plugin you may need to exclude the page or post with 
 = Why some or all of the used attributes of the shortcode do not work? =
 Please make sure that you are using only straight double quotes (`"`) and not curly/smart ones(`„` or `“`) for the attributes. The curly ones are not recognized by the shortcode functions. If you are using the straight quotes only and you are still having issues please contact us for support.
 
+= The theme doesn't work in all places e.g. page/post title, footer, menus, etc.? =
+WordPress applies the shortcodes in post's and page's content by default. If your theme does not apply shortcodes in other places automatically you may need to add additional code to your child theme's functions.php to hook into those functions where you need to see the shortcodes applied.
+For example:
+`// For the titles.`
+`add_filter('wp_title', 'do_shortcode', 10);`
+`add_filter('the_title', 'do_shortcode', 10);`
+`// For the menu.`
+`add_filter('walker_nav_menu_start_el', 'do_shortcode', 10);`
+etc.
+If you do not know how to put the correct code you may want to use additional plugin for the purpose like [this one](https://wordpress.org/plugins/jonradio-shortcodes-anywhere-or-everywhere/) to enable any shortcodes in other places of your website pages.
+
 = Why the major shortcode is `[wpdts]` now instead of the old `[wp-dt]` or `[wp_dt]`? =
 As we were improving the plugin we found out the `[wpdts]` shortcode will be much more recognizable and easier to use by everyone so we decided to change the old ones. We strongly recommend the use of the new `[wpdts]` shortcode although backward compatibility for `[wp-dt]` or `[wp_dt]` is supported.
 
 = I have an idea how this plugin can be improved. Can I send it somehow? =
-We have generally completed the development of Free edition of this plugin and it has a big number of features which may cover every basic need. In future we will be mainly supporting it for WordPress version compatibility and bugs. However we will be releasing a Pro edition soon with an annual subscription plan and it will have many new features. Please send all your suggestions and ideas to our [e-mail address](mailto:support@denra.com) and they may be developed and included in the paid product in future. Please note that if you have suggested a new feature and it is implemented you will get a one year subscription for 1 website for free.
+We have generally completed the development of Free edition of this plugin and it has a big number of features which may cover every basic need. In future we will be mainly supporting it for WordPress version compatibility and bugs. However we will be releasing a Pro edition soon with an annual subscription plan and it will have many new features. Please send all your suggestions and ideas to our [e-mail address](mailto:support@denra.com) and they may be developed and included in the paid product in future. Please note that if you have suggested a new feature and it is implemented you will get a 1-year subscription for 1 website for free.
 
 == Changelog ==
+
+= 2.5.2 =
+* Modified: Readme.txt info changes.
+* Other: WordPress 5.5 compatibility.
+
+= 2.5.1 =
+* Added: Description how to show date and/or time based on any [relative date and time format](https://www.php.net/manual/en/datetime.formats.relative.php).
+
+= 2.5 =
+* Fixed: Removed Framework warnings on plugin activation and usage.
 
 = 2.4 =
 * Fixed: There was a bug in the `next` attribute in some cases when the next day is in the next month. Please update!

@@ -20,7 +20,7 @@ class AssetInjector {
      */
     protected $outputBuffer;
 
-    private $htmlCommentTokens = array();
+    private $headTokens = array();
 
     protected function init() {
 
@@ -59,7 +59,13 @@ class AssetInjector {
                          */
                         $head = preg_replace_callback('/<!--.*?-->/s', array(
                             $this,
-                            'tokenizeHtmlComments'
+                            'tokenizeHead'
+                        ), $head);
+
+
+                        $head = preg_replace_callback('/<noscript>.*?<\/noscript>/s', array(
+                            $this,
+                            'tokenizeHead'
                         ), $head);
 
                         /**
@@ -101,7 +107,7 @@ class AssetInjector {
                              */
                             $head = preg_replace_callback('/<!--TOKEN([0-9]+)-->/', array(
                                 $this,
-                                'restoreHtmlComments'
+                                'restoreHeadTokens'
                             ), $head);
 
                             $buffer = $head . '</head>' . $body;
@@ -120,18 +126,18 @@ class AssetInjector {
         return $buffer;
     }
 
-    public function tokenizeHtmlComments($matches) {
+    public function tokenizeHead($matches) {
 
-        $index = count($this->htmlCommentTokens);
+        $index = count($this->headTokens);
 
-        $this->htmlCommentTokens[$index] = $matches[0];
+        $this->headTokens[$index] = $matches[0];
 
         return '<!--TOKEN' . $index . '-->';
     }
 
-    public function restoreHtmlComments($matches) {
+    public function restoreHeadTokens($matches) {
 
-        return $this->htmlCommentTokens[$matches[1]];
+        return $this->headTokens[$matches[1]];
     }
 
     private function finalizeCssJs() {

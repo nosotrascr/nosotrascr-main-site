@@ -19,6 +19,8 @@ abstract class AbstractButton extends AbstractBlock {
 
     protected $size = 'medium';
 
+    protected $tabindex = 0;
+
     public function display() {
 
         echo Html::link($this->getContent(), $this->getUrl(), $this->getAttributes());
@@ -86,5 +88,18 @@ abstract class AbstractButton extends AbstractBlock {
 
     public function setBig() {
         $this->size = 'big';
+    }
+
+    /**
+     * @param integer $tabIndex
+     */
+    public function setTabIndex($tabIndex) {
+        $this->tabindex = $tabIndex;
+
+        if ($this->tabindex === 0) {
+            unset($this->attributes['tabindex']);
+        } else {
+            $this->attributes['tabindex'] = $this->tabindex;
+        }
     }
 }

@@ -128,7 +128,7 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
     </div>
 </div>
 
-<div class="modal fade b2s-publish-approve-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-publish-approve-modal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade b2s-publish-approve-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-publish-approve-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -146,7 +146,7 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
 
 
 
-<div id="b2s-sched-post-modal" class="modal fade" role="dialog" aria-labelledby="b2s-sched-post-modal" aria-hidden="true" data-backdrop="false">
+<div id="b2s-sched-post-modal" class="modal fade" role="dialog" aria-labelledby="b2s-sched-post-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -191,7 +191,7 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
     </div>
 </div>
 
-<div class="modal fade" id="b2sInfoCCModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoCCModal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sInfoCCModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoCCModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -230,7 +230,7 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
     </div>
 </div>
 
-<div id="b2s-network-select-image" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false">
+<div id="b2s-network-select-image" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -252,7 +252,7 @@ $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date
     </div>
 </div>
 
-<div id="b2sInfoNetworkModal" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false">
+<div id="b2sInfoNetworkModal" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

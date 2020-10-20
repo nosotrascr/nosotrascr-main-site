@@ -9,7 +9,7 @@
 
 ?>
 
-<a href="#" id="si-scroll-top" class="si-smooth-scroll" title="<?php esc_html_e( 'Scroll to Top', 'sinatra' ); ?>" <?php sinatra_scroll_top_classes(); ?>>
+<a href="#" id="si-scroll-top" class="si-smooth-scroll" title="<?php esc_attr_e( 'Scroll to Top', 'sinatra' ); ?>" <?php sinatra_scroll_top_classes(); ?>>
 	<span class="si-scroll-icon" aria-hidden="true">
 		<i class="si-icon si-chevron-up top-icon"></i>
 		<i class="si-icon si-chevron-up"></i>

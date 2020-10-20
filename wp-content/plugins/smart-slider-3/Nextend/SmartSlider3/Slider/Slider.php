@@ -296,12 +296,6 @@ class Slider extends AbstractRenderable {
             $loadingType = $this->params->get('loading-type');
             if ($loadingType == 'afterOnLoad') {
                 $rocketAttributes .= 'data-loading-type="' . $loadingType . '"';
-            } else if ($loadingType == 'afterSlider') {
-                $dependency = max(0, intval($this->params->get('dependency')));
-                if ($dependency && ($dependency != $this->sliderId)) {
-                    $rocketAttributes .= 'data-loading-type="' . $loadingType . '"';
-                    $rocketAttributes .= 'data-loading-dependency="' . $dependency . '"';
-                }
             } else if ($loadingType == 'afterDelay') {
 
                 $delay = max(0, intval($this->params->get('delay'), 0));

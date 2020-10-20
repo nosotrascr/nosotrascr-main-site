@@ -117,12 +117,12 @@ if ( ! class_exists( 'Sinatra_Customizer_Control_Background' ) ) :
 						<# if ( data.value['background-image'] ) { #>
 							<div class="thumbnail thumbnail-image"><img src="{{ data.value['background-image'] }}" alt="" /></div>
 						<# } else { #>
-							<div class="placeholder"><?php esc_attr_e( 'No image selected', 'sinatra' ); ?></div>
+							<div class="placeholder"><?php esc_html_e( 'No image selected', 'sinatra' ); ?></div>
 						<# } #>
 
 						<div class="actions">
 
-							<button class="button background-image-upload-remove-button<# if ( ! data.value['background-image'] ) { #> hidden<# } #>"><?php esc_attr_e( 'Remove', 'sinatra' ); ?></button>
+							<button class="button background-image-upload-remove-button<# if ( ! data.value['background-image'] ) { #> hidden<# } #>"><?php esc_html_e( 'Remove', 'sinatra' ); ?></button>
 
 							<button type="button" class="button background-image-upload-button">{{{ data.l10n.select_image }}}</button>
 
@@ -144,17 +144,17 @@ if ( ! class_exists( 'Sinatra_Customizer_Control_Background' ) ) :
 						<!-- Background Repeat -->
 						<div class="background-repeat">
 							<select {{{ data.inputAttrs }}}>
-								<option value="no-repeat"<# if ( 'no-repeat' === data.value['background-repeat'] ) { #> selected <# } #>><?php esc_attr_e( 'No Repeat', 'sinatra' ); ?></option>
-								<option value="repeat"<# if ( 'repeat' === data.value['background-repeat'] ) { #> selected <# } #>><?php esc_attr_e( 'Repeat All', 'sinatra' ); ?></option>
-								<option value="repeat-x"<# if ( 'repeat-x' === data.value['background-repeat'] ) { #> selected <# } #>><?php esc_attr_e( 'Repeat Horizontally', 'sinatra' ); ?></option>
-								<option value="repeat-y"<# if ( 'repeat-y' === data.value['background-repeat'] ) { #> selected <# } #>><?php esc_attr_e( 'Repeat Vertically', 'sinatra' ); ?></option>
+								<option value="no-repeat"<# if ( 'no-repeat' === data.value['background-repeat'] ) { #> selected <# } #>><?php esc_html_e( 'No Repeat', 'sinatra' ); ?></option>
+								<option value="repeat"<# if ( 'repeat' === data.value['background-repeat'] ) { #> selected <# } #>><?php esc_html_e( 'Repeat All', 'sinatra' ); ?></option>
+								<option value="repeat-x"<# if ( 'repeat-x' === data.value['background-repeat'] ) { #> selected <# } #>><?php esc_html_e( 'Repeat Horizontally', 'sinatra' ); ?></option>
+								<option value="repeat-y"<# if ( 'repeat-y' === data.value['background-repeat'] ) { #> selected <# } #>><?php esc_html_e( 'Repeat Vertically', 'sinatra' ); ?></option>
 							</select>
 						</div>
 
 						<!-- Background Position -->
 						<div class="background-position">
 
-							<h4><?php esc_attr_e( 'Background Position', 'sinatra' ); ?></h4>
+							<h4><?php esc_html_e( 'Background Position', 'sinatra' ); ?></h4>
 
 							<div class="sinatra-range-wrapper">
 								<span><?php esc_html_e( 'Horizontal', 'sinatra' ); ?></span>
@@ -196,32 +196,32 @@ if ( ! class_exists( 'Sinatra_Customizer_Control_Background' ) ) :
 
 						<!-- Background Size -->
 						<div class="background-size">
-							<h4><?php esc_attr_e( 'Background Size', 'sinatra' ); ?></h4>
+							<h4><?php esc_html_e( 'Background Size', 'sinatra' ); ?></h4>
 							<div class="buttonset">
 								<input {{{ data.inputAttrs }}} class="switch-input screen-reader-text" type="radio" value="cover" name="_customize-bg-{{{ data.id }}}-size" id="{{ data.id }}cover" <# if ( 'cover' === data.value['background-size'] ) { #> checked="checked" <# } #>>
-									<label class="switch-label" for="{{ data.id }}cover"><?php esc_attr_e( 'Cover', 'sinatra' ); ?></label>
+									<label class="switch-label" for="{{ data.id }}cover"><?php esc_html_e( 'Cover', 'sinatra' ); ?></label>
 								</input>
 								<input {{{ data.inputAttrs }}} class="switch-input screen-reader-text" type="radio" value="contain" name="_customize-bg-{{{ data.id }}}-size" id="{{ data.id }}contain" <# if ( 'contain' === data.value['background-size'] ) { #> checked="checked" <# } #>>
-									<label class="switch-label" for="{{ data.id }}contain"><?php esc_attr_e( 'Contain', 'sinatra' ); ?></label>
+									<label class="switch-label" for="{{ data.id }}contain"><?php esc_html_e( 'Contain', 'sinatra' ); ?></label>
 								</input>
 								<input {{{ data.inputAttrs }}} class="switch-input screen-reader-text" type="radio" value="auto" name="_customize-bg-{{{ data.id }}}-size" id="{{ data.id }}auto" <# if ( 'auto' === data.value['background-size'] ) { #> checked="checked" <# } #>>
-									<label class="switch-label" for="{{ data.id }}auto"><?php esc_attr_e( 'Auto', 'sinatra' ); ?></label>
+									<label class="switch-label" for="{{ data.id }}auto"><?php esc_html_e( 'Auto', 'sinatra' ); ?></label>
 								</input>
 							</div>
 						</div>
 
 						<!-- Background Attachment -->
 						<div class="background-attachment">
-							<h4><?php esc_attr_e( 'Background Attachment', 'sinatra' ); ?></h4>
+							<h4><?php esc_html_e( 'Background Attachment', 'sinatra' ); ?></h4>
 							<div class="buttonset">
 								<input {{{ data.inputAttrs }}} class="switch-input screen-reader-text" type="radio" value="inherit" name="_customize-bg-{{{ data.id }}}-attachment" id="{{ data.id }}inherit" <# if ( 'inherit' === data.value['background-attachment'] ) { #> checked="checked" <# } #>>
-									<label class="switch-label" for="{{ data.id }}inherit"><?php esc_attr_e( 'Inherit', 'sinatra' ); ?></label>
+									<label class="switch-label" for="{{ data.id }}inherit"><?php esc_html_e( 'Inherit', 'sinatra' ); ?></label>
 								</input>
 								<input {{{ data.inputAttrs }}} class="switch-input screen-reader-text" type="radio" value="scroll" name="_customize-bg-{{{ data.id }}}-attachment" id="{{ data.id }}scroll" <# if ( 'scroll' === data.value['background-attachment'] ) { #> checked="checked" <# } #>>
-									<label class="switch-label" for="{{ data.id }}scroll"><?php esc_attr_e( 'Scroll', 'sinatra' ); ?></label>
+									<label class="switch-label" for="{{ data.id }}scroll"><?php esc_html_e( 'Scroll', 'sinatra' ); ?></label>
 								</input>
 								<input {{{ data.inputAttrs }}} class="switch-input screen-reader-text" type="radio" value="fixed" name="_customize-bg-{{{ data.id }}}-attachment" id="{{ data.id }}fixed" <# if ( 'fixed' === data.value['background-attachment'] ) { #> checked="checked" <# } #>>
-									<label class="switch-label" for="{{ data.id }}fixed"><?php esc_attr_e( 'Fixed', 'sinatra' ); ?></label>
+									<label class="switch-label" for="{{ data.id }}fixed"><?php esc_html_e( 'Fixed', 'sinatra' ); ?></label>
 								</input>
 							</div>
 						</div>

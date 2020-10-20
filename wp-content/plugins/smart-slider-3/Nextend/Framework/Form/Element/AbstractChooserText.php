@@ -59,14 +59,16 @@ abstract class AbstractChooserText extends AbstractFieldHidden {
         $html = '';
         if ($this->hasClear) {
             $html .= Html::tag('a', array(
-                'href'  => '#',
-                'class' => 'n2_field_text__clear'
+                'href'     => '#',
+                'class'    => 'n2_field_text__clear',
+                'tabindex' => -1
             ), Html::tag('i', array('class' => 'ssi_16 ssi_16--circularremove'), ''));
         }
 
         $html .= Html::tag('a', array(
-            'href'  => '#',
-            'class' => 'n2_field_text__choose'
+            'href'       => '#',
+            'class'      => 'n2_field_text__choose',
+            'aria-label' => n2_('Choose')
         ), '<i class="ssi_16 ssi_16--plus"></i>');
 
         return $html;

@@ -325,8 +325,15 @@ class ComponentCol extends AbstractComponent {
     public static function getFilled($slide, &$layer) {
         AbstractComponent::getFilled($slide, $layer);
 
-        if (!empty($layer['bgimage'])) {
-            $layer['bgimage'] = $slide->fill($layer['bgimage']);
+        $fields = array(
+            'bgimage',
+            'href'
+        );
+
+        foreach ($fields AS $field) {
+            if (!empty($layer[$field])) {
+                $layer[$field] = $slide->fill($layer[$field]);
+            }
         }
 
         $slide->fillLayers($layer['layers']);

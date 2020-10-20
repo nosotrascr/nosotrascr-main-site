@@ -16,7 +16,7 @@ class B2S_Post_Filter {
     protected $searchPostSharedById;
     protected $postAuthor;
 
-    function __construct($type, $title = "", $authorId = 0, $postStatus = "", $schedDate = "", $postCat = "", $postType = "", $postShareStatus="", $postsPerPage = 15, $sharedById = 0) {  //type=all,publish,sched
+    function __construct($type, $title = "", $authorId = 0, $postStatus = "", $schedDate = "", $postCat = "", $postType = "", $postShareStatus="", $postsPerPage = 15, $sharedById = 0, $sharedToNetwork = 0) {  //type=all,publish,sched
         require_once(B2S_PLUGIN_DIR . 'includes/Options.php');
         $options = new B2S_Options((int) B2S_PLUGIN_BLOG_USER_ID);
         $optionPostFilters = $options->_getOption('post_filters');
@@ -31,6 +31,7 @@ class B2S_Post_Filter {
         $this->searchPostType = (empty($postType) && isset($optionPostFilters['searchPostType'])) ? $optionPostFilters['searchPostType'] : $postType;
         $this->postsPerPage = ((int)$postsPerPage != 15 && isset($optionPostFilters['postsPerPage']) && (int)$optionPostFilters['postsPerPage'] > 0) ? (int)$optionPostFilters['searchAuthorId'] : (int)$postsPerPage;
         $this->searchPostSharedById = ((int)$sharedById == 0 && isset($optionPostFilters['searchPostSharedById']) && (int)$optionPostFilters['searchPostSharedById'] > 0) ? (int)$optionPostFilters['searchPostSharedById'] : (int)$sharedById;
+        $this->searchSharedToNetwork = ((int)$sharedToNetwork == 0 && isset($optionPostFilters['searchSharedToNetwork']) && (int)$optionPostFilters['searchSharedToNetwork'] > 0) ? (int)$optionPostFilters['searchSharedToNetwork'] : (int)$sharedToNetwork;
     }
 
     public function getAutorData() {
@@ -106,37 +107,30 @@ class B2S_Post_Filter {
         $taxonomies = get_taxonomies(array('public' => true), "object", "and");
         $type = '<div class="form-group"><select id="b2sSortPostCat" name="b2sSortPostCat" class="form-control b2s-select"><option value="">' . esc_html__('all categories & tags', 'blog2social') . '</option>';
         foreach ($taxonomies as $tax => $taxValue) {
-            $cat = get_categories(array('taxonomy' => $taxValue->name, 'number' => 100, 'parent' => 0)); //since 3.7.0 => all too much load
-            if (!empty($cat)) {
-                $type.='<optgroup label="' . esc_attr($taxValue->labels->name) . '">';
-                foreach ($cat as $key => $categorie) {
-                    $selected = (!empty($this->searchPostCat) && $categorie->term_id == $this->searchPostCat) ? 'selected' : '';
-                    $catName = $categorie->name;
-                    //Bug: Converting json + PHP Extension
-                    if (function_exists('mb_strlen') && function_exists('mb_substr')) {
-                        $catName = mb_strlen($categorie->name, 'UTF-8') > 27 ? mb_substr($categorie->name, 0, 27, 'UTF-8') . '...' : $catName;
+            if($taxValue->name == 'category') {
+                if(function_exists('wp_dropdown_categories')) {
+                    $cat = wp_dropdown_categories(array('hierarchical' => 1, 'echo' => 0, 'taxonomy' => $taxValue->name, 'selected' => (!empty($this->searchPostCat) && (int) $this->searchPostCat > 0) ? (int) $this->searchPostCat : 0));
+                    if (!empty($cat)) {
+                        $type .='<optgroup label="' . esc_attr($taxValue->labels->name) . '">';
+                        $type .= preg_replace('/<(|\/)select.*?>/', '', $cat);
+                        $type .='</optgroup>';
                     }
-                    $type .= '<option ' . $selected . ' value="' . esc_attr($categorie->term_id) . '">' . esc_html($catName) . '</option>';
-                    
-                    
-                    //subcategorys
-                    $subCat = get_categories(array('taxonomy' => $taxValue->name, 'number' => 100, 'parent' => $categorie->term_id));
-                    if(isset($subCat) && !empty($subCat)) {
-                         foreach ($subCat as $subKey => $subCategorie) {
-                            $selected = (!empty($this->searchPostCat) && $subCategorie->term_id == $this->searchPostCat) ? 'selected' : '';
-                            $subCatName = '&nbsp;&nbsp;&nbsp;&nbsp;'.$subCategorie->name;
-                            //Bug: Converting json + PHP Extension
-                            if (function_exists('mb_strlen') && function_exists('mb_substr')) {
-                                $subCatName = mb_strlen($categorie->name, 'UTF-8') > 27 ? mb_substr($categorie->name, 0, 27, 'UTF-8') . '...' : $subCatName;
-                            }
-                            $type .= '<option ' . $selected . ' value="' . esc_attr($subCategorie->term_id) . '">' . esc_html($subCatName) . '</option>';
-                         }
-                    }
-                    
-                    
-                    
                 }
-                $type .='</optgroup>';
+            } else {
+                $cat = get_categories(array('taxonomy' => $taxValue->name, 'number' => 100, 'parent' => 0)); //since 3.7.0 => all too much load
+                if (!empty($cat)) {
+                    $type.='<optgroup label="' . esc_attr($taxValue->labels->name) . '">';
+                    foreach ($cat as $key => $category) {
+                        $selected = (!empty($this->searchPostCat) && $category->term_id == $this->searchPostCat) ? 'selected' : '';
+                        $catName = $category->name;
+                        //Bug: Converting json + PHP Extension
+                        if (function_exists('mb_strlen') && function_exists('mb_substr')) {
+                            $catName = mb_strlen($category->name, 'UTF-8') > 27 ? mb_substr($category->name, 0, 27, 'UTF-8') . '...' : $catName;
+                        }
+                        $type .= '<option ' . $selected . ' value="' . esc_attr($category->term_id) . '">' . esc_html($catName) . '</option>';
+                    }
+                    $type .='</optgroup>';
+                }
             }
         }
         $type .= '</select></div>';
@@ -184,6 +178,26 @@ class B2S_Post_Filter {
         $autor .= '</select></div>';
         return $autor;
     }
+    
+    private function getSharedToNetworkHtml() {
+        $autor = '<div class="form-group"><select id="b2sSortSharedToNetwork" name="b2sSortSharedToNetwork" class="form-control b2s-select"><option value="0">' . esc_html__('shared to network', 'blog2social') . '</option>';
+        $networks = unserialize(B2S_PLUGIN_NETWORK);
+        foreach ($networks as $var) {
+            $networkId = array_search($var, $networks);
+            if(in_array($networkId, array(1, 2, 3, 4, 12, 6, 18, 19, 17, 16, 11, 14, 7, 9, 15, 24))) {
+                $selected = ($networkId == (int) $this->searchSharedToNetwork) ? 'selected' : '';
+                $autor .= '<option ' . $selected . ' value="' . esc_attr($networkId) . '">' . esc_html($var) . '</option>';
+            }
+        }
+        $autor .= '</select></div>';
+        return $autor;
+    }
+    
+    private function getSharedAtDateHtml() {
+        $date = '<div class="form-group"><input type="text" placeholder="' . esc_attr__('Startdate', 'blog2social') . '" class="form-control b2s-select" name="b2sSortSharedAtDateStart" id="b2sSortSharedAtDateStart"></div>';
+        $date .= '<div class="form-group"><input type="text" placeholder="' . esc_attr__('Enddate', 'blog2social') . '" class="form-control b2s-select" name="b2sSortSharedAtDateEnd" id="b2sSortSharedAtDateEnd"></div>';
+        return $date;
+    }
 
     public function getItemHtml() {
         $this->getAutorData();
@@ -204,11 +218,16 @@ class B2S_Post_Filter {
                 $this->postFilter .= $this->getPostStatusHtml();
                 $this->postFilter .= $this->getPostShareStatusHtml();
             }
+            if ($this->type == 'draft-post') {
+                $this->postFilter .= $this->getSharedAtDateHtml();
+            }
             if ($this->type == 'publish' || $this->type == 'notice') {
                 $this->postFilter .= $this->getPublishDateHtml();
+                $this->postFilter .= $this->getSharedToNetworkHtml();
             }
             if ($this->type == 'sched') {
                 $this->postFilter .= $this->getSchedDateHtml();
+                $this->postFilter .= $this->getSharedToNetworkHtml();
             }
         }
 

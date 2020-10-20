@@ -4,7 +4,7 @@ Tags: slider, wordpress slider, image slider, layer slider, responsive slider, s
 Donate link: https://sites.fastspring.com/nextend/product/smartslider3donate
 Requires at least: 4.9
 Tested up to: 5.5
-Stable tag: 3.4.1.8
+Stable tag: 3.4.1.9
 Requires PHP: 7.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -205,6 +205,24 @@ Of course! Smart Slider use protocol relative urls which works fine on http:// a
 
 == Changelog ==
 
+= 3.4.1.9 - 26. August 2020. =
+* Feature: Placeholder uses Min height when its set
+* Feature: BoldGrid Post and Page Builder compatibility
+* Feature: Smart Slider 3 now renders the sliders via iframe in Brizy editor
+* Fix: Clear device Keyboard Shortcuts
+* Fix: Trashed sliders showed up in the dashboard in rare cases
+* Fix: Slide Library remove localStorage slide cache to avoid quota exceeded errors.
+* Fix: Text bar animates with correct opacity
+* Fix: Firefox <a> click with keyboard
+* Fix: Beaver Builder compatibility
+* Fix: Image variables might caused errors in a Dynamic slide
+* Fix: table names changed for better JEvents compatibility
+* Fix: Redux Framework compatibility
+* Fix: Generator custom sized image variable names
+* Fix: Parallax is disabled in Mac Safari to avoid browser issues
+* Fix: Image box layer image vertical align
+* Other: Google font list updated
+
 = 3.4.1.8 - 10. June 2020. =
 * Feature: [Vimeo layer](https://smartslider.helpscoutdocs.com/article/1847-vimeo-layer#aspect-ratio) custom aspect ratio
 * Feature: [YouTube layer](https://smartslider.helpscoutdocs.com/article/1846-youtube-layer#aspect-ratio) custom aspect ratio
@@ -217,7 +235,7 @@ Of course! Smart Slider use protocol relative urls which works fine on http:// a
 * Fix: Disabled arrows for types, where there was no disabled option earlier.
 * Fix: Prevent opening multiple lightboxes at the same time
 * Fix: Slider height when vertical thumbnail hidden
-* Fix: Fix YouTube cover image flicker
+* Fix: Fix youtube cover image flicker
 * Fix: Empty slide background image after saving a slide which was created in 3.3.x version
 * Fix: Exclude Smart Slider images from A3 Lazy Load plugin to avoid problems
 * Fix: Force iframe mode when HTTP_X_REQUESTED_WITH = swup
@@ -228,7 +246,7 @@ Of course! Smart Slider use protocol relative urls which works fine on http:// a
 
 = 3.4.1.6 - 19. May 2020. =
 * Warning: 3.4 version is not backwards compatible! After installing this version, you won't be able to go back to 3.3.x.
-* Smart Slider 3.4 no longer supports [Internet Explorer browser at all](https://www.zdnet.com/article/microsoft-security-chief-ie-is-not-a-browser-so-stop-using-it-as-your-default/! 
+* Smart Slider 3.4 no longer supports [Internet Explorer browser at all](https://www.zdnet.com/article/microsoft-security-chief-ie-is-not-a-browser-so-stop-using-it-as-your-default/)! 
 * Feature: Content mode was renamed to Default and Canvas mode is now called Absolute. 
 * Feature: Completely redesigned UI 
 * Feature: [Breakpoint system](https://smartslider.helpscoutdocs.com/article/1774-slider-settings-size#breakpoints)

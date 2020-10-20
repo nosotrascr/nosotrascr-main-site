@@ -14,7 +14,7 @@ class PlatformWordPress extends AbstractPlatform {
 
     public function __construct() {
 
-        if (is_admin()) {
+        if (is_admin() || $this->isBeaverBuilderActive()) {
             $this->isAdmin = true;
         }
     }
@@ -139,5 +139,9 @@ class PlatformWordPress extends AbstractPlatform {
         }
 
         return $debug;
+    }
+
+    public function isBeaverBuilderActive() {
+        return isset($_GET['fl_builder']);
     }
 }

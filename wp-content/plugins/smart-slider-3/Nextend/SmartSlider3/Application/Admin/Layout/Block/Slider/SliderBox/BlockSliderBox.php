@@ -40,6 +40,11 @@ class BlockSliderBox extends AbstractBlock {
         return $this->getUrlSliderEdit($this->slider['id'], $this->groupID);
     }
 
+    public function getSimpleEditUrl() {
+
+        return $this->getUrlSliderSimpleEdit($this->slider['id'], $this->groupID);
+    }
+
     public function isGroup() {
         return $this->slider['type'] == 'group';
     }

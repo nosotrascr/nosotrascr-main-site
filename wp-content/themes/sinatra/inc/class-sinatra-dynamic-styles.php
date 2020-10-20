@@ -13,6 +13,7 @@
 /**
  * Do not allow direct script access.
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -70,8 +71,8 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 
 			$upload_dir = wp_upload_dir();
 
-			$this->dynamic_css_uri  = trailingslashit( $upload_dir['baseurl'] ) . 'sinatra/';
-			$this->dynamic_css_path = trailingslashit( $upload_dir['basedir'] ) . 'sinatra/';
+			$this->dynamic_css_uri  = trailingslashit( set_url_scheme( $upload_dir['baseurl'] ) ) . 'sinatra/';
+			$this->dynamic_css_path = trailingslashit( set_url_scheme( $upload_dir['basedir'] ) ) . 'sinatra/';
 
 			if ( ! is_customize_preview() && wp_is_writable( trailingslashit( $upload_dir['basedir'] ) ) ) {
 				add_action( 'sinatra_enqueue_scripts', array( $this, 'enqueue_dynamic_style' ), 20 );
@@ -200,12 +201,6 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 				#sinatra-footer .widget_archive li a:hover + span,
 				#sinatra-footer .widget .cat-item.current-cat a + span,
 				.si-btn.btn-outline:hover,
-				.si-hamburger:hover .hamburger-inner,
-				.si-hamburger:hover .hamburger-inner::before,
-				.si-hamburger:hover .hamburger-inner::after,
-				.is-mobile-menu-active .si-hamburger .hamburger-inner,
-				.is-mobile-menu-active .si-hamburger .hamburger-inner::before,
-				.is-mobile-menu-active .si-hamburger .hamburger-inner::after,
 				#infinite-handle span {
 					background-color: ' . $accent_color . ';
 				}
@@ -279,8 +274,8 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 				var,
 				samp,
 				tt,
-				.is-mobile-menu-active .si-hamburger .hamburger-label,
-				.si-hamburger:hover .hamburger-label,
+				.is-mobile-menu-active .si-hamburger,
+				.si-hamburger:hover,
 				.single #main .post-nav a:hover,
 				#sinatra-topbar .si-topbar-widget__text .si-icon {
 					color: ' . $accent_color . ';
@@ -446,14 +441,6 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 					.si-hamburger { 
 						color: ' . $header_color['link-color'] . '; }
 				';
-
-				$css .= '
-					.hamburger-inner,
-					.hamburger-inner::before,
-					.hamburger-inner::after { 
-						background-color: ' . $header_color['link-color'] . ';
-					}
-				';
 			}
 
 			// Header link hover color.
@@ -462,8 +449,8 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 					.si-header-widgets a:not(.si-btn):hover, 
 					#sinatra-header-inner .si-header-widgets .sinatra-active,
 					.sinatra-logo .site-title a:hover, 
-					.si-hamburger:hover .hamburger-label, 
-					.is-mobile-menu-active .si-hamburger .hamburger-label,
+					.si-hamburger:hover, 
+					.is-mobile-menu-active .si-hamburger,
 					#sinatra-header-inner .sinatra-nav > ul > li > a:hover,
 					#sinatra-header-inner .sinatra-nav > ul > li.menu-item-has-children:hover > a,
 					#sinatra-header-inner .sinatra-nav > ul > li.current-menu-item > a,
@@ -485,6 +472,7 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 			// Main navigation breakpoint.
 			$css .= '
 				@media screen and (max-width: ' . intval( sinatra_option( 'main_nav_mobile_breakpoint' ) ) . 'px) {
+
 					#sinatra-header-inner .sinatra-nav {
 						display: none;
 						color: #000;
@@ -880,7 +868,7 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 
 			// Lightened or darkened background color for backgrounds, borders & inputs.
 			$background_color = sinatra_get_background_color();
-			
+
 			$content_text_color_offset = sinatra_light_or_dark( $background_color, sinatra_luminance( $background_color, -0.045 ), sinatra_luminance( $background_color, 0.2 ) );
 
 			// Only add for dark background color.
@@ -940,7 +928,10 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 					max-width: ' . sinatra_option( 'container_width' ) . 'px;
 				}
 
-				.sinatra-layout__boxed #page {
+				.sinatra-layout__boxed #page,
+				.sinatra-layout__boxed.si-sticky-header.sinatra-is-mobile #sinatra-header-inner,
+				.sinatra-layout__boxed.si-sticky-header:not(.sinatra-header-layout-3) #sinatra-header-inner,
+				.sinatra-layout__boxed.si-sticky-header:not(.sinatra-is-mobile).sinatra-header-layout-3 #sinatra-header-inner .si-nav-container > .si-container {
 					max-width: ' . ( intval( sinatra_option( 'container_width' ) ) + 100 ) . 'px;
 				}
 			';
@@ -980,7 +971,7 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 			// Main Header custom background.
 			$css .= $this->get_design_options_field_css( '.si-tsp-header #sinatra-header-inner', 'tsp_header_background', 'background' );
 
-			/** Font Colors **/
+			/** Font Colors */
 
 			$tsp_font_color = sinatra_option( 'tsp_header_font_color' );
 
@@ -1004,14 +995,6 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 						color: ' . $tsp_font_color['link-color'] . ';
 					}
 				';
-
-				$css .= '
-					.si-tsp-header .hamburger-inner,
-					.si-tsp-header .hamburger-inner::before,
-					.si-tsp-header .hamburger-inner::after { 
-						background-color: ' . $tsp_font_color['link-color'] . ';
-					}
-				';
 			}
 
 			// Header link hover color.
@@ -1020,8 +1003,8 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 					.si-tsp-header .si-header-widgets a:not(.si-btn):hover, 
 					.si-tsp-header #sinatra-header-inner .si-header-widgets .sinatra-active,
 					.si-tsp-header .sinatra-logo .site-title a:hover, 
-					.si-tsp-header .si-hamburger:hover .hamburger-label, 
-					.si-tsp-header.is-mobile-menu-active .si-hamburger .hamburger-label,
+					.si-tsp-header .si-hamburger:hover, 
+					.is-mobile-menu-active .si-tsp-header .si-hamburger,
 					.si-tsp-header #sinatra-header-inner .sinatra-nav > ul > li > a:hover,
 					.si-tsp-header #sinatra-header-inner .sinatra-nav > ul > li.menu-item-has-children:hover > a,
 					.si-tsp-header #sinatra-header-inner .sinatra-nav > ul > li.current-menu-item > a,
@@ -1034,10 +1017,10 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 				';
 			}
 
-			/** Border Color **/
+			/** Border Color */
 			$css .= $this->get_design_options_field_css( '.si-tsp-header #sinatra-header-inner', 'tsp_header_border', 'border' );
 
-			/** Separator Color **/
+			/** Separator Color */
 			$css .= $this->get_design_options_field_css( '.si-tsp-header .si-header-widget', 'tsp_header_border', 'separator_color' );
 
 			/**
@@ -1052,7 +1035,8 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 				$css .= $this->get_spacing_field_css( '.si-page-title-align-left .page-header.si-has-page-title, .si-page-title-align-right .page-header.si-has-page-title, .si-page-title-align-center .page-header .si-page-header-wrapper', 'padding', 'page_header_spacing' );
 
 				// Page Header background.
-				$css .= $this->get_design_options_field_css( '.page-header, .si-tsp-header:not(.si-tsp-absolute) #masthead', 'page_header_background', 'background' );
+				$css .= $this->get_design_options_field_css( '.si-tsp-header:not(.si-tsp-absolute) #masthead', 'page_header_background', 'background' );
+				$css .= $this->get_design_options_field_css( '.page-header', 'page_header_background', 'background' );
 
 				// Page Header font color.
 				$page_header_color = sinatra_option( 'page_header_text_color' );
@@ -1159,7 +1143,7 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 				$footer_text_color = $footer_text_color['text-color'];
 
 				$copyright_separator_color = sinatra_light_or_dark( $footer_text_color, 'rgba(255,255,255,0.1)', 'rgba(0,0,0,0.1)' );
-				
+
 				$css .= '
 					#sinatra-copyright.contained-separator > .si-container::before {
 						background-color: ' . $copyright_separator_color . ';
@@ -1381,7 +1365,7 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 
 			// Clean OpCache.
 			if ( function_exists( 'opcache_reset' ) ) {
-				opcache_reset();
+				opcache_reset(); // phpcs:ignore
 			}
 
 			// Clean WordPress cache.
@@ -1734,7 +1718,7 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 
 			// Responsive options - tablet.
 			$tablet = '';
-			
+
 			if ( ! empty( $setting['font-size-tablet'] ) ) {
 				$tablet .= 'font-size:' . $setting['font-size-tablet'] . $setting['font-size-unit'] . ';';
 			}
@@ -1974,7 +1958,7 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 			$sidebar_position     = sinatra_get_sidebar_position( $post_id );
 			$container_width      = sinatra_option( 'container_width' );
 			$single_content_width = sinatra_option( 'single_content_width' );
-			
+
 			$container_width = $container_width - 100;
 
 			if ( sinatra_is_sidebar_displayed( $post_id ) ) {
@@ -2106,50 +2090,52 @@ if ( ! class_exists( 'Sinatra_Dynamic_Styles' ) ) :
 
 			// Background color.
 			$css .= '
-				#editor {
+				:root .editor-styles-wrapper {
 					background-color: #' . trim( $background_color, '#' ) . ';
 				}
 			';
 
 			// Body.
-			$css .= $this->get_typography_field_css( '#editor .editor-styles-wrapper, .editor-styles-wrapper .wp-block, .block-editor-default-block-appender textarea.block-editor-default-block-appender__content', 'body_font' );
+			$css .= $this->get_typography_field_css( ':root .editor-styles-wrapper, .editor-styles-wrapper .wp-block, .block-editor-default-block-appender textarea.block-editor-default-block-appender__content', 'body_font' );
 			$css .= '
-				.editor-styles-wrapper {
+				:root .editor-styles-wrapper {
 					color: ' . $text_color . ';
 				}
 			';
 
 			// If single post, use single post font size settings.
 			if ( 'post' === $post_type ) {
-				$css .= $this->get_range_field_css( '#editor .editor-styles-wrapper .wp-block', 'font-size', 'single_content_font_size', true );
+				$css .= $this->get_range_field_css( ':root .editor-styles-wrapper .wp-block', 'font-size', 'single_content_font_size', true );
 			}
 
 			// Headings typography.
-			$css .= $this->get_typography_field_css( '.editor-styles-wrapper h1, .editor-styles-wrapper h2, .editor-styles-wrapper h3, .editor-styles-wrapper h4, .editor-styles-wrapper h5, .editor-styles-wrapper h6, .editor-styles-wrapper .editor-post-title__block .editor-post-title__input', 'headings_font' );
+			$css .= $this->get_typography_field_css( ':root .editor-styles-wrapper h1, :root .editor-styles-wrapper h2, :root .editor-styles-wrapper h3, :root .editor-styles-wrapper h4, :root .editor-styles-wrapper h5, :root .editor-styles-wrapper h6, :root .editor-styles-wrapper .editor-post-title__block .editor-post-title__input', 'headings_font' );
 
 			// Heading em.
 			$css .= $this->get_typography_field_css( '.editor-styles-wrapper h1 em, .editor-styles-wrapper h2 em, .editor-styles-wrapper h3 em, .editor-styles-wrapper h4 em, .editor-styles-wrapper h5 em, .editor-styles-wrapper h6 em', 'heading_em_font' );
 
 			// Headings (H1-H6).
-			$css .= $this->get_typography_field_css( '.editor-styles-wrapper h1, .editor-styles-wrapper .h1, .editor-styles-wrapper .editor-post-title__block .editor-post-title__input', 'h1_font' );
-			$css .= $this->get_typography_field_css( '.editor-styles-wrapper h2, .editor-styles-wrapper .h2', 'h2_font' );
-			$css .= $this->get_typography_field_css( '.editor-styles-wrapper h3, .editor-styles-wrapper .h3', 'h3_font' );
-			$css .= $this->get_typography_field_css( '.editor-styles-wrapper h4', 'h4_font' );
-			$css .= $this->get_typography_field_css( '.editor-styles-wrapper h5', 'h5_font' );
-			$css .= $this->get_typography_field_css( '.editor-styles-wrapper h6', 'h6_font' );
+			$css .= $this->get_typography_field_css( ':root .editor-styles-wrapper h1, :root .editor-styles-wrapper .h1, :root .editor-styles-wrapper .editor-post-title__block .editor-post-title__input', 'h1_font' );
+			$css .= $this->get_typography_field_css( ':root .editor-styles-wrapper h2, :root .editor-styles-wrapper .h2', 'h2_font' );
+			$css .= $this->get_typography_field_css( ':root .editor-styles-wrapper h3, :root .editor-styles-wrapper .h3', 'h3_font' );
+			$css .= $this->get_typography_field_css( ':root .editor-styles-wrapper h4', 'h4_font' );
+			$css .= $this->get_typography_field_css( ':root .editor-styles-wrapper h5', 'h5_font' );
+			$css .= $this->get_typography_field_css( ':root .editor-styles-wrapper h6', 'h6_font' );
 
-			// Headings color.
 			$css .= '
-				#editor .editor-styles-wrapper h1, 
-				#editor .editor-styles-wrapper h2, 
-				#editor .editor-styles-wrapper h3, 
-				#editor .editor-styles-wrapper h4, 
-				#editor .editor-styles-wrapper h5, 
-				#editor .editor-styles-wrapper h6, 
-				#editor .editor-post-title__block .editor-post-title__input {
+				:root .editor-styles-wrapper h1,
+				:root .editor-styles-wrapper h2,
+				:root .editor-styles-wrapper h3,
+				:root .editor-styles-wrapper h4,
+				:root .editor-styles-wrapper h5,
+				:root .editor-styles-wrapper h6,
+				:root .editor-post-title__block .editor-post-title__input {
 					color: ' . $headings_color . ';
 				}
 			';
+
+			// Page header font size.
+			$css .= $this->get_range_field_css( ':root .editor-styles-wrapper .editor-post-title__block .editor-post-title__input', 'font-size', 'page_header_font_size', true );
 
 			// Link hover color.
 			$css .= '

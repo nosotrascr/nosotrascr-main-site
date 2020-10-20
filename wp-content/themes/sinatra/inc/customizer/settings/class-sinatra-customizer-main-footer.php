@@ -71,11 +71,19 @@ if ( ! class_exists( 'Sinatra_Customizer_Main_Footer' ) ) :
 					'choices'     => array(
 						'layout-1' => array(
 							'image' => SINATRA_THEME_URI . '/inc/customizer/assets/images/footer-layout-1.svg',
-							'title' => esc_html__( 'Layout 1', 'sinatra' ),
+							'title' => esc_html__( '1/4 + 1/4 + 1/4 + 1/4', 'sinatra' ),
 						),
 						'layout-2' => array(
 							'image' => SINATRA_THEME_URI . '/inc/customizer/assets/images/footer-layout-2.svg',
-							'title' => esc_html__( 'Layout 2', 'sinatra' ),
+							'title' => esc_html__( '1/3 + 1/3 + 1/3', 'sinatra' ),
+						),
+						'layout-3' => array(
+							'image' => SINATRA_THEME_URI . '/inc/customizer/assets/images/footer-layout-3.svg',
+							'title' => esc_html__( '2/3 + 1/3', 'sinatra' ),
+						),
+						'layout-4' => array(
+							'image' => SINATRA_THEME_URI . '/inc/customizer/assets/images/footer-layout-4.svg',
+							'title' => esc_html__( '1/3 + 2/3', 'sinatra' ),
 						),
 					),
 					'required'    => array(
@@ -99,10 +107,10 @@ if ( ! class_exists( 'Sinatra_Customizer_Main_Footer' ) ) :
 				'transport'         => 'postMessage',
 				'sanitize_callback' => 'sinatra_sanitize_toggle',
 				'control'           => array(
-					'type'    => 'sinatra-toggle',
-					'label'   => esc_html__( 'Center Widget Content', 'sinatra' ),
-					'section' => 'sinatra_section_main_footer',
-					'required'    => array(
+					'type'     => 'sinatra-toggle',
+					'label'    => esc_html__( 'Center Widget Content', 'sinatra' ),
+					'section'  => 'sinatra_section_main_footer',
+					'required' => array(
 						array(
 							'control'  => 'sinatra_enable_footer',
 							'value'    => true,

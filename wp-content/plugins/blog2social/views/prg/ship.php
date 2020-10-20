@@ -87,7 +87,7 @@ $prgInfo = get_option('B2S_PLUGIN_PRG_' . B2S_PLUGIN_BLOG_USER_ID);
                 <h4 class="modal-title"><?php esc_html_e('Please Note', 'blog2social') ?></h4>
             </div>
             <div class="modal-body">
-                <p><?php esc_html_e('It may incur charges for publishing on PR-Gateway. Sent press releases can not be withdrawn. If you want your press release to be published now?', 'blog2social') ?></p>
+                <p><?php esc_html_e('There may be a fee for this service when publishing your message with PR-Gateway. Once your press release has been sent, it can not be withdrawn anymore. Do you want your press release to be published now?', 'blog2social') ?></p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary prg-ship-confirm"><?php esc_html_e('Yes, I accept', 'blog2social') ?></button>

@@ -88,7 +88,7 @@ if ( ! class_exists( 'Sinatra_Elementor_Pro' ) ) :
 		public function register_locations( $manager ) {
 			$manager->register_all_core_location();
 
-			$this->elementor_location_manager = \ElementorPro\Modules\ThemeBuilder\Module::instance()->get_locations_manager();
+			$this->elementor_location_manager = \ElementorPro\Modules\ThemeBuilder\Module::instance()->get_locations_manager(); // phpcs:ignore
 		}
 
 		/**

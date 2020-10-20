@@ -1,7 +1,7 @@
 (~'div#@{sliderid}') {
   .nextend-autoplay {
     cursor: pointer;
-    z-index: 10;
+    z-index: 16;
     line-height: 1;
   }
 

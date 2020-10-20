@@ -12,6 +12,12 @@ class BlockButtonDashboardInfo extends BlockButtonPlainIcon {
 
     protected $size = 'big';
 
+    protected function init() {
+        parent::init();
+
+        $this->setTabIndex(-1);
+    }
+
     protected function getContent() {
 
         return '<i class="' . $this->icon . '"></i><div class="n2_dashboard_info__marker"></div>';

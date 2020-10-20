@@ -76,7 +76,7 @@ $settingsItem = new B2S_Settings_Item();
 <input type="hidden" id="b2sServerUrl" value="<?php echo B2S_PLUGIN_SERVER_URL; ?>">
 
 
-<div class="modal fade" id="b2sInfoAllowShortcodeModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoAllowShortcodeModal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sInfoAllowShortcodeModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoAllowShortcodeModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -90,21 +90,7 @@ $settingsItem = new B2S_Settings_Item();
     </div>
 </div>
 
-<div class="modal fade" id="b2sInfoAllowHashTagModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoAllowHashTagModal" aria-hidden="true" data-backdrop="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoAllowHashTagModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php esc_html_e('Include WordPress tags as hashtags in your posts', 'blog2social') ?></h4>
-            </div>
-            <div class="modal-body">
-                <?php esc_html_e('Hashtags are a great way to generate more reach and visibility for your posts. By activating this feature Blog2Social will automatically include your WordPress tags as hashtags in all Social Media posts for networks that support hashtags. This way you don\'t need to worry about adding extra hashtags to your comments. Blog2Social erases unnecessary spaces in your WordPress tags to generate valid hashtags.', 'blog2social') ?>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="b2sInfoLegacyMode" tabindex="-1" role="dialog" aria-labelledby="b2sInfoLegacyMode" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sInfoLegacyMode" tabindex="-1" role="dialog" aria-labelledby="b2sInfoLegacyMode" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -118,7 +104,7 @@ $settingsItem = new B2S_Settings_Item();
     </div>
 </div>
 
-<div class="modal fade" id="b2sInfoNoCache" tabindex="-1" role="dialog" aria-labelledby="b2sInfoNoCache" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sInfoNoCache" tabindex="-1" role="dialog" aria-labelledby="b2sInfoNoCache" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -132,7 +118,7 @@ $settingsItem = new B2S_Settings_Item();
     </div>
 </div>
 
-<div class="modal fade" id="b2sInfoTimeZoneModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoTimeZoneModal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sInfoTimeZoneModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoTimeZoneModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

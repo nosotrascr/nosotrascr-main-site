@@ -41,6 +41,7 @@ class Ajax_Get {
         add_action('wp_ajax_b2s_get_curation_ship_details', array($this, 'getCurationShipDetails'));
         add_action('wp_ajax_b2s_get_network_auth_settings', array($this, 'getNetworkAuthSettings'));
         add_action('wp_ajax_b2s_update_post_box', array($this, 'updatePostBox'));
+        add_action('wp_ajax_b2s_get_image_caption', array($this, 'getImageCaption'));
     }
 
     public function getBlogPostStatus() {
@@ -109,7 +110,10 @@ class Ajax_Get {
             $b2sUserLang = isset($_POST['b2sUserLang']) ? trim(sanitize_text_field($_POST['b2sUserLang'])) : strtolower(substr(B2S_LANGUAGE, 0, 2));
             $b2sResultsPerPage = (isset($_POST['b2sPostsPerPage']) && (int) $_POST['b2sPostsPerPage'] > 0) ? (int) $_POST['b2sPostsPerPage'] : B2S_PLUGIN_POSTPERPAGE;
             $b2sSortPostSharedBy = (isset($_POST['b2sSortPostSharedBy']) && (int) $_POST['b2sSortPostSharedBy'] > 0) ? (int) $_POST['b2sSortPostSharedBy'] : 0;
-
+            $b2sSortSharedToNetwork = (isset($_POST['b2sSortSharedToNetwork']) && (int) $_POST['b2sSortSharedToNetwork'] > 0) ? (int) $_POST['b2sSortSharedToNetwork'] : 0;
+            $b2sSortSharedAtDateStart = (isset($_POST['b2sSortSharedAtDateStart']) && (int) $_POST['b2sSortSharedAtDateStart'] > 0) ? $_POST['b2sSortSharedAtDateStart'] : 0;
+            $b2sSortSharedAtDateEnd = (isset($_POST['b2sSortSharedAtDateEnd']) && (int) $_POST['b2sSortSharedAtDateEnd'] > 0) ? $_POST['b2sSortSharedAtDateEnd'] : 0;
+            
             require_once(B2S_PLUGIN_DIR . 'includes/Options.php');
             $options = new B2S_Options((int) B2S_PLUGIN_BLOG_USER_ID);
             $optionPostFilters = $options->_getOption('post_filters');
@@ -122,10 +126,13 @@ class Ajax_Get {
             $optionPostFilters['searchPostType'] = $b2sSortPostType;
             $optionPostFilters['postsPerPage'] = $b2sResultsPerPage;
             $optionPostFilters['searchPostSharedById'] = $b2sSortPostSharedBy;
+            $optionPostFilters['searchSharedToNetwork'] = $b2sSortSharedToNetwork;
+            $optionPostFilters['searchSharedAtDateStart'] = $b2sSortSharedAtDateStart;
+            $optionPostFilters['searchSharedAtDateEnd'] = $b2sSortSharedAtDateEnd;
             $optionPostFilters = $options->_setOption('post_filters', $optionPostFilters);
 
             if (!empty($b2sType) && in_array($b2sType, array('all', 'sched', 'publish', 'notice', 'approve', 'draft', 'draft-post', 'favorites'))) {
-                $postItem = new B2S_Post_Item($b2sType, $b2sSortPostTitle, $b2sSortPostAuthor, $b2sSortPostStatus, $b2sSortPostShareStatus, $b2sSortPostPublishDate, $b2sSortPostSchedDate, $b2sShowByDate, $b2sShowByNetwork, $b2sUserAuthId, $b2sPostBlogId, $b2sPagination, $b2sSortPostCat, $b2sSortPostType, $b2sUserLang, $b2sResultsPerPage, $b2sSortPostSharedBy);
+                $postItem = new B2S_Post_Item($b2sType, $b2sSortPostTitle, $b2sSortPostAuthor, $b2sSortPostStatus, $b2sSortPostShareStatus, $b2sSortPostPublishDate, $b2sSortPostSchedDate, $b2sShowByDate, $b2sShowByNetwork, $b2sUserAuthId, $b2sPostBlogId, $b2sPagination, $b2sSortPostCat, $b2sSortPostType, $b2sUserLang, $b2sResultsPerPage, $b2sSortPostSharedBy, $b2sSortSharedToNetwork, $b2sSortSharedAtDateStart, $b2sSortSharedAtDateEnd);
                 $result = array('result' => true, 'content' => $postItem->getItemHtml($b2sSelectSchedDate), 'schedDates' => json_encode($postItem->getCalendarSchedDate()));
                 if ($b2sShowPagination) {
                     $result['pagination'] = $postItem->getPaginationHtml();
@@ -462,7 +469,7 @@ class Ajax_Get {
                 } else {
                     $metaInfo = B2S_Util::getMetaTags(0, esc_url($_POST['url']), (int) $_POST['networkId']);
                 }
-                echo json_encode(array('result' => true, 'networkId' => (int) $_POST['networkId'], 'networkAuthId' => (int) $_POST['networkAuthId'], 'title' => isset($metaInfo['title']) ? $metaInfo['title'] : '', 'description' => isset($metaInfo['description']) ? $metaInfo['description'] : '', 'image' => isset($metaInfo['image']) ? esc_attr($metaInfo['image']) : ''));
+                echo json_encode(array('result' => true, 'networkId' => (int) $_POST['networkId'], 'networkAuthId' => (int) $_POST['networkAuthId'], 'title' => isset($metaInfo['title']) ? (function_exists('htmlspecialchars_decode') ? htmlspecialchars_decode($metaInfo['title']) : $metaInfo['title'])  : '', 'description' => isset($metaInfo['description']) ? (function_exists('htmlspecialchars_decode') ? htmlspecialchars_decode($metaInfo['description']): $metaInfo['description'])  : '', 'image' => isset($metaInfo['image']) ? esc_attr($metaInfo['image']) : ''));
                 wp_die();
             }
             echo json_encode(array('result' => false));
@@ -772,6 +779,20 @@ class Ajax_Get {
                 $postBox = new B2S_PostBox();
                 $updateInfo = $postBox->updateInfo((int) $_GET['post_id']);
                 echo json_encode(array('result' => true, 'active' => $updateInfo['active'], 'lastPostDate' => $updateInfo['lastPostDate'], 'shareCount' => $updateInfo['shareCount']));
+                wp_die();
+            }
+        } else {
+            echo json_encode(array('result' => false, 'error' => 'nonce'));
+            wp_die();
+        }
+    }
+    
+    public function getImageCaption() {
+        if (isset($_GET['b2s_security_nonce']) && (int) wp_verify_nonce($_GET['b2s_security_nonce'], 'b2s_security_nonce') > 0) {
+            if(isset($_GET['image_id']) && (int) $_GET['image_id'] > 0) {
+                $image = get_post((int) $_GET['image_id']);
+                $caption = (($image->post_content != false && $image->post_content != '') ? $image->post_content : '');
+                echo json_encode(array('result' => true, 'caption' => $caption));
                 wp_die();
             }
         } else {

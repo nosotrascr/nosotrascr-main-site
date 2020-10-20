@@ -377,6 +377,8 @@ if ( ! class_exists( 'AM_Notification' ) ) {
 						$key = is_array( $option ) && isset( $option['api']['key'] ) ? $option['api']['key'] : '';
 					}
 					break;
+				default:
+				break;
 			}
 
 			// Possibly set the level to 'none' if the key is empty and no level has been set.

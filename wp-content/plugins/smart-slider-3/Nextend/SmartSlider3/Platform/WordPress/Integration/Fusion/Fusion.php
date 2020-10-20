@@ -50,7 +50,7 @@ class Fusion {
 
         $fields[] = array(
             'smartslider3',
-            dirname(__FILE__) . '/field-smartslider3.phtml'
+            dirname(__FILE__) . '/field-smartslider3.php'
         );
 
         return $fields;

@@ -152,7 +152,7 @@
 					range = $( this );
 					input = range.parent().children( '.sinatra-range-input' );
 
-					newVal = range.attr( 'value' );
+					newVal = range.val();
 
 					if ( value !== newVal ) {
 						value = newVal;
@@ -172,7 +172,7 @@
 
 					// Handle mousemove.
 					range.mousemove( function() {
-						newVal = range.attr( 'value' );
+						newVal = range.val();
 						if ( value !== newVal ) {
 							value = newVal;
 							input.val( newVal ).change();

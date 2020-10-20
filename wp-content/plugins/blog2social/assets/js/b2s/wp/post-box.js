@@ -83,7 +83,34 @@ jQuery(window).on("load", function () {
         }
     }
     
-    jQuery('#b2s-post-meta-box-profil-dropdown').trigger('change');
+    //update Twitter Dropdown
+    var mandantId = jQuery('#b2s-post-meta-box-profil-dropdown').val();
+    var tos = false;
+    if (jQuery('#b2s-post-meta-box-profil-data-' + mandantId).val() == "") {
+        jQuery('#b2s-post-meta-box-state-no-auth').show();
+        tos = true;
+    } else {
+        jQuery('#b2s-post-meta-box-state-no-auth').hide();
+        //TOS Twitter Check
+        var len = jQuery('#b2s-post-meta-box-profil-dropdown-twitter').children('option[data-mandant-id="' + mandantId + '"]').length;
+        if (len >= 1) {
+            jQuery('.b2s-meta-box-auto-post-twitter-profile').show();
+            jQuery('#b2s-post-meta-box-profil-dropdown-twitter').prop('disabled', false);
+            jQuery('#b2s-post-meta-box-profil-dropdown-twitter').show();
+            jQuery('#b2s-post-meta-box-profil-dropdown-twitter option').attr("disabled", "disabled");
+            jQuery('#b2s-post-meta-box-profil-dropdown-twitter option[data-mandant-id="' + mandantId + '"]').attr("disabled", false);
+        } else {
+            tos = true;
+        }
+
+    }
+    //TOS Twitter 032018
+    if (tos) {
+        jQuery('.b2s-meta-box-auto-post-twitter-profile').hide();
+        jQuery('#b2s-post-meta-box-profil-dropdown-twitter').prop('disabled', 'disabled');
+        jQuery('#b2s-post-meta-box-profil-dropdown-twitter').hide();
+    }
+    
 });
 
 

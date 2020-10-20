@@ -1111,7 +1111,7 @@ if ( ! class_exists( 'Sinatra_Woocommerce' ) ) :
 
 			// Background Color - generated from text color.
 			$background_color = sinatra_get_background_color();
-			
+
 			$css .= '
 				.woocommerce div.product .woocommerce-product-gallery .flex-direction-nav .flex-prev,
 				.woocommerce div.product .woocommerce-product-gallery .flex-direction-nav .flex-next,
@@ -1190,10 +1190,10 @@ if ( ! class_exists( 'Sinatra_Woocommerce' ) ) :
 			/**
 			 * Typography.
 			 */
-			
+
 			// Headings.
 			$css .= sinatra_dynamic_styles()->get_typography_field_css( '.woocommerce div.product h1.product_title, .woocommerce #reviews #comments h2, .woocommerce .cart_totals h2, .woocommerce .cross-sells > h4, .woocommerce #reviews #respond .comment-reply-title', 'headings_font' );
-			
+
 			$css .= sinatra_dynamic_styles()->get_typography_field_css( '.woocommerce div.product h1.product_title', 'h2_font' );
 			$css .= sinatra_dynamic_styles()->get_typography_field_css( '.woocommerce #reviews #comments h2', 'h3_font' );
 			$css .= sinatra_dynamic_styles()->get_typography_field_css( '.woocommerce .cart_totals h2, .woocommerce .cross-sells > h4, .woocommerce #reviews #respond .comment-reply-title', 'h4_font' );
@@ -1203,7 +1203,7 @@ if ( ! class_exists( 'Sinatra_Woocommerce' ) ) :
 
 		/**
 		 * Return post ID.
-		 * 
+		 *
 		 * @param  int $post_id Post ID.
 		 * @return int          Modified post ID.
 		 */

@@ -110,8 +110,8 @@ class SliderGeneral extends AbstractSliderTab {
             )
         ));
 
-        new OnOff($row1, 'alias-smoothscroll', n2_('Smooth scroll to this element'), '', array(
-            'tipLabel'       => n2_('Smooth scroll to this element'),
+        new OnOff($row1, 'alias-smoothscroll', n2_('Smooth scroll'), '', array(
+            'tipLabel'       => n2_('Smooth scroll'),
             'tipDescription' => n2_('The #your-alias urls in links would be forced to smooth scroll to the slider.'),
             'tipLink'        => 'https://smartslider.helpscoutdocs.com/article/1722-slider-settings-general#smooth-scroll-to-this-element'
         ));
@@ -119,10 +119,18 @@ class SliderGeneral extends AbstractSliderTab {
         /**
          * Used for field removal: /general/alias/alias-1/alias-slideswitch
          */
-        new OnOff($row1, 'alias-slideswitch', n2_('Allow slide switching for anchor'), '', array(
-            'tipLabel'       => n2_('Allow slide switching for anchor'),
-            'tipDescription' => n2_('Use #your-alias-2 as an anchor to jump to the slider and switch to the 2nd slide immediately. Use #your-alias-3 for the 3rd slide and so on.'),
-            'tipLink'        => 'https://smartslider.helpscoutdocs.com/article/1722-slider-settings-general#allow-slide-switching-for-anchor'
+        new OnOff($row1, 'alias-slideswitch', n2_('Switch slide'), '', array(
+            'tipLabel'        => n2_('Switch slide'),
+            'tipDescription'  => n2_('Use #your-alias-2 as an anchor to jump to the slider and switch to the 2nd slide immediately. Use #your-alias-3 for the 3rd slide and so on.'),
+            'tipLink'         => 'https://smartslider.helpscoutdocs.com/article/1722-slider-settings-general#allow-slide-switching-for-anchor',
+            'relatedFieldsOn' => array(
+                'slideralias-slideswitch-scroll'
+            )
+        ));
+
+        new OnOff($row1, 'alias-slideswitch-scroll', n2_('Scroll to slide'), 1, array(
+            'tipLabel'       => n2_('Scroll to slide'),
+            'tipDescription' => n2_('The "Switch slide" option won\'t scroll you to the slider. Only the slides will switch.')
         ));
     }
 

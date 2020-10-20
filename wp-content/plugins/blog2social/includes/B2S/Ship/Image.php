@@ -19,7 +19,8 @@ class B2S_Ship_Image {
         if ($this->imageData) {
             $imageData = $this->imageData;
         } else {
-            $imageData = B2S_Util::getImagesByPostID($postId, $postContent, $postUrl, true, $userLang);
+            $hook_filter = new B2S_Hook_Filter();
+            $imageData = $hook_filter->get_wp_post_image($postId, false, $postContent, $postUrl, true, $userLang);
         }
         
         $isImage = (is_array($imageData) && !empty($imageData)) ? true : false;
@@ -34,7 +35,10 @@ class B2S_Ship_Image {
 
         $content .= '<div class="row b2s-image-size-info">';
         $content .='<div class="col-xs-12 hidden-xs hidden-sm">';
-        $content .='<i">' . esc_html__('The best size for images in social media posts are between: 667-1000px x 523-1000px. Blog2Social will automatically resize your image according to network requirements.', 'blog2social') . '</i>';
+        $content .='<i class="b2s-multi-image-info-text">' . esc_html__('Sharing more than one image improves the visibility of your content. You can create image series, show sequences, and level up your storytelling. With Blog2Social you can share up to 4 images in one post on Facebook (page and group) and on Twitter.', 'blog2social') . '</i>';
+        $content .='<i class="b2s-multi-image-info-text">' . esc_html__('The best size for images in social media posts are between: 667-1000px x 523-1000px. Blog2Social will automatically resize your image according to network requirements.', 'blog2social') . '</i>';
+        $content .='<i class="b2s-default-image-info-text">' . esc_html__('The best size for images in social media posts are between: 667-1000px x 523-1000px. Blog2Social will automatically resize your image according to the network requirements. You can also share up to 4 images in one post on Facebook (page and group) and on Twitter.', 'blog2social') . '</i>';
+        $content .='<i> ' . esc_html__('Changing the image for a link post affects all images for link post publications of that post on the network.', 'blog2social') . '</i>';
         $content .='</div>';
         $content .='</div>';
         $tempCountImage = 0;
@@ -76,6 +80,7 @@ class B2S_Ship_Image {
         if (B2S_PLUGIN_USER_VERSION > 0) {
             $content .= '<button class="btn btn-primary b2s-image-change-this-network b2s-image-change-btn-area" ' . (!$isImage ? 'style="display:none"' : '') . ' data-network-auth-id="" data-network-id="" data-meta-type="" data-post-id="' . esc_attr($postId) . '">' . esc_html__('Apply image for this post', 'blog2social') . '</button>';
             $content .= '<button class="btn btn-primary b2s-image-change-meta-network b2s-image-change-btn-area" ' . (!$isImage ? 'style="display:none"' : '') . ' data-network-auth-id="" data-network-id="" data-meta-type="" data-post-id="' . esc_attr($postId) . '">' . esc_html__('Apply image for all og-meta networks', 'blog2social') . '</button>';
+            $content .= '<button class="btn btn-primary b2s-image-add-this-network b2s-image-change-btn-area" ' . (!$isImage ? 'style="display:none"' : '') . ' data-network-auth-id="" data-network-id="" data-image-count="" data-post-id="' . esc_attr($postId) . '">' . esc_html__('Apply image for this image gallery', 'blog2social') . '</button>';
         } else {
             $content .= '<button class="btn btn-primary b2s-btn-disabled b2s-upload-image-free-version b2s-image-change-btn-area" ' . (!$isImage ? 'style="display:none"' : '') . ' data-post-id="' . esc_attr($postId) . '">' . esc_html__('Apply image for this post', 'blog2social') . ' <span class="label label-success">' . esc_html__('SMART', 'blog2social') . ' </span></button>';
         }

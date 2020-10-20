@@ -130,7 +130,6 @@ class WPForms_Process {
 		$this->fields = array();
 		$form_id      = absint( $entry['id'] );
 		$form         = wpforms()->form->get( $form_id );
-		$honeypot     = false;
 
 		// Validate form is real and active (published).
 		if ( ! $form || 'publish' !== $form->post_status ) {
@@ -260,23 +259,39 @@ class WPForms_Process {
 			return;
 		}
 
-		// Validate honeypot early - before actual processing.
-		if (
-			! empty( $this->form_data['settings']['honeypot'] ) &&
-			'1' == $this->form_data['settings']['honeypot'] &&
-			! empty( $entry['hp'] )
-		) {
-			$honeypot = esc_html__( 'WPForms honeypot field triggered.', 'wpforms-lite' );
-		}
+		$honeypot = wpforms()->get( 'honeypot' )->validate( $this->form_data, $this->fields, $entry );
 
-		$honeypot = apply_filters( 'wpforms_process_honeypot', $honeypot, $this->fields, $entry, $this->form_data );
-
-		// If spam - return early.
+		// If we trigger the honey pot, we want to log the entry, disable the errors, and fail silently.
 		if ( $honeypot ) {
+
 			// Logs spam entry depending on log levels set.
 			wpforms_log(
 				'Spam Entry ' . uniqid(),
 				array( $honeypot, $entry ),
+				array(
+					'type'    => array( 'spam' ),
+					'form_id' => $this->form_data['id'],
+				)
+			);
+
+			// Fail silently.
+			return;
+		}
+
+		$antispam = wpforms()->get( 'token' )->validate( $this->form_data, $this->fields, $entry );
+
+		// If spam - return early.
+		// For antispam, we want to make sure that we have a value, we are not using AMP, and the value is an error string.
+		if ( $antispam && ! wpforms_is_amp() && is_string( $antispam ) ) {
+
+			if ( $antispam ) {
+				$this->errors[ $form_id ]['header'] = $antispam;
+			}
+
+			// Logs spam entry depending on log levels set.
+			wpforms_log(
+				esc_html__( 'Spam Entry ' ) . uniqid(),
+				array( $antispam, $entry ),
 				array(
 					'type'    => array( 'spam' ),
 					'form_id' => $this->form_data['id'],
@@ -778,8 +793,16 @@ class WPForms_Process {
 		// Transform field ids to field names for jQuery Validate plugin.
 		foreach ( $field_errors as $key => $error ) {
 
-			$props = wpforms()->frontend->get_field_properties( $fields[ $key ], $form_data );
-			$name  = isset( $props['inputs']['primary']['attr']['name'] ) ? $props['inputs']['primary']['attr']['name'] : '';
+			$field = $fields[ $key ];
+			$props = wpforms()->frontend->get_field_properties( $field, $form_data );
+			$input = isset( $props['inputs']['primary'] ) ? $props['inputs']['primary'] : end( $props['inputs'] );
+			$name  = isset( $input['attr']['name'] ) && empty( $input['hidden'] ) ? $input['attr']['name'] : '';
+			$type  = isset( $field['type'] ) ? $field['type'] : '';
+
+			// Multiple select field has a name property without [] at the end.
+			if ( $name && 'select' === $type && ! empty( $field['multiple'] ) ) {
+				$name .= '[]';
+			}
 
 			if ( $name ) {
 				$field_errors[ $name ] = $error;

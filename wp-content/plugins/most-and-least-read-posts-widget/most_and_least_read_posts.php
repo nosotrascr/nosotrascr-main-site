@@ -5,7 +5,7 @@ Plugin URI: http://www.whiletrue.it/
 Description: Provide two widgets, showing lists of the most and reast read posts.
 Author: WhileTrue
 Text Domain: most-and-least-read-posts-widget
-Version: 2.5.13
+Version: 2.5.14
 Author URI: http://www.whiletrue.it/
 */
 /*
@@ -709,8 +709,12 @@ function most_read_posts_shortcode($atts)
 }
 
 
-// register widget
-add_action('widgets_init', create_function('', 'return register_widget("MostReadPostsWidget");'));
-add_action('widgets_init', create_function('', 'return register_widget("LeastReadPostsWidget");'));
+// REGISTER WIDGET AND SHORTCODE
+add_action('widgets_init',  function () {
+	return register_widget('MostReadPostsWidget');
+});
+add_action('widgets_init',  function () {
+	return register_widget('LeastReadPostsWidget');
+});
 
 add_shortcode('most_read_posts',  'most_read_posts_shortcode');

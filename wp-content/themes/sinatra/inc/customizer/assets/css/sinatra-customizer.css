@@ -207,7 +207,9 @@ body:not(.wp-customizer) input[type=submit],
 #accordion-panel-nav_menus,
 #accordion-section-sinatra_section_help .accordion-section-title,
 #accordion-panel-sinatra_panel_blog,
-#accordion-panel-sinatra_panel_header {
+#accordion-panel-sinatra_panel_header,
+#accordion-section-sinatra_section_transparent_header,
+#accordion-section-sinatra_section_page_header {
   margin-top: 12px;
 }
 

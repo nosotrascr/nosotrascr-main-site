@@ -354,8 +354,9 @@ function sinatra_get_sidebar_position( $post = null ) {
 /**
  * Check if sidebar is displayed.
  *
- * @since  1.0.0
- * @return boolean, Sidebar displayed.
+ * @since 1.0.0
+ * @param int $post Optional. The post ID to check. If not supplied, defaults to the current post if used in the loop.
+ * @return boolean Sidebar displayed.
  */
 function sinatra_is_sidebar_displayed( $post = null ) {
 
@@ -448,7 +449,7 @@ function sinatra_get_single_post_elements( $post_id = null ) {
  * Check if single post element is displayed.
  *
  * @since  1.1.0
- * @param  string  $element Element name.
+ * @param  string $element Element name.
  * @return boolean          Element is enabled or not.
  */
 function sinatra_single_post_displays( $element ) {
@@ -550,7 +551,7 @@ add_filter( 'comment_form_submit_button', 'sinatra_filter_comment_form_submit_bu
  *
  * @since 1.0.0
  * @param int $length Word count for excerpt.
- * @param int
+ * @return int
  */
 function sinatra_excerpt_length( $length ) {
 	return intval( sinatra_option( 'excerpt_length' ) );
@@ -573,12 +574,13 @@ add_filter( 'excerpt_more', 'sinatra_excerpt_more' );
  * Determines if post thumbnail can be displayed.
  *
  * @since 1.0.0
+ * @param int $post_id Optional. The post ID to check. If not supplied, defaults to the current post if used in the loop.
  * @return boolean, Thumbnail displayed.
  */
 function sinatra_show_post_thumbnail( $post_id = null ) {
 
 	$post_id = is_null( $post_id ) ? sinatra_get_the_id() : $post_id;
-	
+
 	$display = ! post_password_required( $post_id ) && ! is_attachment( $post_id ) && has_post_thumbnail( $post_id );
 
 	if ( get_post_meta( $post_id, 'sinatra_disable_thumbnail', true ) ) {
@@ -878,7 +880,7 @@ endif;
  *
  * @since 1.1.0
  *
- * @param  int      $post_id Optional. The post ID to check.
+ * @param  int $post_id Optional. The post ID to check.
  * @return boolean, Breadcrumbs displayed.
  */
 function sinatra_has_breadcrumbs( $post_id = 0 ) {
@@ -905,7 +907,7 @@ function sinatra_has_breadcrumbs( $post_id = 0 ) {
  *
  * @since 1.0.0
  *
- * @param  int      $post_id Optional. The post ID to check.
+ * @param  int $post_id Optional. The post ID to check.
  * @return boolean, Breadcrumbs displayed.
  */
 function sinatra_page_header_has_breadcrumbs( $post_id = 0 ) {
@@ -918,7 +920,7 @@ function sinatra_page_header_has_breadcrumbs( $post_id = 0 ) {
  *
  * @since 1.0.0
  *
- * @param  int      $post_id Optional. The post ID to check.
+ * @param  int $post_id Optional. The post ID to check.
  * @return boolean, Title & description displayed.
  */
 function sinatra_page_header_has_title( $post_id = 0 ) {
@@ -997,13 +999,14 @@ function sinatra_comments_toggle_displayed() {
  *
  * @since 1.1.1
  * @param array $atts Attributes array.
+ * @param int   $post_id Optional. The post ID to check. If not supplied, defaults to the current post if used in the loop.
  * @return void|string
  */
 function sinatra_masthead_atts( $atts = array(), $post_id = '' ) {
 
 	if ( is_single() && 'in-page-header' === sinatra_option( 'single_title_position' ) && sinatra_is_header_transparent( $post_id ) ) {
 		if ( sinatra_show_post_thumbnail( $post_id ) && sinatra_single_post_displays( 'thumb' ) ) {
-			$atts['style'] = isset( $atts['style'] ) ? $atts['style'] : '';
+			$atts['style']  = isset( $atts['style'] ) ? $atts['style'] : '';
 			$atts['style'] .= 'background-image: url(' . wp_get_attachment_image_url( get_post_thumbnail_id( $post_id ), 'full' ) . ');';
 		}
 	}
@@ -1020,7 +1023,7 @@ function sinatra_masthead_atts( $atts = array(), $post_id = '' ) {
 
 		$output = empty( $output ) ? '' : ' ' . $output;
 
-		print $output;
+		print $output; // phpcs:ignore
 	}
 }
 
@@ -1111,14 +1114,15 @@ function sinatra_page_header_classes( $classes = array() ) {
  * Add attributes to Page Header.
  *
  * @since 1.0.0
- * @param array $classes Classes array.
+ * @param array $atts Array of additional attributes.
+ * @param int   $post_id Optional. The post ID to check. If not supplied, defaults to the current post if used in the loop.
  * @return void
  */
 function sinatra_page_header_atts( $atts = array(), $post_id = '' ) {
 
 	if ( is_single() && 'in-page-header' === sinatra_option( 'single_title_position' ) && ! sinatra_is_header_transparent( $post_id ) ) {
 		if ( sinatra_show_post_thumbnail( $post_id ) && sinatra_single_post_displays( 'thumb' ) ) {
-			$atts['style'] = isset( $atts['style'] ) ? $atts['style'] : '';
+			$atts['style']  = isset( $atts['style'] ) ? $atts['style'] : '';
 			$atts['style'] .= 'background-image: url(' . wp_get_attachment_image_url( get_post_thumbnail_id( $post_id ), 'full' ) . ');';
 		}
 	}
@@ -1135,7 +1139,7 @@ function sinatra_page_header_atts( $atts = array(), $post_id = '' ) {
 
 		$output = empty( $output ) ? '' : ' ' . $output;
 
-		print $output;
+		print $output; // phpcs:ignore
 	}
 }
 
@@ -1270,6 +1274,14 @@ function sinatra_get_footer_column_class( $layout = 'layout-1' ) {
 			'col-xs-12 col-sm-6 stretch-xs col-md-4',
 			'col-xs-12 col-sm-6 stretch-xs col-md-4',
 		),
+		'layout-3' => array(
+			'col-xs-12 col-sm-6 stretch-xs col-md-8',
+			'col-xs-12 col-sm-6 stretch-xs col-md-4',
+		),
+		'layout-4' => array(
+			'col-xs-12 col-sm-6 stretch-xs col-md-4',
+			'col-xs-12 col-sm-6 stretch-xs col-md-8',
+		),
 	);
 
 	$classes = apply_filters( 'sinatra_footer_column_classes', $classes, $layout );
@@ -1380,7 +1392,7 @@ function sinatra_body_classes( $classes ) {
 	if ( is_singular( 'post' ) ) {
 
 		$title_position = sinatra_option( 'single_title_position' );
-		$classes[] = 'si-single-title-' . $title_position;
+		$classes[]      = 'si-single-title-' . $title_position;
 
 		// Narrow content for single post.
 		if ( 'narrow' === sinatra_option( 'single_content_width' ) ) {
@@ -1412,12 +1424,14 @@ function sinatra_body_classes( $classes ) {
 		if ( $sidebar_sticky ) {
 			$classes[] = 'si-sticky-' . $sidebar_sticky;
 		}
-		
+
 		// Sidebar style.
 		$classes[] = 'sinatra-sidebar-style-' . sinatra_option( 'sidebar_style' );
 
 		// Sidebar position.
 		$classes[] = 'sinatra-sidebar-position__' . sinatra_get_sidebar_position();
+
+		$classes[] = 'si-sidebar-r__' . sinatra_option( 'sidebar_responsive_position' );
 
 	} else {
 
@@ -1496,7 +1510,7 @@ function sinatra_dynamic_strings( $content ) {
 	$content = str_replace( '{{the_year}}', date_i18n( 'Y' ), $content );
 	$content = str_replace( '{{the_date}}', date_i18n( get_option( 'date_format' ) ), $content );
 	$content = str_replace( '{{site_title}}', get_bloginfo( 'name' ), $content );
-	$content = str_replace( '{{theme_link}}', '<a href="https://sinatrawp.com/" class="imprint" target="_blank" rel="noopener noreferrer">Sinatra WordPress Theme</a>', $content );
+	$content = str_replace( '{{theme_link}}', '<a href="https://wordpress.org/themes/sinatra/" class="imprint" target="_blank" rel="noopener noreferrer">Sinatra WordPress Theme</a>', $content );
 
 	if ( false !== strpos( $content, '{{current_user}}' ) ) {
 		$current_user = wp_get_current_user();

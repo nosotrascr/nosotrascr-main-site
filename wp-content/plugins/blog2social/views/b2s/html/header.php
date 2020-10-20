@@ -22,13 +22,15 @@ if ($autoPostCon !== false && is_array($autoPostCon) && isset($autoPostCon['coun
     $autoPostLimit = ($autoPostCon['count'] == $con[B2S_PLUGIN_USER_VERSION] && $current_user_date == $autoPostCon['last_call_date']) ? 'block' : 'none';
 }
 $b2sLastVersion = get_option('b2s_plugin_version');
-$b2sPrivacyPolicy = get_option('B2S_PLUGIN_PRIVACY_POLICY_USER_ACCEPT_' . B2S_PLUGIN_BLOG_USER_ID);
 $showPrivacyPolicy = false;
-if ($b2sPrivacyPolicy !== false) {
-    $b2sPrivacyPolicy = unserialize(base64_decode($b2sPrivacyPolicy));
-    if (is_array($b2sPrivacyPolicy) && $b2sPrivacyPolicy !== false && isset($b2sPrivacyPolicy[substr(B2S_LANGUAGE, 0, 2)])) {
-        $showPrivacyPolicy = true;
-        $b2sPrivacyPolicy = $b2sPrivacyPolicy[substr(B2S_LANGUAGE, 0, 2)];
+if (!B2S_System::isblockedArea('B2S_USER_POLICY', B2S_PLUGIN_ADMIN)) {
+    $b2sPrivacyPolicy = get_option('B2S_PLUGIN_PRIVACY_POLICY_USER_ACCEPT_' . B2S_PLUGIN_BLOG_USER_ID);
+    if ($b2sPrivacyPolicy !== false) {
+        $b2sPrivacyPolicy = unserialize(base64_decode($b2sPrivacyPolicy));
+        if (is_array($b2sPrivacyPolicy) && $b2sPrivacyPolicy !== false && isset($b2sPrivacyPolicy[substr(B2S_LANGUAGE, 0, 2)])) {
+            $showPrivacyPolicy = true;
+            $b2sPrivacyPolicy = $b2sPrivacyPolicy[substr(B2S_LANGUAGE, 0, 2)];
+        }
     }
 }
 ?>
@@ -322,7 +324,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
 <!--Header-->
 
 <!-- B2S-Trial -->
-<div id="b2s-trial-modal" class="modal fade" role="dialog" aria-labelledby="b2s-trial-modal" aria-hidden="true" data-backdrop="false">
+<div id="b2s-trial-modal" class="modal fade" role="dialog" aria-labelledby="b2s-trial-modal" aria-hidden="true" data-backdrop="false" style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -380,7 +382,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
 </div>
 
 <!-- B2S-Key-Info-->
-<div class="modal fade" id="b2sInfoKeyModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoKeyModal" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sInfoKeyModal" tabindex="-1" role="dialog" aria-labelledby="b2sInfoKeyModal" aria-hidden="true" data-backdrop="false" style="display:none;">
     <div class="modal-dialog b2s-modal-info-key-area">
         <div class="modal-content">
             <div class="modal-body">
@@ -462,7 +464,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
 
 <input id="b2sUserAcceptPrivacyPolicy" type="hidden" value="<?php echo (($showPrivacyPolicy) ? 'true' : 'false'); ?>">
 <!-- B2S-Privacy-Policy-Info-->
-<div class="modal fade" id="b2sModalPrivacyPolicy" tabindex="-1" role="dialog" aria-labelledby="b2sModalPrivacyPolicy" aria-hidden="true" data-backdrop="false">
+<div class="modal fade" id="b2sModalPrivacyPolicy" tabindex="-1" role="dialog" aria-labelledby="b2sModalPrivacyPolicy" aria-hidden="true" data-backdrop="false" style="display:none;">
     <div class="modal-dialog b2s-scroll-modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">

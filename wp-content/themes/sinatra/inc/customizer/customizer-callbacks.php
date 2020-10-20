@@ -405,7 +405,7 @@ function sinatra_sanitize_spacing( $values, $setting, $default = array() ) {
  * @param mixed  $default Default Value.
  */
 function sinatra_sanitize_range( $value, $setting, $default = '' ) {
-	
+
 	if ( is_array( $value ) ) {
 		if ( isset( $value['value'], $value['unit'] ) ) {
 			return array(
@@ -415,7 +415,7 @@ function sinatra_sanitize_range( $value, $setting, $default = '' ) {
 		} elseif ( isset( $value['value'] ) ) {
 			return floatval( $value['value'] );
 		}
-	} 
+	}
 
 	return is_numeric( $value ) ? floatval( $value ) : $default;
 }

@@ -9,7 +9,7 @@
 
 ?>
 
-<div <?php sinatra_page_header_classes(); sinatra_page_header_atts(); ?>>
+<div <?php sinatra_page_header_classes(); ?><?php sinatra_page_header_atts(); ?>>
 	<div class="si-container">
 
 	<?php do_action( 'sinatra_page_header_start' ); ?>

@@ -6,6 +6,7 @@ use MO;
 use Nextend\Framework\Localization\Joomla\JoomlaLocalization;
 use Nextend\Framework\Localization\WordPress\WordPressLocalization;
 use Nextend\Framework\Pattern\SingletonTrait;
+use Nextend\Framework\Platform\Platform;
 use Nextend\Framework\Settings;
 use NOOP_Translations;
 
@@ -47,7 +48,7 @@ class Localization {
     }
 
     public static function loadPluginTextDomain($path, $domain = 'nextend') {
-        if (Settings::get('force-english-backend')) {
+        if (Platform::isAdmin() && Settings::get('force-english-backend')) {
             $locale = 'en_EN';
         } else {
             $locale = self::getLocale();

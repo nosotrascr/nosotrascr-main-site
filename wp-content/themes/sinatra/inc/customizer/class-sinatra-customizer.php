@@ -241,6 +241,7 @@ if ( ! class_exists( 'Sinatra_Customizer' ) ) :
 				'buttons',
 				'misc',
 				'transparent-header',
+				'sticky-header',
 				'sidebar',
 				'breadcrumbs',
 			);
@@ -289,7 +290,7 @@ if ( ! class_exists( 'Sinatra_Customizer' ) ) :
 		 * Filter and return Customizer options.
 		 *
 		 * @since 1.0.0
-		 * 
+		 *
 		 * @return Array Customizer options for registering Sections/Panels/Controls.
 		 */
 		public function get_customizer_options() {
@@ -304,10 +305,10 @@ if ( ! class_exists( 'Sinatra_Customizer' ) ) :
 		 * Register Customizer Panel.
 		 *
 		 * @since 1.0.0
-		 * 
+		 *
 		 * @param Array                $panel Panel settings.
 		 * @param WP_Customize_Manager $customizer instance of WP_Customize_Manager.
-		 * 
+		 *
 		 * @return void
 		 */
 		private function add_panel( $id, $args, $customizer ) {
@@ -320,10 +321,10 @@ if ( ! class_exists( 'Sinatra_Customizer' ) ) :
 		 * Register Customizer Section.
 		 *
 		 * @since 1.0.0
-		 * 
+		 *
 		 * @param Array                $section Section settings.
 		 * @param WP_Customize_Manager $customizer instance of WP_Customize_Manager.
-		 * 
+		 *
 		 * @return void
 		 */
 		private function add_section( $id, $args, $customizer ) {
@@ -336,10 +337,10 @@ if ( ! class_exists( 'Sinatra_Customizer' ) ) :
 		 * Register Customizer Control.
 		 *
 		 * @since 1.0.0
-		 * 
+		 *
 		 * @param Array                $control Control settings.
 		 * @param WP_Customize_Manager $customizer instance of WP_Customize_Manager.
-		 * 
+		 *
 		 * @return void
 		 */
 		private function add_control( $id, $args, $customizer ) {
@@ -358,15 +359,15 @@ if ( ! class_exists( 'Sinatra_Customizer' ) ) :
 		 * Register Customizer Setting.
 		 *
 		 * @since 1.0.0
-		 * 
+		 *
 		 * @param Array                $setting Settings.
 		 * @param WP_Customize_Manager $customizer instance of WP_Customize_Manager.
-		 * 
+		 *
 		 * @return void
 		 */
 		private function add_setting( $id, $setting, $customizer ) {
 			$setting = wp_parse_args( $setting, $this->get_customizer_defaults( 'setting' ) );
-			
+
 			$customizer->add_setting(
 				$id,
 				array(
@@ -397,7 +398,7 @@ if ( ! class_exists( 'Sinatra_Customizer' ) ) :
 		 * Return custom controls.
 		 *
 		 * @since 1.0.0
-		 * 
+		 *
 		 * @return Array custom control slugs & classnames.
 		 */
 		private function get_custom_controls() {
@@ -421,7 +422,7 @@ if ( ! class_exists( 'Sinatra_Customizer' ) ) :
 					'info'           => 'Sinatra_Customizer_Control_Info',
 					'design-options' => 'Sinatra_Customizer_Control_Design_Options',
 					'alignment'      => 'Sinatra_Customizer_Control_Alignment',
-					'checkbox-group' => 'Sinatra_Customizer_Control_Checkbox_Group'
+					'checkbox-group' => 'Sinatra_Customizer_Control_Checkbox_Group',
 				)
 			);
 		}
@@ -430,7 +431,7 @@ if ( ! class_exists( 'Sinatra_Customizer' ) ) :
 		 * Return default values for customizer parts.
 		 *
 		 * @since 1.0.0
-		 * 
+		 *
 		 * @return Array default values for the Customizer Configurations.
 		 */
 		private function get_customizer_defaults( $type ) {
@@ -464,9 +465,9 @@ if ( ! class_exists( 'Sinatra_Customizer' ) ) :
 		 * Get custom control classname.
 		 *
 		 * @since 1.0.0
-		 * 
+		 *
 		 * @param string $control Control ID.
-		 * 
+		 *
 		 * @return string Control classname.
 		 */
 		private function get_control_class( $type ) {
@@ -480,7 +481,7 @@ if ( ! class_exists( 'Sinatra_Customizer' ) ) :
 					return $controls[ $type ];
 				}
 			}
-			
+
 			return false;
 		}
 

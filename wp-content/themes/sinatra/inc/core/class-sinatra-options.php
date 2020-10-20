@@ -69,7 +69,7 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 		 * @return array Default values.
 		 */
 		public function get_defaults() {
-			
+
 			$defaults = array(
 
 				/**
@@ -188,10 +188,10 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 					'bottom-left'  => 2,
 					'unit'         => 'px',
 				),
-				'sinatra_primary_button_border_width'       => 1,
-				'sinatra_primary_button_border_color'       => 'rgba(0, 0, 0, 0.12)',
+				'sinatra_primary_button_border_width'      => 1,
+				'sinatra_primary_button_border_color'      => 'rgba(0, 0, 0, 0.12)',
 				'sinatra_primary_button_hover_border_color' => 'rgba(0, 0, 0, 0.12)',
-				'sinatra_primary_button_typography'         => sinatra_typography_defaults(
+				'sinatra_primary_button_typography'        => sinatra_typography_defaults(
 					array(
 						'font-family'         => 'inherit',
 						'font-weight'         => 500,
@@ -202,22 +202,22 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 				),
 
 				// Secondary Button.
-				'sinatra_secondary_button_heading'          => false,
-				'sinatra_secondary_button_bg_color'         => '#23282d',
-				'sinatra_secondary_button_hover_bg_color'   => '#3e4750',
-				'sinatra_secondary_button_text_color'       => '#FFFFFF',
+				'sinatra_secondary_button_heading'         => false,
+				'sinatra_secondary_button_bg_color'        => '#23282d',
+				'sinatra_secondary_button_hover_bg_color'  => '#3e4750',
+				'sinatra_secondary_button_text_color'      => '#FFFFFF',
 				'sinatra_secondary_button_hover_text_color' => '#FFFFFF',
-				'sinatra_secondary_button_border_radius'    => array(
+				'sinatra_secondary_button_border_radius'   => array(
 					'top-left'     => 2,
 					'top-right'    => 2,
 					'bottom-right' => 2,
 					'bottom-left'  => 2,
 					'unit'         => 'px',
 				),
-				'sinatra_secondary_button_border_width'       => 1,
-				'sinatra_secondary_button_border_color'       => 'rgba(0, 0, 0, 0.12)',
+				'sinatra_secondary_button_border_width'    => 1,
+				'sinatra_secondary_button_border_color'    => 'rgba(0, 0, 0, 0.12)',
 				'sinatra_secondary_button_hover_border_color' => 'rgba(0, 0, 0, 0.12)',
-				'sinatra_secondary_button_typography'         => sinatra_typography_defaults(
+				'sinatra_secondary_button_typography'      => sinatra_typography_defaults(
 					array(
 						'font-family'         => 'inherit',
 						'font-weight'         => 500,
@@ -228,10 +228,10 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 				),
 
 				// Text button.
-				'sinatra_text_button_heading'          => false,
-				'sinatra_text_button_text_color'       => '#23282d',
-				'sinatra_text_button_hover_text_color' => '',
-				'sinatra_text_button_typography'       => sinatra_typography_defaults(
+				'sinatra_text_button_heading'              => false,
+				'sinatra_text_button_text_color'           => '#23282d',
+				'sinatra_text_button_hover_text_color'     => '',
+				'sinatra_text_button_typography'           => sinatra_typography_defaults(
 					array(
 						'font-family'         => 'inherit',
 						'font-weight'         => 500,
@@ -265,13 +265,13 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 						'bottom' => 25,
 						'left'   => 0,
 					),
-					'tablet' => array(
+					'tablet'  => array(
 						'top'    => '',
 						'right'  => '',
 						'bottom' => '',
 						'left'   => '',
 					),
-					'mobile' => array(
+					'mobile'  => array(
 						'top'    => '',
 						'right'  => '',
 						'bottom' => '',
@@ -388,7 +388,7 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 					'archive',
 					'search',
 				),
-				'sinatra_tsp_logo_heading'                 => true,
+				'sinatra_tsp_logo_heading'                 => false,
 				'sinatra_tsp_logo'                         => '',
 				'sinatra_tsp_logo_retina'                  => '',
 				'sinatra_tsp_logo_max_height'              => array(
@@ -396,18 +396,18 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 				),
 				'sinatra_tsp_logo_margin'                  => array(
 					'desktop' => array(
-						'top'    => 25,
-						'right'  => 0,
-						'bottom' => 25,
-						'left'   => 0,
-					),
-					'tablet' => array(
 						'top'    => '',
 						'right'  => '',
 						'bottom' => '',
 						'left'   => '',
 					),
-					'mobile' => array(
+					'tablet'  => array(
+						'top'    => '',
+						'right'  => '',
+						'bottom' => '',
+						'left'   => '',
+					),
+					'mobile'  => array(
 						'top'    => '',
 						'right'  => '',
 						'bottom' => '',
@@ -434,6 +434,9 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 					)
 				),
 
+				// Sticky Header.
+				'sinatra_sticky_header'                    => false,
+
 				// Main Navigation.
 				'sinatra_main_nav_heading_animation'       => false,
 				'sinatra_main_nav_hover_animation'         => 'underline',
@@ -446,7 +449,9 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 				'sinatra_main_nav_background'              => sinatra_design_options_defaults(
 					array(
 						'background' => array(
-							'color'    => array(),
+							'color'    => array(
+								'background-color' => '#FFFFFF',
+							),
 							'gradient' => array(),
 						),
 					)
@@ -454,9 +459,10 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 				'sinatra_main_nav_border'                  => sinatra_design_options_defaults(
 					array(
 						'border' => array(
-							'border-top-width' => 1,
-							'border-style'     => 'solid',
-							'border-color'     => 'rgba(0,0,0, .085)',
+							'border-top-width'    => 1,
+							'border-bottom-width' => 1,
+							'border-style'        => 'solid',
+							'border-color'        => 'rgba(0,0,0, .085)',
 						),
 					)
 				),
@@ -479,11 +485,11 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 						'top'    => 30,
 						'bottom' => 30,
 					),
-					'tablet' => array(
+					'tablet'  => array(
 						'top'    => '',
 						'bottom' => '',
 					),
-					'mobile' => array(
+					'mobile'  => array(
 						'top'    => '',
 						'bottom' => '',
 					),
@@ -528,11 +534,11 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 						'top'    => 15,
 						'bottom' => 15,
 					),
-					'tablet' => array(
+					'tablet'  => array(
 						'top'    => '',
 						'bottom' => '',
 					),
-					'mobile' => array(
+					'mobile'  => array(
 						'top'    => '',
 						'bottom' => '',
 					),
@@ -621,11 +627,11 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 						'top'    => 152,
 						'bottom' => 100,
 					),
-					'tablet' => array(
+					'tablet'  => array(
 						'top'    => 90,
 						'bottom' => 55,
 					),
-					'mobile' => array(
+					'mobile'  => array(
 						'top'    => '',
 						'bottom' => '',
 					),
@@ -674,12 +680,13 @@ if ( ! class_exists( 'Sinatra_Options' ) ) :
 				'sinatra_sidebar_style'                    => '1',
 				'sinatra_sidebar_width'                    => 25,
 				'sinatra_sidebar_sticky'                   => '',
+				'sinatra_sidebar_responsive_position'      => 'after-content',
 				'sinatra_typography_sidebar_heading'       => false,
 				'sinatra_sidebar_widget_title_font_size'   => array(
 					'desktop' => 1,
 					'unit'    => 'rem',
 				),
-				
+
 				/**
 				 * Footer.
 				 */

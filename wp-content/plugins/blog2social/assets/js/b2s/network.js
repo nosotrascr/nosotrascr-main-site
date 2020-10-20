@@ -901,6 +901,9 @@ jQuery(window).on("load", function () {
             jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('0');
             jQuery('.b2s-edit-template-image-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             jQuery('.b2s-edit-template-link-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
+            if(jQuery('#b2s-edit-template-network-id').val() == 1) {
+                jQuery('.b2s-edit-template-enable-link-area[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
+            }
         });
 
         jQuery(document).on('click', '.b2s-edit-template-image-post', function () {
@@ -909,6 +912,9 @@ jQuery(window).on("load", function () {
             jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('1');
             jQuery('.b2s-edit-template-link-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             jQuery('.b2s-edit-template-image-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
+            if(jQuery('#b2s-edit-template-network-id').val() == 1) {
+                jQuery('.b2s-edit-template-enable-link-area[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
+            }
         });
 
 
@@ -1106,7 +1112,7 @@ jQuery(document).on('click', '.b2s-edit-template-save-btn', function () {
         template_data[networkType]['content'] = jQuery('.b2s-edit-template-post-content[data-network-type="' + networkType + '"]').val();
         template_data[networkType]['range_max'] = jQuery('.b2s-edit-template-range[data-network-type="' + networkType + '"]').val();
         template_data[networkType]['excerpt_range_max'] = jQuery('.b2s-edit-template-excerpt-range[data-network-type="' + networkType + '"]').val();
-        if (jQuery('#b2s-edit-template-network-id').val() == 12) {
+        if (jQuery('#b2s-edit-template-network-id').val() == 12 || jQuery('#b2s-edit-template-network-id').val() == 1) {
             if(jQuery('.b2s-edit-template-enable-link[data-network-type="' + networkType + '"]').is(':checked')) {
                 template_data[networkType]['addLink'] = true;
             } else {
@@ -1596,11 +1602,22 @@ jQuery(document).on('click', '.b2s-url-parameter-save-btn', function () {
 //END Network Auth Settings
 
 jQuery(document).on('click', '.b2s-network-add-page-info-btn', function() {
-    jQuery('#b2sNetworkAddInfoModal').modal('show');
+    jQuery('#b2sNetworkAddPageInfoModal').modal('show');
     var b2sAuthUrl = jQuery(this).data('b2s-auth-url');
     jQuery(document).on('click', '.b2s-add-network-continue-btn', function() {
-        jQuery('#b2sNetworkAddInfoModal').modal('hide');
+        jQuery('#b2sNetworkAddPageInfoModal').modal('hide');
         wop(b2sAuthUrl + '&choose=page', 'Blog2Social Network');
+        return false;
+    });
+    return false;
+});
+
+jQuery(document).on('click', '.b2s-network-add-group-info-btn', function() {
+    jQuery('#b2sNetworkAddGroupInfoModal').modal('show');
+    var b2sAuthUrl = jQuery(this).data('b2s-auth-url');
+    jQuery(document).on('click', '.b2s-add-network-continue-btn', function() {
+        jQuery('#b2sNetworkAddGroupInfoModal').modal('hide');
+        wop(b2sAuthUrl + '&choose=group', 'Blog2Social Network');
         return false;
     });
     return false;

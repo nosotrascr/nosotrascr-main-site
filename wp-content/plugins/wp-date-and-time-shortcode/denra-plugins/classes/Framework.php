@@ -6,9 +6,9 @@
  * The Denra Plugins Framework class.
  *
  * @author     Denra.com aka SoftShop Ltd <support@denra.com>
- * @copyright  2019 Denra.com aka SoftShop Ltd
+ * @copyright  2019-2020 Denra.com aka SoftShop Ltd
  * @license    GPLv2 or later
- * @version    1.2.1
+ * @version    1.3.5
  * @link       https://www.denra.com/
  */
 
@@ -22,7 +22,7 @@ namespace Denra\Plugins;
 class Framework extends BasicExtra {
     
     // The version here and above in the comments MUST MATCH !!!
-    public static $version = '1.2.1';
+    public static $version = '1.3.5';
     
     public $url_website = 'https://denra.com/';
     public $url_support_page = 'https://denra.com/';
@@ -35,23 +35,17 @@ class Framework extends BasicExtra {
         
         (isset($data['framework_plugin_id']) && $data['framework_plugin_id']) || die('<p>Framework plugin ID needed for '.get_class($this).'.</p>');
         
-        // Check framework version correctness
-        if (FrameworkLoader::$framework_version != self::$version) {
-            die('<p>Error: FrameworkLoader framework version (' . FrameworkLoader::$framework_version . ') and Framework real version (' . self::$version . ') do not match.</p>');
-        }
-        
         // Set text_domain for the framework
         $this->text_domain = $id;
         
         // Set framework dir and url
         $plugin_data = $denra_plugins['data'][$data['framework_plugin_id']];
-        $data['file'] .= $plugin_data['file'];
-        $data['dir'] .= $plugin_data['dir'] . $id . '/';
-        $data['url'] .= $plugin_data['url'] . $id . '/';
+        $data['file'] = $plugin_data['file'];
+        $data['dir'] = $plugin_data['dir'] . $id . '/';
+        $data['url'] = $plugin_data['url'] . $id . '/';
         unset($plugin_data);
         
         parent::__construct($id, $data);
-        unset($data);
         
         // Load all plugins
         foreach($denra_plugins['data'] as $plugin_id => $plugin_data) {
@@ -100,31 +94,34 @@ class Framework extends BasicExtra {
     // Delete all keys that are missing in the new plugin version
     public static function deleteOldSettingsData(&$settings, &$settings_default) {
         
-        foreach (array_keys($settings) as $key) {
-            if (!isset($settings_default[$key])) {
-                unset($settings[$key]); // delete settings key if missing
-            }
-            elseif (is_array($settings[$key])) { // check subkeys recursively
-                self::deleteOldSettingsData($settings[$key], $settings_default[$key]);
-            }
-        }        
-    }
-    
-    public static function addNewSettingsData(&$settings, &$settings_default) {
-        
-        // Add all keys that are newly created in the new plugin version
-        foreach (array_keys($settings_default) as $key) {
-            if (isset($settings[$key])) {
-                if (is_array($settings[$key]) && is_array($settings_default[$key])) {
-                    self::addNewSettingsData($settings[$key], $settings_default[$key]);
-                    continue;                    
+        if (is_array($settings) && is_array($settings_default)) {
+            foreach (array_keys($settings) as $key) {
+                if (!isset($settings_default[$key])) {
+                    unset($settings[$key]); // delete settings key if missing
+                }
+                elseif (is_array($settings[$key])) { // check subkeys recursively
+                    self::deleteOldSettingsData($settings[$key], $settings_default[$key]);
                 }
             }
-            else {
-                $settings[$key] = $settings_default[$key];
+        }
+    }
+    
+    // Add all keys that are newly created in the new plugin version
+    public static function addNewSettingsData(&$settings, &$settings_default) {
+        
+        if (is_array($settings) && is_array($settings_default)) {
+            foreach (array_keys($settings_default) as $key) {
+                if (isset($settings[$key])) {
+                    if (is_array($settings[$key]) && is_array($settings_default[$key])) {
+                        self::addNewSettingsData($settings[$key], $settings_default[$key]);
+                        continue;                    
+                    }
+                }
+                else {
+                    $settings[$key] = $settings_default[$key];
+                }
             }
         }
-        
     }
     
     public function addAdminMenus() {

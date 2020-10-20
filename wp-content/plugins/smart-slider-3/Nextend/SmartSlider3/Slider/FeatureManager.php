@@ -151,6 +151,7 @@ class FeatureManager {
             'id'           => intval($this->slider->params->get('alias-id', 0)),
             'smoothScroll' => intval($this->slider->params->get('alias-smoothscroll', 0)),
             'slideSwitch'  => intval($this->slider->params->get('alias-slideswitch', 0)),
+            'scroll'       => intval($this->slider->params->get('alias-slideswitch-scroll', 1)),
             'scrollSpeed'  => intval(Settings::get('smooth-scroll-speed', 400))
         );
 

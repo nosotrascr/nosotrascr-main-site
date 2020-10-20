@@ -8,7 +8,8 @@ class PRG_Ship_Image {
 
    public function getItemHtml($postId,$postContent,$postUrl,$userLang='en') {
         $content = '';
-        $imageData = B2S_Util::getImagesByPostID($postId,$postContent,$postUrl, true,$userLang);
+        $hook_filter = new B2S_Hook_Filter();
+        $imageData = $hook_filter->get_wp_post_image($postId, false, $postContent,$postUrl, true,$userLang);
         $isImage = (is_array($imageData) && !empty($imageData)) ? true : false;
 
         if ($isImage) {

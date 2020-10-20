@@ -768,6 +768,35 @@ jQuery(document).on('click', '.b2s-image-change', function () {
         jQuery('.b2s-upload-image-no-permission').hide();
         jQuery('.b2s-upload-image-free-version-info').hide();
         jQuery('.b2s-post-item-details-url-image').removeClass('error');
+        if(jQuery('input[name=image_url]:checked').data('id') > 0) {
+            jQuery.ajax({
+                url: ajaxurl,
+                type: "GET",
+                dataType: "json",
+                cache: false,
+                data: {
+                    'action': 'b2s_get_image_caption',
+                    'image_id': jQuery('input[name=image_url]:checked').data('id'),
+                    'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+                },
+                error: function () {
+                    jQuery('.b2s-server-connection-fail').show();
+                    return false;
+                },
+                success: function (data) {
+                    if (data.result == true) {
+                        if(data.caption != '' && jQuery('.b2s-post-item-details-item-message-input').val() == '') {
+                            jQuery('.b2s-post-item-details-item-message-input').val(data.caption);
+                        }
+                        return false;
+                    } else {
+                        if(data.error == 'nonce') {
+                            jQuery('.b2s-nonce-check-fail').show();
+                        }
+                    }
+                }
+            });
+        }
     }
     jQuery('#b2s-network-select-image').modal('hide');
     return false;

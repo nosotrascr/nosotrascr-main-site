@@ -5,7 +5,7 @@
  * @package     Kirki
  * @category    Modules
  * @author      Ari Stathopoulos (@aristath)
- * @copyright   Copyright (c) 2019, Ari Stathopoulos (@aristath)
+ * @copyright   Copyright (c) 2020, David Vongries
  * @license     https://opensource.org/licenses/MIT
  * @since       3.0.0
  */
@@ -140,7 +140,7 @@ class Kirki_Modules_CSS {
 		// Enqueue the dynamic stylesheet.
 		wp_enqueue_style(
 			'kirki-styles',
-			add_query_arg( $args, site_url() ),
+			add_query_arg( $args, home_url() ),
 			array(),
 			KIRKI_VERSION
 		);

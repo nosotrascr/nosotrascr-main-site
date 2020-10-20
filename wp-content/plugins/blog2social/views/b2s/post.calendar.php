@@ -73,6 +73,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                             </div>
                         </div>
                         <?php
+                        $noLegendCalender=1;
                         require_once (B2S_PLUGIN_DIR . 'views/b2s/html/footer.php');
                         ?> 
                     </div>
@@ -102,7 +103,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 <input type="hidden" id="b2s_rfd" value="<?php echo (isset($_GET['rfd'])) ? 1 : 0; ?>">
 <input type="hidden" id="b2s_rfd_b2s_id" value="<?php echo (isset($_GET['b2s_id'])) ? esc_attr($_GET['b2s_id']) : ""; ?>">
 
-<div id="b2s-post-ship-item-post-format-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-ship-item-post-format-modal" aria-hidden="true" data-backdrop="false" style="z-index: 1070;">
+<div id="b2s-post-ship-item-post-format-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-ship-item-post-format-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -147,7 +148,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
     </div>
 </div>
 
-<div id="b2s-network-select-image" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false" style="z-index: 1070;">
+<div id="b2s-network-select-image" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -165,7 +166,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
     </div>
 </div>
 
-<div id="b2s-show-post-type-modal" class="modal fade" role="dialog" aria-labelledby="b2s-show-post-type-modal" aria-hidden="true" data-backdrop="false" style="z-index: 1070;">
+<div id="b2s-show-post-type-modal" class="modal fade" role="dialog" aria-labelledby="b2s-show-post-type-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -209,7 +210,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 </div>
 
 
-<div id="b2s-show-post-all-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-all-modal" aria-hidden="true" data-backdrop="false" style="z-index: 1070;">
+<div id="b2s-show-post-all-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-all-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -256,7 +257,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 </div>
 
 
-<div id="b2s-sched-post-modal" class="modal fade" role="dialog" aria-labelledby="b2s-sched-post-modal" aria-hidden="true" data-backdrop="false" style="z-index: 1070;">
+<div id="b2s-sched-post-modal" class="modal fade" role="dialog" aria-labelledby="b2s-sched-post-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

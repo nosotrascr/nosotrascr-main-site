@@ -20,10 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class OMAPI_Rules_Exception extends Exception {
 	protected $bool = null;
+	protected $exceptions = array();
 	public function __construct( $message = null, $code = 0, Exception $previous = null ) {
 		if ( is_bool( $message ) ) {
 			$this->bool = $message;
-			$message = null;
+			$message    = null;
 		}
 		parent::__construct( $message, $code, $previous );
 	}
@@ -31,6 +32,15 @@ class OMAPI_Rules_Exception extends Exception {
 	public function get_bool() {
 		return $this->bool;
 	}
+
+	public function add_exceptions( array $exceptions ) {
+		$this->exceptions = $exceptions;
+	}
+
+	public function get_exceptions() {
+		return (array) $this->exceptions;
+	}
+
 }
 class OMAPI_Rules_False extends OMAPI_Rules_Exception {
 	protected $bool = false;
@@ -66,9 +76,6 @@ class OMAPI_Rules {
 		'taxonomies',
 		'show',
 		'type',
-		'shortcode',
-		'shortcode_output',
-		'mailpoet',
 		'test',
 		'show_on_woocommerce',
 		'is_wc_shop',
@@ -158,6 +165,13 @@ class OMAPI_Rules {
 	public static $last_instance = null;
 
 	/**
+	 * Exceptions which were not caught/were ignored and may be the reason for the final exclusion.
+	 *
+	 * @var array
+	 */
+	public $reasons = array();
+
+	/**
 	 * Primary class constructor.
 	 *
 	 * @since 1.5.0
@@ -175,7 +189,7 @@ class OMAPI_Rules {
 		$this->is_inline_check = $is_inline_check;
 		$this->global_override = ! $is_inline_check;
 
-		self::$last_instance   = $this;
+		self::$last_instance = $this;
 	}
 
 	/**
@@ -297,18 +311,23 @@ class OMAPI_Rules {
 			$this->include_if_inline_and_automatic_and_no_advanced_settings();
 			$this->output_if_global_override();
 
-			// If we get this far, include it.
-			throw new OMAPI_Rules_False( 'default no show' );
+			$e = new OMAPI_Rules_False( 'default no show' );
+
+			if ( ! empty( $this->reasons ) ) {
+				$e->add_exceptions( $this->reasons );
+			}
+
+			throw $e;
 
 		} catch ( OMAPI_Rules_Exception $e ) {
-			$this->caught = $e;
+			$this->caught  = $e;
 			$should_output = $e instanceof OMAPI_Rules_True;
 		}
 
 		$rules_debug = ! empty( $_GET['omwpdebug'] );
 
 		if ( $rules_debug ) {
-			$option = OMAPI::get_instance()->get_option();
+			$option      = OMAPI::get_instance()->get_option();
 			$rules_debug = ! empty( $option['api']['omwpdebug'] ) || is_user_logged_in() && apply_filters( 'optin_monster_api_menu_cap', 'manage_options', '' );
 		}
 
@@ -424,7 +443,7 @@ class OMAPI_Rules {
 
 		// Set flag for possibly not loading globally.
 		if ( $this->field_not_empty_array( 'only' ) ) {
-			$this->global_override = false;
+			$this->global_override           = false;
 			$this->advanced_settings['show'] = $this->get_field_value( 'only' );
 
 			// If the optin is only to be shown on specific post IDs...
@@ -446,6 +465,7 @@ class OMAPI_Rules {
 			if ( $e instanceof OMAPI_Rules_True ) {
 				throw new OMAPI_Rules_True( 'include on categories', 0, $e );
 			}
+			$this->reasons[] = $e;
 		}
 
 		try {
@@ -455,11 +475,12 @@ class OMAPI_Rules {
 			if ( $e instanceof OMAPI_Rules_True ) {
 				throw new OMAPI_Rules_True( 'include on taxonomies', 0, $e );
 			}
+			$this->reasons[] = $e;
 		}
 
 		if ( $this->field_not_empty_array( 'show' ) ) {
 			// Set flag for not loading globally.
-			$this->global_override = false;
+			$this->global_override           = false;
 			$this->advanced_settings['show'] = $this->get_field_value( 'show' );
 		}
 
@@ -504,6 +525,7 @@ class OMAPI_Rules {
 				if ( $e instanceof OMAPI_Rules_True ) {
 					throw new OMAPI_Rules_True( 'include woocommerce', 0, $e );
 				}
+				$this->reasons[] = $e;
 			}
 		}
 	}
@@ -567,13 +589,8 @@ class OMAPI_Rules {
 
 		if ( $this->field_not_empty_array( 'categories' ) ) {
 			// Set flag for possibly not loading globally.
-			$this->global_override = false;
+			$this->global_override                 = false;
 			$this->advanced_settings['categories'] = $categories;
-		}
-
-		// If the optin is only to be shown on particular categories...
-		if ( 'post' !== get_post_type() ) {
-			throw new OMAPI_Rules_False( 'not post post_type' );
 		}
 
 		// If this is the home page, check to see if they have decided to load on certain archive pages.
@@ -589,8 +606,8 @@ class OMAPI_Rules {
 		// But has not worked for 3+ years as the is_home() condition was precluding it.
 		// Also applies to logic in check_taxonomies_field
 		// if ( in_array( 'post', (array) $fields['show'] ) && ! ( is_front_page() || is_home() || is_archive() || is_search() ) ) {
-		// 	$omapi_output->set_slug( $optin );
-		// 	return $html;
+		// $omapi_output->set_slug( $optin );
+		// return $html;
 		// }
 
 		if ( $this->post_id ) {
@@ -632,7 +649,7 @@ class OMAPI_Rules {
 		if ( $values ) {
 			foreach ( $values as $i => $value ) {
 				if ( OMAPI_Utils::field_not_empty_array( $values, $i ) ) {
-					$this->global_override = false;
+					$this->global_override                 = false;
 					$this->advanced_settings['taxonomies'] = $values;
 					break;
 				}
@@ -651,6 +668,13 @@ class OMAPI_Rules {
 		$this->check_is_home_and_show_on_index();
 
 		foreach ( $taxonomies as $taxonomy => $ids_to_check ) {
+			// Tags are saved differently.
+			// https://github.com/awesomemotive/optin-monster-wp-api/issues/104
+			if ( ! empty( $ids_to_check[0] ) && false !== strpos( $ids_to_check[0], ',' ) ) {
+				$ids_to_check = explode( ',', (string) $ids_to_check[0] );
+			}
+
+			$ids_to_check = (array) $ids_to_check;
 
 			if ( $this->post_id ) {
 				$all_terms = get_the_terms( $this->post_id, $taxonomy );
@@ -665,10 +689,13 @@ class OMAPI_Rules {
 				}
 			}
 
-			if ( ! $this->is_inline_check && OMAPI_Utils::is_term_archive( $ids_to_check, $taxonomy ) ) {
-				throw new OMAPI_Rules_True( "not inline and is on $taxonomy archive" );
+			if ( ! $this->is_inline_check ) {
+				foreach ( $ids_to_check as $tax_id ) {
+					if ( OMAPI_Utils::is_term_archive( $tax_id, $taxonomy ) ) {
+						throw new OMAPI_Rules_True( "not inline and is on $taxonomy archive" );
+					}
+				}
 			}
-
 		}
 
 		throw new OMAPI_Rules_False( 'no taxonomy matches found' );
@@ -705,7 +732,7 @@ class OMAPI_Rules {
 				continue;
 			}
 
-			$this->global_override = false;
+			$this->global_override             = false;
 			$this->advanced_settings[ $field ] = $this->get_field_value( $field );
 
 			if ( call_user_func_array( array_shift( $callback ), $callback ) ) {
@@ -736,6 +763,8 @@ class OMAPI_Rules {
 			case 'global_override':
 			case 'advanced_settings':
 				return $this->$property;
+			default:
+				break;
 		}
 
 		throw new Exception( sprintf( esc_html__( 'Invalid %1$s property: %2$s', 'optin-monster-api' ), __CLASS__, $property ) );
@@ -751,19 +780,31 @@ class OMAPI_Rules {
 	protected function output_debug() {
 		$show = $this->caught instanceof OMAPI_Rules_True;
 
-		echo '<xmp class="_om-campaign-status" style="color: '. ( $show ? 'green' : 'red' ) . ';">'. $this->optin->post_name . ":\n" . print_r( $this->caught->getMessage(), true ) .'</xmp>';
+		echo '<xmp class="_om-post-id">$post_id: ' . print_r( $this->post_id, true ) . '</xmp>';
+		echo '<xmp class="_om-campaign-status" style="color: ' . ( $show ? 'green' : 'red' ) . ';">' . $this->optin->post_name . ":\n" . print_r( $this->caught->getMessage(), true );
+		$reasons = $this->caught->get_exceptions();
+		if ( ! empty( $reasons ) ) {
+			$messages = array();
+			foreach ( $reasons as $e ) {
+				$messages[] = $e->getMessage();
+			}
+
+			echo ":\n\t- " . implode( "\n\t- ", $messages );
+		}
+		echo '</xmp>';
+
 
 		if ( ! empty( $this->advanced_settings ) ) {
-			echo '<xmp class="_om-advanced-settings">$advanced_settings: '. print_r( $this->advanced_settings, true ) .'</xmp>';
+			echo '<xmp class="_om-advanced-settings">$advanced_settings: ' . print_r( $this->advanced_settings, true ) . '</xmp>';
 		}
 
 		if ( ! empty( $this->field_values ) ) {
-			echo '<xmp class="_om-field-values" style="display:none;">$field_values: '. print_r( $this->field_values, true ) .'</xmp>';
+			echo '<xmp class="_om-field-values" style="display:none;">$field_values: ' . print_r( $this->field_values, true ) . '</xmp>';
 		}
 
-		echo '<xmp class="_om-is-inline-check" style="display:none;">$is_inline_check?: '. print_r( $this->is_inline_check, true ) .'</xmp>';
-		echo '<xmp class="_om-global-override" style="display:none;">$global_override?: '. print_r( $this->global_override, true ) .'</xmp>';
-		echo '<xmp class="_om-optin" style="display:none;">$optin: '. print_r( $this->optin, true ) .'</xmp>';
+		echo '<xmp class="_om-is-inline-check" style="display:none;">$is_inline_check?: ' . print_r( $this->is_inline_check, true ) . '</xmp>';
+		echo '<xmp class="_om-global-override" style="display:none;">$global_override?: ' . print_r( $this->global_override, true ) . '</xmp>';
+		echo '<xmp class="_om-optin" style="display:none;">$optin: ' . print_r( $this->optin, true ) . '</xmp>';
 	}
 
 }

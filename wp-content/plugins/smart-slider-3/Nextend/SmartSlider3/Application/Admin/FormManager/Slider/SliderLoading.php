@@ -53,8 +53,7 @@ class SliderLoading extends AbstractSliderTab {
             'options'            => array(
                 ''            => n2_('Instant'),
                 'afterOnLoad' => n2_('After page loaded'),
-                'afterDelay'  => n2_('After delay'),
-                'afterSlider' => n2_('After slider')
+                'afterDelay'  => n2_('After delay')
             ),
             'relatedValueFields' => array(
                 array(
@@ -64,24 +63,8 @@ class SliderLoading extends AbstractSliderTab {
                     'field'  => array(
                         'sliderdelay'
                     )
-                ),
-                array(
-                    'values' => array(
-                        'afterSlider'
-                    ),
-                    'field'  => array(
-                        'sliderdependency'
-                    )
                 )
             ),
-        ));
-
-        new Number($row0, 'dependency', n2_('Load after'), '', array(
-            'tipLabel'       => n2_('Load after'),
-            'tipDescription' => n2_('The current slider will not start loading until the set slider is loaded completely.'),
-            'tipLink'        => 'https://smartslider.helpscoutdocs.com/article/1803-slider-settings-loading#load-after',
-            'wide'           => 5,
-            'sublabel'       => n2_('Slider ID')
         ));
 
         new Number($row0, 'delay', n2_('Load delay'), 0, array(

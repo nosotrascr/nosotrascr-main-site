@@ -147,8 +147,9 @@ class WPForms_Builder_Panel_Fields extends WPForms_Builder_Panel {
 				</div>
 
 				<?php
-				$submit = ! empty( $this->form_data['settings']['submit_text'] ) ? $this->form_data['settings']['submit_text'] : esc_html__( 'Submit', 'wpforms-lite' );
-				printf( '<p class="wpforms-field-submit"><input type="submit" value="%s" class="wpforms-field-submit-button"></p>', esc_attr( $submit ) );
+				$submit       = ! empty( $this->form_data['settings']['submit_text'] ) ? $this->form_data['settings']['submit_text'] : esc_html__( 'Submit', 'wpforms-lite' );
+				$submit_style = empty( $this->form_data['fields'] ) ? 'display: none;' : '';
+				printf( '<p class="wpforms-field-submit" style="%1$s"><input type="submit" value="%2$s" class="wpforms-field-submit-button"></p>', esc_attr( $submit_style ), esc_attr( $submit ) );
 				?>
 
 				<?php wpforms_debug_data( $this->form_data ); ?>
@@ -326,8 +327,12 @@ class WPForms_Builder_Panel_Fields extends WPForms_Builder_Panel {
 	public function no_fields_preview() {
 
 		printf(
-			'<p class="no-fields-preview">%s</p>',
-			esc_html__( 'You don\'t have any fields yet. Add some!', 'wpforms-lite' )
+			'<div class="no-fields-preview">
+				<h4>%1$s</h4>
+				<p>%2$s</p>
+			</div>',
+			esc_html__( 'You don\'t have any fields yet. Add some!', 'wpforms-lite' ),
+			esc_html__( 'Take your pick from our wide variety of fields and start building out your form!', 'wpforms-lite' )
 		);
 	}
 
@@ -352,6 +357,7 @@ class WPForms_Builder_Panel_Fields extends WPForms_Builder_Panel {
 	 */
 	public function field_preview_templates() {
 
+		// phpcs:disable WordPress.WP.I18n
 		// Checkbox, Radio, and Payment Multiple/Checkbox field choices.
 		?>
 		<script type="text/html" id="tmpl-wpforms-field-preview-checkbox-radio-payment-multiple">
@@ -373,7 +379,9 @@ class WPForms_Builder_Panel_Fields extends WPForms_Builder_Panel {
 						<# } else { #>
 							<input class="wpforms-screen-reader-element" type="{{ data.type }}" disabled<# if ( 1 === data.settings.choices[choiceID].default ) { print( ' checked' ); } #>>
 						<# } #>
-						<span class="wpforms-image-choices-label">{{{ wpf.sanitizeHTML( data.settings.choices[choiceID].label ) }}}</span>
+						<span class="wpforms-image-choices-label">
+							{{ WPFormsBuilder.fieldChoiceLabel( data, choiceID ) }}
+						</span>
 					</label>
 				</li>
 				<# }) #>
@@ -382,13 +390,15 @@ class WPForms_Builder_Panel_Fields extends WPForms_Builder_Panel {
 			<ul class="primary-input">
 				<# _.each( data.order, function( choiceID, key ) {  #>
 				<li>
-					<input type="{{ data.type }}" disabled<# if ( 1 === data.settings.choices[choiceID].default ) { print( ' checked' ); } #>>{{{ wpf.sanitizeHTML( data.settings.choices[choiceID].label ) }}}
+					<input type="{{ data.type }}" disabled<# if ( 1 === data.settings.choices[choiceID].default ) { print( ' checked' ); } #>>
+					{{ WPFormsBuilder.fieldChoiceLabel( data, choiceID ) }}
 				</li>
 				<# }) #>
 			</ul>
 			<# } #>
 		</script>
 		<?php
+		// phpcs:enable
 	}
 
 }

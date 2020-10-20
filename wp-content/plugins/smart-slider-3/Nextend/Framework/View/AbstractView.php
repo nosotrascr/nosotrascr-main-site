@@ -33,7 +33,7 @@ abstract class AbstractView {
 
     protected function render($templateName) {
         ob_start();
-        include self::getPath() . '/Template/' . $templateName . '.phtml';
+        include self::getPath() . '/Template/' . $templateName . '.php';
 
         return ob_get_clean();
     }

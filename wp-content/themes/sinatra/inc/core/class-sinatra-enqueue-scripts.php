@@ -28,8 +28,8 @@ function sinatra_enqueues() {
 	);
 
 	// Enqueue IE specific styles.
-	wp_enqueue_style( 
-		'sinatra-ie', 
+	wp_enqueue_style(
+		'sinatra-ie',
 		SINATRA_THEME_URI . '/assets/css/compatibility/ie' . $sinatra_suffix . '.css',
 		false,
 		SINATRA_THEME_VERSION,
@@ -55,23 +55,23 @@ function sinatra_enqueues() {
 	);
 
 	// Flexibility.js for crossbrowser flex support.
-	wp_enqueue_script( 
-		'sinatra-flexibility', 
+	wp_enqueue_script(
+		'sinatra-flexibility',
 		SINATRA_THEME_URI . '/assets/js/' . $sinatra_dir . 'vendors/flexibility' . $sinatra_suffix . '.js',
-		array(), 
-		SINATRA_THEME_VERSION, 
-		false 
+		array(),
+		SINATRA_THEME_VERSION,
+		false
 	);
 
-	wp_add_inline_script( 
-		'sinatra-flexibility', 
-		'flexibility(document.documentElement);' 
+	wp_add_inline_script(
+		'sinatra-flexibility',
+		'flexibility(document.documentElement);'
 	);
 
-	wp_script_add_data( 
-		'sinatra-flexibility', 
-		'conditional', 
-		'IE' 
+	wp_script_add_data(
+		'sinatra-flexibility',
+		'conditional',
+		'IE'
 	);
 
 	// Register ImagesLoaded library.
@@ -114,6 +114,7 @@ function sinatra_enqueues() {
 		'ajaxurl'               => esc_url( admin_url( 'admin-ajax.php' ) ),
 		'nonce'                 => wp_create_nonce( 'sinatra-nonce' ),
 		'responsive-breakpoint' => intval( sinatra_option( 'main_nav_mobile_breakpoint' ) ),
+		'sticky-header'         => sinatra_option( 'sticky_header' ),
 		'strings'               => array(
 			/* translators: %s Comment count */
 			'comments_toggle_show' => $comment_count > 0 ? esc_html( sprintf( _n( 'Show %s Comment', 'Show %s Comments', $comment_count, 'sinatra' ), $comment_count ) ) : esc_html__( 'Leave a Comment', 'sinatra' ),
@@ -139,7 +140,7 @@ add_action( 'wp_enqueue_scripts', 'sinatra_enqueues' );
  * Skip link focus fix for IE11.
  *
  * @since 1.0.0
- * 
+ *
  * @return void
  */
 function sinatra_skip_link_focus_fix() {
@@ -155,7 +156,7 @@ add_action( 'wp_print_footer_scripts', 'sinatra_skip_link_focus_fix' );
  * Enqueue assets for the Block Editor.
  *
  * @since 1.0.0
- * 
+ *
  * @return void
  */
 function sinatra_block_editor_assets() {

@@ -10,11 +10,33 @@ jQuery(window).on("load", function () {
     jQuery('#b2sPagination').val("1");
     b2sSortFormSubmit();
 
-    /*if (jQuery('#b2sType').val() != "sched") {
-     jQuery('.b2s-sched-calendar-btn').hide();
-     }*/
     jQuery('#b2s-sched-calendar-area').hide();
 
+    if (jQuery('#b2sType').val() == "draft-post") {
+        var dateFormat = "yyyy-mm-dd";
+        var language = "en";
+        if (jQuery('#b2sUserLang').val() == "de") {
+            dateFormat = "dd.mm.yyyy";
+            language = "de";
+        }
+        jQuery("#b2sSortSharedAtDateStart").datepicker({
+            format: dateFormat,
+            language: language,
+            maxViewMode: 2,
+            todayHighlight: true,
+            calendarWeeks: true,
+            autoclose: true
+        });
+
+        jQuery("#b2sSortSharedAtDateEnd").datepicker({
+            format: dateFormat,
+            language: language,
+            maxViewMode: 2,
+            todayHighlight: true,
+            calendarWeeks: true,
+            autoclose: true
+        });
+    }
 });
 
 
@@ -226,6 +248,9 @@ function b2sSortFormSubmit(sched_dates) {
         'b2sUserLang': jQuery('#b2sUserLang').val(),
         'b2sPostsPerPage': jQuery('#b2sPostsPerPage').val(),
         'b2sSortPostSharedBy': jQuery('#b2sSortPostSharedBy').val(),
+        'b2sSortSharedToNetwork': jQuery('#b2sSortSharedToNetwork').val(),
+        'b2sSortSharedAtDateStart': jQuery('#b2sSortSharedAtDateStart').val(),
+        'b2sSortSharedAtDateEnd': jQuery('#b2sSortSharedAtDateEnd').val(),
         'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
     };
 

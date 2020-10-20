@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Short description for file
+ * Plugin Hooks
  *
- * Long description for file (if any)...
+ * The main hooks class which is inherited.
  *
  * @author     Denra.com aka SoftShop Ltd <support@denra.com>
- * @copyright  2019 Denra.com aka SoftShop Ltd
+ * @copyright  2019-2020 Denra.com aka SoftShop Ltd
  * @license    GPLv2 or later
- * @version    1.1
+ * @version    1.1.1
  * @link       https://www.denra.com/
  */
 

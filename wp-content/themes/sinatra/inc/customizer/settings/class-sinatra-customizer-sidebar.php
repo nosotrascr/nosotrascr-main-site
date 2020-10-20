@@ -201,6 +201,30 @@ if ( ! class_exists( 'Sinatra_Customizer_Sidebar' ) ) :
 				),
 			);
 
+			// Sidebar mobile position.
+			$options['setting']['sinatra_sidebar_responsive_position'] = array(
+				'transport'         => 'postMessage',
+				'sanitize_callback' => 'sinatra_sanitize_select',
+				'control'           => array(
+					'type'        => 'sinatra-select',
+					'section'     => 'sinatra_section_sidebar',
+					'label'       => esc_html__( 'Responsive Sidebar Position', 'sinatra' ),
+					'description' => esc_html__( 'Control sidebar position on smaller screens.', 'sinatra' ),
+					'choices'     => array(
+						'hide'           => esc_html__( 'Hide', 'sinatra' ),
+						'before-content' => esc_html__( 'Before Content', 'sinatra' ),
+						'after-content'  => esc_html__( 'After Content', 'sinatra' ),
+					),
+					'required'    => array(
+						array(
+							'control'  => 'sinatra_sidebar_options_heading',
+							'value'    => true,
+							'operator' => '==',
+						),
+					),
+				),
+			);
+
 			// Sidebar typography heading.
 			$options['setting']['sinatra_typography_sidebar_heading'] = array(
 				'transport'         => 'postMessage',

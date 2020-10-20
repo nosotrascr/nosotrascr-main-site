@@ -94,7 +94,7 @@ class OMAPI_TrustPulse {
 		}
 
 		// If user is in admin ajax or doing cron, return.
-		if ( ( defined( 'DOING_AJAX' ) && DOING_AJAX  ) || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
+		if ( ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
 			return;
 		}
 
@@ -126,7 +126,7 @@ class OMAPI_TrustPulse {
 
 		$this->trustpulse_active = function_exists( 'trustpulse_dir_uri' );
 
-		$account_id = get_option( 'trustpulse_script_id', null );
+		$account_id             = get_option( 'trustpulse_script_id', null );
 		$this->trustpulse_setup = ! empty( $account_id );
 	}
 
@@ -139,10 +139,10 @@ class OMAPI_TrustPulse {
 		$this->hook = add_submenu_page(
 			// If trustpulse is active/setup, don't show the TP sub-menu item under OM.
 			$this->trustpulse_active && $this->trustpulse_setup
-				? 'optin-monster-api-settings-no-menu'
-				: 'optin-monster-api-settings', // Parent slug
-			__( 'TrustPulse', 'optin-monster-api' ), // Page title
-			__( 'Social Proof Widget', 'optin-monster-api' ),
+				? $this->base->menu->parent_slug() . '-no-menu'
+				: $this->base->menu->parent_slug(), // Parent slug
+			esc_html__( 'TrustPulse', 'optin-monster-api' ), // Page title
+			esc_html__( 'Social Proof Widget', 'optin-monster-api' ),
 			apply_filters( 'optin_monster_api_menu_cap', 'manage_options', 'optin-monster-trustpulse' ), // Cap
 			'optin-monster-trustpulse', // Slug
 			array( $this, 'display_page' ) // Callback
@@ -174,7 +174,13 @@ class OMAPI_TrustPulse {
 	 * @since 1.9.0
 	 */
 	public function display_page() {
-		$this->base->output_view( 'trustpulse-settings-page.php' );
+		$all = get_plugins();
+		$this->base->output_view(
+			'trustpulse-settings-page.php',
+			array(
+				'has_plugin' => ! empty( $all['trustpulse-api/trustpulse.php'] ),
+			)
+		);
 	}
 
 	/**
@@ -184,11 +190,11 @@ class OMAPI_TrustPulse {
 	 */
 	public function assets() {
 		add_filter( 'admin_body_class', array( $this, 'add_body_classes' ) );
+		$this->base->menu->styles();
+		$this->base->menu->scripts();
 
-		wp_enqueue_style( $this->base->plugin_slug . '-settings', $this->base->url . 'assets/css/settings.css', array(), $this->base->version );
-
-		wp_enqueue_style( 'om-tp-admin-css',  $this->base->url . 'assets/css/trustpulse-admin.min.css', false, $this->base->version );
-		add_action( 'in_admin_header', array( $this, 'render_banner') );
+		wp_enqueue_style( 'om-tp-admin-css', $this->base->url . 'assets/dist/css/trustpulse.min.css', false, $this->base->asset_version() );
+		add_action( 'in_admin_header', array( $this, 'render_banner' ) );
 	}
 
 	/**

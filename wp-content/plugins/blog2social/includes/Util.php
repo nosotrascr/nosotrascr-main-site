@@ -219,50 +219,51 @@ class B2S_Util {
         return $list;
     }
 
-    public static function getImagesByPostId($postId = 0, $postContent = '', $postUrl = '', $network = false, $postLang = 'en') {
+    public static function getImagesByPostId($postId = 0, $forceFeaturedImage = true, $postContent = '', $postUrl = '', $network = false, $postLang = 'en') {
+        $matches = array();
         $homeUrl = get_site_url();
         $scheme = parse_url($homeUrl, PHP_URL_SCHEME);
         $featuredImage = wp_get_attachment_url(get_post_thumbnail_id($postId));
-        $content = self::getFullContent($postId, $postContent, $postUrl, $postLang);
-
-        $matches = array();
-        if (!preg_match_all('%<img.*?src=[\"\'](.*?)[\"\'].*?>%', $content, $matches) && !$featuredImage) {
-            return false;
+        if ($forceFeaturedImage && $featuredImage != false && !empty($featuredImage)) {
+            return array(0 => array(0 => $featuredImage));
+        } else {
+            $content = stripcslashes(self::getFullContent($postId, $postContent, $postUrl, $postLang));
+            if (!preg_match_all('%<img.*?src=[\"\'](.*?)[\"\'].*?>%', $content, $matches) && !$featuredImage) {
+                return false;
+            }
+            array_unshift($matches[1], $featuredImage);
         }
-        array_unshift($matches[1], $featuredImage);
         $rtrnArray = array();
-        foreach ($matches[1] as $key => $imgUrl) {
-            if ($imgUrl == false) {
-                continue;
-            }
-
-            //AllowedExtensions?
-            if (!$network && !in_array(substr($imgUrl, strrpos($imgUrl, '.')), array('.jpg', '.png'))) {
-                continue;
-            }
-
-            //isRelativ?
-            if (!preg_match('/((http|https):\/\/|(www.))/', $imgUrl)) {
-                //StartWith //
-                if ((substr($imgUrl, 0, 2) == '//')) {
-                    $imgUrl = (($scheme != NULL) ? $scheme : 'http') . ':' . $imgUrl;
-                } else {
-                    //StartWith /
-                    $imgUrl = (substr($imgUrl, 0, 1) != '/') ? '/' . $imgUrl : $imgUrl;
-                    $imgUrl = str_replace('//', '/', $imgUrl);
-                    $imgUrl = $homeUrl . $imgUrl;
-                    if (strpos($imgUrl, 'http://') === false && strpos($imgUrl, 'https://') === false) {
-                        $imgUrl = (($scheme != NULL) ? $scheme : 'http') . '://' . $imgUrl;
+        if (isset($matches[1])) {
+            foreach ($matches[1] as $key => $imgUrl) {
+                if ($imgUrl == false) {
+                    continue;
+                }
+                //AllowedExtensions?
+                if (!$network && !in_array(substr($imgUrl, strrpos($imgUrl, '.')), array('.jpg', '.png'))) {
+                    continue;
+                }
+                //isRelativ?
+                if (!preg_match('/((http|https):\/\/|(www.))/', $imgUrl)) {
+                    //StartWith //
+                    if ((substr($imgUrl, 0, 2) == '//')) {
+                        $imgUrl = (($scheme != NULL) ? $scheme : 'http') . ':' . $imgUrl;
+                    } else {
+                        //StartWith /
+                        $imgUrl = (substr($imgUrl, 0, 1) != '/') ? '/' . $imgUrl : $imgUrl;
+                        $imgUrl = str_replace('//', '/', $imgUrl);
+                        $imgUrl = $homeUrl . $imgUrl;
+                        if (strpos($imgUrl, 'http://') === false && strpos($imgUrl, 'https://') === false) {
+                            $imgUrl = (($scheme != NULL) ? $scheme : 'http') . '://' . $imgUrl;
+                        }
                     }
                 }
+                /* $file_headers = @get_headers($imgUrl);
+                  if ((!is_array($file_headers)) || (is_array($file_headers) && !preg_match('/200/', $file_headers[0]))) {
+                  continue;
+                  } */
+                $rtrnArray[$key][0] = urldecode($imgUrl);
             }
-
-            /* $file_headers = @get_headers($imgUrl);
-              if ((!is_array($file_headers)) || (is_array($file_headers) && !preg_match('/200/', $file_headers[0]))) {
-              continue;
-              } */
-
-            $rtrnArray[$key][0] = urldecode($imgUrl);
         }
         return $rtrnArray;
     }
@@ -413,13 +414,13 @@ class B2S_Util {
                 return trim($text);
             }
             $stops = array('.', ':');
-            $min = 10;
+            $min = 1;
             $cleanTruncateWord = true;
             $max = ($max !== false) ? ($max - $min) : ($min - 1);
             if (mb_strlen($text, 'UTF-8') < $max) {
                 return trim($text);
             }
-            
+
             $sub = mb_substr($text, $min, mb_strripos(mb_substr($text, $min, $max, 'UTF-8'), ' '), 'UTF-8');
 
             for ($i = 0; $i < count($stops); $i++) {
@@ -427,7 +428,7 @@ class B2S_Util {
                     $cleanTruncateWord = false;
                     if (mb_substr($subArray[count($subArray) - 1], 0, 1) == ' ' || mb_substr($subArray[count($subArray) - 1], 0, 1) == "\n") { //empty first charcater in last explode - delete last explode
                         $subArray[count($subArray) - 1] = ' ';
-                    }                    
+                    }
                     if (mb_stripos($subArray[count($subArray) - 1], $stops[$i]) === false) { //delete last explode if no stops set
                         $subArray[count($subArray) - 1] = mb_substr($subArray[count($subArray) - 1], 0, mb_stripos($subArray[count($subArray) - 1], ' '));
                     }
@@ -581,10 +582,10 @@ class B2S_Util {
 
         return (float) $offset / 3600;
     }
-    
+
     public static function addUrlParameter($url = '', $parameter = array()) {
         $add = '&';
-        if(!parse_url($url, PHP_URL_QUERY)) {
+        if (!parse_url($url, PHP_URL_QUERY)) {
             $add = '?';
         }
         foreach ($parameter as $key => $value) {

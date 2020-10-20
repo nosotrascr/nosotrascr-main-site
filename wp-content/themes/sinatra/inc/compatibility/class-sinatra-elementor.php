@@ -91,7 +91,7 @@ if ( ! class_exists( 'Sinatra_Elementor' ) ) :
 		 * Setup default postdata for Elementor pages.
 		 *
 		 * @since 1.0.0
-		 * 
+		 *
 		 * @return void
 		 */
 		public function setup_postdata() {
@@ -114,11 +114,11 @@ if ( ! class_exists( 'Sinatra_Elementor' ) ) :
 			global $post;
 
 			$id = sinatra_get_the_id();
-			
+
 			$setup = get_post_meta( $id, '_sinatra_page_builder_setup', true );
 
 			if ( isset( $post ) && empty( $setup ) && ( is_admin() || is_singular() ) && empty( $post->post_content ) && $this->is_built_with_elementor( $id ) ) {
-				
+
 				update_post_meta( $id, '_sinatra_page_builder_setup', true );
 				update_post_meta( $id, 'sinatra_disable_page_title', true );
 				update_post_meta( $id, 'sinatra_disable_breadcrumbs', true );
@@ -156,7 +156,7 @@ if ( ! class_exists( 'Sinatra_Elementor' ) ) :
 		 *
 		 * @param int $id Post/Page Id.
 		 * @since 1.0.0
-		 * 
+		 *
 		 * @return boolean
 		 */
 		public function is_built_with_elementor( $id ) {

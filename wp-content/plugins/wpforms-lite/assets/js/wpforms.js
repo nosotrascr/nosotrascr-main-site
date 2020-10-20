@@ -1,4 +1,4 @@
-/* global wpforms_settings, grecaptcha, wpformsRecaptchaCallback, wpforms_validate, wpforms_datepicker, wpforms_timepicker, Mailcheck */
+/* global wpforms_settings, grecaptcha, wpformsRecaptchaCallback, wpforms_validate, wpforms_datepicker, wpforms_timepicker, Mailcheck, Choices */
 
 'use strict';
 
@@ -14,7 +14,7 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 		init: function() {
 
 			// Document ready.
-			$( document ).ready( app.ready );
+			$( app.ready );
 
 			// Page load.
 			$( window ).on( 'load', app.load );
@@ -43,6 +43,7 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 			app.loadSmartPhoneField();
 			app.loadPayments();
 			app.loadMailcheck();
+			app.loadChoicesJS();
 
 			// Randomize elements.
 			$( '.wpforms-randomize' ).each( function() {
@@ -52,6 +53,9 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 					$list.append( $listItems.splice( Math.floor( Math.random() * $listItems.length ), 1 )[0] );
 				}
 			} );
+
+			// Unlock pagebreak navigation.
+			$( '.wpforms-page-button' ).prop( 'disabled', false );
 
 			$( document ).trigger( 'wpformsReady' );
 		},
@@ -210,6 +214,14 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 					}, wpforms_settings.val_phone );
 				}
 
+				// Validate Input Mask minimum length.
+				$.validator.addMethod( 'empty-blanks', function( value, element ) {
+					if ( typeof $.fn.inputmask === 'undefined' ) {
+						return true;
+					}
+					return ! ( value.indexOf( element.inputmask.opts.placeholder ) + 1 );
+				}, wpforms_settings.val_empty_blanks );
+
 				// Validate US Phone Field.
 				$.validator.addMethod( 'us-phone-field', function( value, element ) {
 					if ( value.match( /[^\d()\-+\s]/ ) ) {
@@ -263,6 +275,8 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 									element.parent().after( error );
 								} else if ( element.hasClass( 'wpforms-validation-group-member' ) ) {
 									element.closest( '.wpforms-field' ).append( error );
+								} else if ( element.hasClass( 'choicesjs-select' ) ) {
+									element.closest( '.wpforms-field' ).append( error );
 								} else {
 									error.insertAfter( element );
 								}
@@ -296,8 +310,19 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 									altText     = $submit.data( 'alt-text' ),
 									recaptchaID = $submit.get( 0 ).recaptchaID;
 
+								if ( $form.data( 'token' ) && 0 === $( '.wpforms-token', $form ).length ) {
+									$( '<input type="hidden" class="wpforms-token" name="wpforms[token]" />' )
+										.val( $form.data( 'token' ) )
+										.appendTo( $form );
+								}
+
 								$submit.prop( 'disabled', true );
 								$form.find( '#wpforms-field_recaptcha-error' ).remove();
+
+								// Display processing text.
+								if ( altText ) {
+									$submit.text( altText );
+								}
 
 								if ( ! app.empty( recaptchaID ) || recaptchaID === 0 ) {
 
@@ -309,11 +334,6 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 										$submit.prop( 'disabled', false );
 									} );
 									return false;
-								}
-
-								// Normal form.
-								if ( altText ) {
-									$submit.text( altText );
 								}
 
 								// Remove name attributes if needed.
@@ -540,8 +560,13 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 
 				$el.intlTelInput( inputOptions );
 
-				// Remove original input name not to interfere with a hidden input.
-				$el.removeAttr( 'name' );
+				// For proper validation, we should preserve the name attribute of the input field.
+				// But we need to modify original input name not to interfere with a hidden input.
+				$el.attr( 'name', 'wpf-temp-' + $el.attr( 'name' ) );
+
+				// Add special class to remove name attribute before submitting.
+				// So, only the hidden input value will be submitted.
+				$el.addClass( 'wpforms-input-temp-name' );
 
 				// Instantly update a hidden form input with a correct data.
 				// Previously "blur" only was used, which is broken in case Enter was used to submit the form.
@@ -550,6 +575,12 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 						$el.siblings( 'input[type="hidden"]' ).val( $el.intlTelInput( 'getNumber' ) );
 					}
 				} );
+			} );
+
+			// Update hidden input of the `Smart` phone field to be sure the latest value will be submitted.
+			$( '.wpforms-form' ).on( 'wpformsBeforeFormSubmit', function() {
+
+				$( this ).find( '.wpforms-smart-phone-field' ).trigger( 'input' );
 			} );
 		},
 
@@ -625,6 +656,107 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 
 		},
 
+		/**
+		 * Load Choices.js library for all Modern style Dropdown fields (<select>).
+		 *
+		 * @since 1.6.1
+		 */
+		loadChoicesJS: function() {
+
+			// Loads if function exists.
+			if ( ! $.isFunction( window.Choices ) ) {
+
+				return;
+			}
+
+			$( '.wpforms-field-select-style-modern .choicesjs-select, .wpforms-field-payment-select .choicesjs-select' ).each( function( idx, el ) {
+
+				var args = window.wpforms_choicesjs_config || {};
+
+				args.callbackOnInit = function() {
+
+					var self      = this,
+						$element  = $( self.passedElement.element ),
+						$input    = $( self.input.element ),
+						sizeClass = $element.data( 'size-class' );
+
+					// Remove hidden attribute and hide `<select>` like a screen-reader text.
+					// It's important for field validation.
+					$element
+						.removeAttr( 'hidden' )
+						.addClass( self.config.classNames.input + '--hidden' );
+
+					// Add CSS-class for size.
+					if ( sizeClass ) {
+						$( self.containerOuter.element ).addClass( sizeClass );
+					}
+
+					/**
+					 * If a multiple select has selected choices - hide a placeholder input.
+					 * We use custom styles like `.screen-reader-text` for it,
+					 * because it avoids an issue with closing a dropdown.
+					 */
+					if ( $element.prop( 'multiple' ) ) {
+
+						// On init event.
+						if ( self.getValue( true ).length ) {
+							$input.addClass( self.config.classNames.input + '--hidden' );
+						}
+					}
+
+					// On change event.
+					$element.on( 'change', function() {
+
+						var validator;
+
+						// Listen if multiple select has choices.
+						if ( $element.prop( 'multiple' ) ) {
+							self.getValue( true ).length > 0 ? $input.addClass( self.config.classNames.input + '--hidden' ) : $input.removeClass( self.config.classNames.input + '--hidden' );
+						}
+
+						validator = $element.closest( 'form' ).data( 'validator' );
+
+						if ( ! validator ) {
+							return;
+						}
+
+						validator.element( $element );
+					} );
+				};
+
+				args.callbackOnCreateTemplates = function() {
+
+					var self      = this,
+						$element  = $( self.passedElement.element );
+
+					return {
+
+						// Change default template for option.
+						option: function( item ) {
+
+							var opt = Choices.defaults.templates.option.call( this, item );
+
+							// Add a `.placeholder` class for placeholder option - it needs for WPForm CL.
+							if ( 'undefined' !== typeof item.placeholder && true === item.placeholder ) {
+								opt.classList.add( 'placeholder' );
+							}
+
+							// Add a `data-amount` attribute for payment dropdown.
+							// It will be copy from a Choices.js `data-custom-properties` attribute.
+							if ( $element.hasClass( 'wpforms-payment-price' ) && 'undefined' !== typeof item.customProperties && null !== item.customProperties ) {
+								opt.dataset.amount = item.customProperties;
+							}
+
+							return opt;
+						},
+					};
+				};
+
+				// Save choicesjs instance for future access.
+				$( el ).data( 'choicesjs', new Choices( el, args ) );
+			} );
+		},
+
 		//--------------------------------------------------------------------//
 		// Binds.
 		//--------------------------------------------------------------------//
@@ -669,7 +801,7 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 			} );
 
 			// Payment radio/checkbox fields: preselect the selected payment (from dynamic/fallback population).
-			$( document ).ready( function() {
+			$( function() {
 
 				// Radios.
 				$( '.wpforms-field-radio .wpforms-image-choices-item input:checked' ).change();
@@ -704,7 +836,7 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 			} );
 
 			// Rating field: preselect the selected rating (from dynamic/fallback population).
-			$( document ).ready( function() {
+			$( function() {
 				$( '.wpforms-field-rating-item input:checked' ).change();
 			} );
 
@@ -853,8 +985,9 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 			} );
 
 			// Allow only numbers, minus and decimal point to be entered into the Numbers field.
-			$( document ).on( 'input', '.wpforms-field-number input', function( e ) {
-				this.value = this.value.replace( /[^-0-9.]/g, '' );
+			$( document ).on( 'keypress', '.wpforms-field-number input', function( e ) {
+
+				return /^[-0-9.]+$/.test( String.fromCharCode( e.keyCode || e.which ) );
 			} );
 		},
 
@@ -937,6 +1070,13 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 				// Validate.
 				if ( typeof $.fn.validate !== 'undefined' ) {
 					$page.find( ':input' ).each( function( index, el ) {
+
+						// Skip input fields without `name` attribute, which could have fields.
+						// E.g. `Placeholder` input for Modern dropdown.
+						if ( ! $( el ).attr( 'name' ) ) {
+							return;
+						}
+
 						if ( ! $( el ).valid() ) {
 							valid = false;
 						}
@@ -1455,6 +1595,8 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 		 * @param {jQuery} $form Form element.
 		 */
 		formSubmit: function( $form ) {
+
+			$form.trigger( 'wpformsBeforeFormSubmit' );
 
 			if ( $form.hasClass( 'wpforms-ajax-form' ) && typeof FormData !== 'undefined' ) {
 				app.formSubmitAjax( $form );

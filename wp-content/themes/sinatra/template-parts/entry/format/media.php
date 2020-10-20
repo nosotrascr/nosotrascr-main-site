@@ -31,7 +31,7 @@ if ( 'link' === $sinatra_post_format || ! is_single( get_the_ID() ) ) {
 	$sinatra_icon = '';
 
 	if ( is_sticky() ) {
-		$sinatra_icon = '<span class="entry-media-icon" title="' . esc_attr( 'Featured', 'sinatra' ) . '" aria-hidden="true"><span class="entry-media-icon-wrapper"><i class="si-icon si-star top-icon" aria-hidden="true"></i><i class="si-icon si-star"></i></span></span>';
+		$sinatra_icon = '<span class="entry-media-icon" title="' . esc_attr__( 'Featured', 'sinatra' ) . '" aria-hidden="true"><span class="entry-media-icon-wrapper"><i class="si-icon si-star top-icon" aria-hidden="true"></i><i class="si-icon si-star"></i></span></span>';
 	} elseif ( 'video' === $sinatra_post_format ) {
 		$sinatra_icon = '<span class="entry-media-icon" aria-hidden="true"><span class="entry-media-icon-wrapper"><i class="si-icon si-play top-icon"></i><i class="si-icon si-play" aria-hidden="true"></i></span></span>';
 	} elseif ( 'link' === $sinatra_post_format ) {
