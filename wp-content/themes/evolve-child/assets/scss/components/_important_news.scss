@@ -25,7 +25,11 @@
   }
 }
 
-.important_news {
+.important_news-mobile{
+  display:none;
+}
+
+.important_news,  .important_news-mobile{
   margin-bottom: 7em;
   overflow: hidden;
 
@@ -123,6 +127,14 @@
 		width: 100%;
     border-right: none;
 	}
+
+  .important_news{
+    display:none;
+  }
+  
+  important_news-mobile{
+    display:block;
+  }
 }
 
 
