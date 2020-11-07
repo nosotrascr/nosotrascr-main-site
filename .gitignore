@@ -19,6 +19,10 @@
 #!/wp-content/languages/
 #!/wp-content/vpdb/
 
+#------------------------
+#  Evolve Child
+#------------------------
+/wp-content/themes/evolve-child/node_modules/
 
 #------------------------
 #  Log files
